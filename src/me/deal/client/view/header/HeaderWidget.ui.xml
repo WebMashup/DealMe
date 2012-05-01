@@ -16,6 +16,6 @@
 		Tweet button, etc...).  I don't think the city pull-down
 		is necessary because user's can set their exact location
 		with the LocationWidget if they are unsatisfied with the
-		precision of their location. -->
+		precision of their geolocated position. -->
 	</g:HorizontalPanel>
 </ui:UiBinder> 
