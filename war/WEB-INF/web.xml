@@ -6,19 +6,32 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
+  
+  <!-- Servlet for communication relating to deal data -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>me.deal.server.GreetingServiceImpl</servlet-class>
+    <servlet-name>dealServlet</servlet-name>
+    <servlet-class>me.deal.server.DealServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/dealme/greet</url-pattern>
+    <servlet-name>dealServlet</servlet-name>
+    <url-pattern>/deal</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Servlet for communication relating to getting location data -->
+  <servlet>
+    <servlet-name>geolocationServlet</servlet-name>
+    <servlet-class>me.deal.server.GeolocationServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>geolocationServlet</servlet-name>
+    <url-pattern>/geolocation</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>DealMe.html</welcome-file>
+    <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
 </web-app>

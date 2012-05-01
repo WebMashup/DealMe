@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		<!-- TODO: Add styling -->
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<g:HorizontalPanel>
+		<g:Label>Deal.me</g:Label>
+		<!-- TODO Figure out what goes on the top right.
+		I think rather than putting a pull down of cities,
+		we should instead put social sharing buttons, which
+		can be used to share the site (e.g., Like button,
+		Tweet button, etc...).  I don't think the city pull-down
+		is necessary because user's can set their exact location
+		with the LocationWidget if they are unsatisfied with the
+		precision of their location. -->
+	</g:HorizontalPanel>
+</ui:UiBinder> 
