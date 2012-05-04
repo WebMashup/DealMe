@@ -1,11 +1,14 @@
 package me.deal.shared;
 
+import java.io.Serializable;
+
 /*
  * Relevant data received from the Yelp API.
  * See http://www.yelp.com/developers/documentation/v2/business
  */
 
-public class BusinessInfo {
+@SuppressWarnings("serial")
+public class BusinessInfo implements Serializable {
 	
 	private String yelpID; 
 	private String name;
@@ -15,6 +18,9 @@ public class BusinessInfo {
 	private Integer numReviews;
 	private String mobileUrl;
 	private String webUrl;
+	
+	public BusinessInfo() {
+	}
 	
 	public BusinessInfo(
 		final String yelpID,

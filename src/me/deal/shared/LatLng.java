@@ -1,6 +1,9 @@
 package me.deal.shared;
 
-public class LatLng {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class LatLng implements Serializable {
 	
 	private Double latitude;
 	private Double longitude;

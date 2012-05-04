@@ -24,7 +24,7 @@ public class Deal {
 	private Double value; // How much the deal retails for
 	private String title; // The title of the deal
 	private String subtitle; // Yipit's assigned title
-	private String yipitWebUrl; // The wbe url of the deal
+	private String yipitWebUrl; // The web url of the deal
 	private String yipitMobileUrl; // The mobile url of the deal
 	private String bigImageUrl; // The url of the deal's big image
 	private String smallImageUrl; // The url of the deal's small image
@@ -34,7 +34,7 @@ public class Deal {
 	private Boolean paid; // Is this deal part of the Yipit affiliates program?
 	private ArrayList<Category> tags; // The categories that this deal falls under
 	
-	public Deal() {	
+	public Deal() {
 	}
 	
 	public Deal(
