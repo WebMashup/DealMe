@@ -18,8 +18,8 @@ public class DisplayWidget extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	@UiField
-	MapWidget mapWidget;
+	/* @UiField
+	GoogleMapWidget mapWidget; */
 	@UiField
 	ListItemWidget listWidget;
 

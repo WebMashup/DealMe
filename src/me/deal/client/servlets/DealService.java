@@ -15,7 +15,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  * Service used for retrieving information about deals from the server.
  */
 
-@RemoteServiceRelativePath("dealServlet")
+@RemoteServiceRelativePath("deal")
 public interface DealService extends RemoteService {
 	// Get limit # of deals from yipit within radius distance of coor, using the filter tags.
 	// Returns null if no deals found

@@ -8,8 +8,8 @@
 			font-weight: bold;
 		}
 	</ui:style>
-	<g:VerticalPanel>
-		<local:MapWidget ui:field="mapWidget" />
+	<g:HorizontalPanel>
 		<local:ListWidget ui:field="listWidget" />
-	</g:VerticalPanel>
+		<!-- <local:GoogleMapWidget ui:field="mapWidget" /> -->
+	</g:HorizontalPanel>
 </ui:UiBinder> 

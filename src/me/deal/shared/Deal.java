@@ -1,5 +1,6 @@
 package me.deal.shared;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,11 +15,12 @@ import java.util.Date;
  *  this class; for now, to make it easy on the client, we'll use it.
  */
 
-public class Deal {
+@SuppressWarnings("serial")
+public class Deal implements Serializable {
 	
 	private Integer yipitDealID;
-	private Date addDate; // The date the deal was created
-	private Date endDate; // The date when the deal offer ends
+	private String addDate; // The date the deal was created
+	private String endDate; // The date when the deal offer ends
 	private Double discountPercentage; // Number between 0 and 100
 	private Double price; // How much the deal costs
 	private Double value; // How much the deal retails for
@@ -39,8 +41,8 @@ public class Deal {
 	
 	public Deal(
 		final Integer yipitDealID,
-		final Date addDate,
-		final Date endDate,
+		final String addDate,
+		final String endDate,
 		final Double discountPercentage,
 		final Double price,
 		final Double value,
@@ -82,19 +84,19 @@ public class Deal {
 		yipitDealID = dealID;
 	}
 	
-	public Date getAddDate() {
+	public String getAddDate() {
 		return this.addDate;
 	}
 	
-	public void setAddDate(final Date addDate) {
+	public void setAddDate(final String addDate) {
 		this.addDate = addDate;
 	}
 	
-	public Date getEndDate() {
+	public String getEndDate() {
 		return this.endDate;
 	}
 	
-	public void setEndDate(final Date endDate) {
+	public void setEndDate(final String endDate) {
 		this.endDate = endDate;
 	}
 	public Double getDiscountPercentage() {

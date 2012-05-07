@@ -15,7 +15,7 @@
   
   <servlet-mapping>
     <servlet-name>dealServlet</servlet-name>
-    <url-pattern>/deal</url-pattern>
+    <url-pattern>/dealme/deal</url-pattern>
   </servlet-mapping>
   
   <!-- Servlet for communication relating to getting location data -->
@@ -26,7 +26,7 @@
   
   <servlet-mapping>
     <servlet-name>geolocationServlet</servlet-name>
-    <url-pattern>/geolocation</url-pattern>
+    <url-pattern>/dealme/geolocation</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

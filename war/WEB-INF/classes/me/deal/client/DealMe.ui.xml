@@ -1,0 +1,17 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:header="urn:import:me.deal.client.view.header"
+	xmlns:main="urn:import:me.deal.client.view.main"
+	xmlns:menubar="urn:import:me.deal.client.view.menubar">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<!-- <g:VerticalPanel>
+		<header:HeaderWidget ui:field="headerWidget"></header:HeaderWidget>
+		<menubar:MenuWidget ui:field="menuWidget"></menubar:MenuWidget>
+		<main:DisplayWidget ui:field="displayWidget"></main:DisplayWidget>
+	</g:VerticalPanel> -->
+</ui:UiBinder> 
