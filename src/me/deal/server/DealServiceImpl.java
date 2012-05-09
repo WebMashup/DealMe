@@ -1,26 +1,19 @@
 package me.deal.server;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import me.deal.client.servlets.DealService;
 import me.deal.shared.BusinessInfo;
 import me.deal.shared.Category;
 import me.deal.shared.Deal;
-import me.deal.shared.JSONYipitDeals;
-import me.deal.shared.JSONYipitDeals.JSONYipitDeal;
-import me.deal.shared.JSONYipitDeals.JSONYipitDeal.JSONTag;
+import me.deal.shared.json.JSONYipitDeals;
+import me.deal.shared.json.JSONYipitDeals.JSONYipitDeal;
+import me.deal.shared.json.JSONYipitDeals.JSONYipitDeal.JSONTag;
 import me.deal.shared.LatLng;
 import me.deal.shared.Location;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -36,7 +29,6 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 	 *  Implemented using the Yipit API.  Returns deals relating to the tags within radius distance of
 	 *  the given coordinate.  Returns null if no deals found.
 	 */
-	@SuppressWarnings("deprecation")
 	public ArrayList<Deal> getYipitDeals(LatLng coor, Double radius, Integer limit, ArrayList<Category> tags) {
 		/*
 		 * TODO: Implement this method.  Get the deals using the Yipit API and parse the result into
@@ -89,10 +81,9 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 					jsonDeal.mobile_url,
 					jsonDeal.images.image_big,
 					jsonDeal.images.image_small,
-					latLng,
 					new Location(jsonDeal.business.locations.get(0).address, "",
 							jsonDeal.business.locations.get(0).state,
-							jsonDeal.business.locations.get(0).zip_code),
+							jsonDeal.business.locations.get(0).zip_code, latLng),
 					jsonDeal.business.locations.get(0).phone,
 					new Boolean(jsonDeal.source.paid != 0),
 					tags);

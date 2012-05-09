@@ -1,7 +1,10 @@
 package me.deal.client.view.menubar;
 
+import me.deal.client.servlets.GeolocationServiceAsync;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -11,7 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 
-public class LocationWidget extends Composite implements HasText {
+public class LocationWidget extends Composite {
 
 	private static LocationWidgetUiBinder uiBinder = GWT
 			.create(LocationWidgetUiBinder.class);
@@ -19,29 +22,18 @@ public class LocationWidget extends Composite implements HasText {
 	interface LocationWidgetUiBinder extends UiBinder<Widget, LocationWidget> {
 	}
 
-	public LocationWidget() {
+	private final GeolocationServiceAsync geolocationService;
+	private final HandlerManager eventBus;
+	
+	public LocationWidget(final GeolocationServiceAsync geolocationService,
+			final HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
+		this.geolocationService = geolocationService;
+		this.eventBus = eventBus;
+		initialize();
 	}
-
-	@UiField
-	Button button;
-
-	public LocationWidget(String firstName) {
-		initWidget(uiBinder.createAndBindUi(this));
-		button.setText(firstName);
+	
+	private void initialize() {
+		
 	}
-
-	@UiHandler("button")
-	void onClick(ClickEvent e) {
-		Window.alert("Hello!");
-	}
-
-	public void setText(String text) {
-		button.setText(text);
-	}
-
-	public String getText() {
-		return button.getText();
-	}
-
 }

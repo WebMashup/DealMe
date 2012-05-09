@@ -2,7 +2,6 @@ package me.deal.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 /*
  * The deal object which contains information about deals from Yipit.
@@ -30,7 +29,6 @@ public class Deal implements Serializable {
 	private String yipitMobileUrl; // The mobile url of the deal
 	private String bigImageUrl; // The url of the deal's big image
 	private String smallImageUrl; // The url of the deal's small image
-	private LatLng businessCoor; // The coordinate of the business
 	private Location businessAddress; // The address of the business
 	private String businessPhoneNumber; // The phone number of the businesses (containing no '-' or '(', ')')
 	private Boolean paid; // Is this deal part of the Yipit affiliates program?
@@ -52,7 +50,6 @@ public class Deal implements Serializable {
 		final String yipitMobileUrl,
 		final String bigImageUrl,
 		final String smallImageUrl,
-		final LatLng businessCoor,
 		final Location businessAddress,
 		final String businessPhoneNumber,
 		final Boolean paid,
@@ -69,7 +66,6 @@ public class Deal implements Serializable {
 			this.yipitMobileUrl = yipitMobileUrl;
 			this.bigImageUrl = bigImageUrl;
 			this.smallImageUrl = smallImageUrl;
-			this.businessCoor = businessCoor;
 			this.businessAddress = businessAddress;
 			this.businessPhoneNumber = businessPhoneNumber;
 			this.paid = paid;
@@ -169,14 +165,6 @@ public class Deal implements Serializable {
 	
 	public void setSmallImageUrl(final String smallImageUrl) {
 		this.smallImageUrl = smallImageUrl;
-	}
-	
-	public LatLng getBusinessCoor() {
-		return this.businessCoor;
-	}
-	
-	public void setBusinessCoor(final LatLng businessCoor) {
-		this.businessCoor = businessCoor;
 	}
 	
 	public Location getBusinessAddress() {

@@ -1,6 +1,9 @@
 package me.deal.client.view.main;
 
+import me.deal.client.servlets.DirectionsServiceAsync;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -15,8 +18,14 @@ public class ListWidget extends Composite {
 	interface ListWidgetUiBinder extends UiBinder<Widget, ListWidget> {
 	}
 	
-	public ListWidget() {
+	private final DirectionsServiceAsync directionsService;
+	private final HandlerManager eventBus;
+	
+	public ListWidget(final DirectionsServiceAsync directionsService,
+			final HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
+		this.directionsService = directionsService;
+		this.eventBus = eventBus;
 		initialize();
 	}
 
