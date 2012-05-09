@@ -15,6 +15,7 @@
   <inherits name="com.google.gwt.json.JSON" />
   
   <!-- Specify the app entry point class.                         -->
+  <entry-point class='me.deal.client.DealMe'/>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>

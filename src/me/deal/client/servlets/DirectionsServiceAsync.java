@@ -1,5 +1,8 @@
 package me.deal.client.servlets;
 
-public class DirectionsServiceAsync {
-
+/**
+ * The async counterpart of @DirectionsService.
+ */
+public interface DirectionsServiceAsync {
+	
 }

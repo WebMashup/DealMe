@@ -18,16 +18,27 @@
     <url-pattern>/dealme/deal</url-pattern>
   </servlet-mapping>
   
-  <!-- Servlet for communication relating to getting location data -->
   <servlet>
-    <servlet-name>geolocationServlet</servlet-name>
-    <servlet-class>me.deal.server.GeolocationServiceImpl</servlet-class>
+    <servlet-name>directionsServlet</servlet-name>
+    <servlet-class>me.deal.server.DirectionsServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>geolocationServlet</servlet-name>
-    <url-pattern>/dealme/geolocation</url-pattern>
+    <servlet-name>directionsServlet</servlet-name>
+    <url-pattern>/dealme/directions</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>geocodingServlet</servlet-name>
+    <servlet-class>me.deal.server.GeocodingServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>geocodingServlet</servlet-name>
+    <url-pattern>/dealme/geocoding</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Servlet for communication relating to getting location data -->
   
   <!-- Default page to serve -->
   <welcome-file-list>
