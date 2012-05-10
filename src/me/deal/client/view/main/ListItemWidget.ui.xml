@@ -13,6 +13,7 @@
 			<g:Button ui:field="formatMapButton"></g:Button>
 			<g:Image ui:field="dealImage"></g:Image>
 			<g:Label ui:field="dealTitle"></g:Label>
+			<g:Label ui:field="dealSubtitle"></g:Label>
 		</g:VerticalPanel>
 		<g:VerticalPanel>
 			<g:HorizontalPanel>

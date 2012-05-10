@@ -38,6 +38,8 @@ public class ListItemWidget extends Composite {
 	Image dealImage;
 	@UiField
 	Label dealTitle;
+	@UiField
+	Label dealSubtitle;
 	
 	@UiField
 	Image avgRating;
@@ -72,5 +74,12 @@ public class ListItemWidget extends Composite {
 		 * the ListItem and add a close button so that the user can easily close
 		 * get rid of the directions.
 		 */
+		
+		dealImage.setUrl(deal.getBigImageUrl());
+		dealTitle.setText(deal.getTitle());
+		dealSubtitle.setText(deal.getSubtitle());
+		dealPrice.setText(deal.getPrice().toString());
+		discountPercentage.setText(deal.getDiscountPercentage() + "%");
+		numDaysLeft.setText(deal.getEndDate());
 	}
 }

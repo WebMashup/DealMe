@@ -6,6 +6,7 @@ public class DealsLocation {
 	
 	private static final DealsLocation INSTANCE = new DealsLocation();
 	private Location dealsLocation;
+	public final Double DEFAULT_RADIUS = 20.0;  // Default radius in miles to search around
 	
 	private DealsLocation() {
 	}
