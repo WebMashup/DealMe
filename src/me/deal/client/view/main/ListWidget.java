@@ -7,6 +7,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -17,6 +18,11 @@ public class ListWidget extends Composite {
 
 	interface ListWidgetUiBinder extends UiBinder<Widget, ListWidget> {
 	}
+
+	@UiField
+	Image loadingSpinnerImage;
+	@UiField
+	VerticalPanel listItemContainer;
 	
 	private final DirectionsServiceAsync directionsService;
 	private final HandlerManager eventBus;
@@ -28,12 +34,8 @@ public class ListWidget extends Composite {
 		this.eventBus = eventBus;
 		initialize();
 	}
-
-	@UiField
-	VerticalPanel listItemContainer;
 	
 	private void initialize() {
-		
 		/*
 		 * TODO: Add code to observe the DealsData model and automatically
 		 * update the items in the listItemContainer dynamically to reflect

@@ -13,6 +13,7 @@
 
   <!-- Other module inherits                                      -->
   <inherits name="com.google.gwt.json.JSON" />
+  <inherits name="com.google.gwt.resources.Resources" />
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='me.deal.client.DealMe'/>
