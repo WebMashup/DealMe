@@ -25,15 +25,16 @@ import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
 import com.google.gwt.geolocation.client.Position.Coordinates;
 import com.google.gwt.geolocation.client.PositionError;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class DealMe extends Composite implements EntryPoint {
+public class DealMe implements EntryPoint {
 	
 	
 	private final DealServiceAsync dealService =  GWT.create(DealService.class);
@@ -42,31 +43,39 @@ public class DealMe extends Composite implements EntryPoint {
 	
 	private final HandlerManager eventBus = new HandlerManager(null);
 	
-	@UiField
 	HeaderWidget headerWidget;
-	
-	@UiField
 	MenuWidget menuWidget;
-	@UiField
 	FilterWidget filterWidget;
-	@UiField
 	LocationWidget locationWidget;
-	
-	@UiField
 	ListWidget listWidget;
-	@UiField
 	GoogleMapWidget googleMapWidget;
+	
+	VerticalPanel mainDisplay;
+	HorizontalPanel dealsDisplay;
 	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		mainDisplay = new VerticalPanel();
+		dealsDisplay = new HorizontalPanel();
+		
+		headerWidget = new HeaderWidget();
 		menuWidget = new MenuWidget(eventBus);
 		filterWidget = new FilterWidget(dealService, eventBus);
 		locationWidget = new LocationWidget(geocodingService, eventBus);
 		listWidget = new ListWidget(directionsService, eventBus);
 		googleMapWidget = new GoogleMapWidget(dealService, eventBus);
 		
+		mainDisplay.add(headerWidget);
+		mainDisplay.add(menuWidget);
+		mainDisplay.add(locationWidget);
+		mainDisplay.add(filterWidget);
+		dealsDisplay.add(listWidget);
+		dealsDisplay.add(googleMapWidget);
+		mainDisplay.add(dealsDisplay);
+		
+		RootPanel.get().add(mainDisplay);
 		getUserLocation();
 	}
 	

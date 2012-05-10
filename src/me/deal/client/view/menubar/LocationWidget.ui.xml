@@ -6,8 +6,9 @@
 			font-weight: bold;
 		}
 	</ui:style>
-	<g:HTMLPanel>
-		Hello,
-		<g:Button styleName="{style.important}" ui:field="button" />
-	</g:HTMLPanel>
+	<g:VerticalPanel>
+		<g:Label ui:field="addressLine1"></g:Label>
+		<g:Label ui:field="addressLine2"></g:Label>
+		<g:Button ui:field="changeAddressButton">Change Address</g:Button>
+	</g:VerticalPanel>
 </ui:UiBinder> 

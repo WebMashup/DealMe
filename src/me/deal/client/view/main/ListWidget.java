@@ -33,6 +33,7 @@ public class ListWidget extends Composite {
 	VerticalPanel listItemContainer;
 	
 	private void initialize() {
+		
 		/*
 		 * TODO: Add code to observe the DealsData model and automatically
 		 * update the items in the listItemContainer dynamically to reflect
