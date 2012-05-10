@@ -37,6 +37,13 @@ public class ListWidget extends Composite {
 		 * TODO: Add code to observe the DealsData model and automatically
 		 * update the items in the listItemContainer dynamically to reflect
 		 * changes in the model.
+		 * 
+		 * eventBus.addHandler(DealsEvent.TYPE,
+        	new DealsEventHandler() {
+          	public void onDeal(DealsEvent event) {
+            //Insert Code Here
+          }
+        });
 		 */
 	}
 }

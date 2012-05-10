@@ -1,0 +1,2 @@
+serviceClass: me.deal.client.servlets.GeocodingService
+path: B51E559F47717160A636546DBF52AD1B.gwt.rpc

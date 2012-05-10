@@ -28,6 +28,11 @@ public class LocationWidget extends Composite {
 	}
 	
 	private void initialize() {
-		
+		/*
+		 * When you modify the UserLocation singleton be sure to fire this event
+		 * to notify other people the UserLocation singleton has been modified.
+		 * 
+		 * eventBus.fireEvent(new UserLocation());
+		 */
 	}
 }

@@ -1,8 +1,7 @@
 package me.deal.client;
 
-import java.util.ArrayList;
-
-import me.deal.client.model.UserLocation;
+import me.deal.client.events.DealsLocationEvent;
+import me.deal.client.model.DealsLocation;
 import me.deal.client.servlets.DealService;
 import me.deal.client.servlets.DealServiceAsync;
 import me.deal.client.servlets.DirectionsService;
@@ -15,9 +14,8 @@ import me.deal.client.view.main.ListWidget;
 import me.deal.client.view.menubar.FilterWidget;
 import me.deal.client.view.menubar.LocationWidget;
 import me.deal.client.view.menubar.MenuWidget;
-import me.deal.shared.Category;
-import me.deal.shared.Deal;
 import me.deal.shared.LatLng;
+import me.deal.shared.Location;
 
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
@@ -31,12 +29,18 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class DealMe extends Composite implements EntryPoint {
+	
+	
+	private final DealServiceAsync dealService =  GWT.create(DealService.class);
+	private final DirectionsServiceAsync directionsService = GWT.create(DirectionsService.class);
+	private final GeocodingServiceAsync geocodingService = GWT.create(GeocodingService.class);
+	
+	private final HandlerManager eventBus = new HandlerManager(null);
 	
 	@UiField
 	HeaderWidget headerWidget;
@@ -57,10 +61,6 @@ public class DealMe extends Composite implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		DealServiceAsync dealService = GWT.create(DealService.class);
-		DirectionsServiceAsync directionsService = GWT.create(DirectionsService.class);
-		GeocodingServiceAsync geocodingService = GWT.create(GeocodingService.class);
-		HandlerManager eventBus = new HandlerManager(null);
 		menuWidget = new MenuWidget(eventBus);
 		filterWidget = new FilterWidget(dealService, eventBus);
 		locationWidget = new LocationWidget(geocodingService, eventBus);
@@ -84,7 +84,19 @@ public class DealMe extends Composite implements EntryPoint {
 					public void onSuccess(Position result) {
 						Coordinates userCoor = result.getCoordinates();
 						LatLng userLatLng = new LatLng(userCoor.getLatitude(), userCoor.getLongitude());
-						// TODO: Set the Location in the model to userLatLng and then fire a UserLocationEvent
+						geocodingService.convertLatLngToAddress(userLatLng, new AsyncCallback<Location>() {
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert("Failed to geocode!");
+							}
+
+							@Override
+							public void onSuccess(final Location result) {
+								// Window.alert(result.getAddress() + "\n" + result.getCity() + ", " + result.getState() + " " + result.getZipCode());
+								DealsLocation.getInstance().setDealsLocation(result);
+								eventBus.fireEvent(new DealsLocationEvent());
+							}
+						});
 					}
 			});
 		}

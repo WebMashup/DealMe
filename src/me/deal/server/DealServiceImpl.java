@@ -41,7 +41,6 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		String requestParameters = generateParamterStr(coor, radius, limit, tags);
 		String response = HttpSender.sendGetRequest(endPoint, requestParameters);
 		response = formatResponse(response);
-		System.out.println(response);
 		
 		Gson gson = new GsonBuilder().create();
 		JSONYipitDeals yipitDeals = gson.fromJson(response, JSONYipitDeals.class);

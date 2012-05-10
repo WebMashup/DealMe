@@ -3,15 +3,9 @@ package me.deal.client.view.menubar;
 import me.deal.client.servlets.DealServiceAsync;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FilterWidget extends Composite {
@@ -34,6 +28,31 @@ public class FilterWidget extends Composite {
 	}
 
 	private void initialize() {
-		
+		/*
+		 * When you modify the Deals singleton be sure to fire this event
+		 * to notify other people the deals singleton has been modified.
+		 * 
+		 * eventBus.fireEvent(new DealsEvent());
+		 * 
+		 * eventBus.addHandler(DealsEvent.TYPE,
+	        new DealsEventHandler() {
+	          public void onDeal(DealsEvent event) {
+	            //Insert Code Here
+	          }
+	        });
+	        
+	        dealService.getYipitDeals(<coor>, <radius>, <limit>, <tags>, 
+					new AsyncCallback<ArrayList<Deal>>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							Window.alert("Failed to load deals.")
+						}
+	
+						@Override
+						public void onSuccess(ArrayList<Deal> result) {
+							
+						}
+			});
+		 */
 	}
 }
