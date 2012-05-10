@@ -6,10 +6,10 @@ import me.deal.client.servlets.DealService;
 import me.deal.shared.BusinessInfo;
 import me.deal.shared.Category;
 import me.deal.shared.Deal;
+import me.deal.shared.LatLngCoor;
 import me.deal.shared.json.JSONYipitDeals;
 import me.deal.shared.json.JSONYipitDeals.JSONYipitDeal;
 import me.deal.shared.json.JSONYipitDeals.JSONYipitDeal.JSONTag;
-import me.deal.shared.LatLng;
 import me.deal.shared.Location;
 
 import com.google.gson.Gson;
@@ -29,7 +29,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 	 *  Implemented using the Yipit API.  Returns deals relating to the tags within radius distance of
 	 *  the given coordinate.  Returns null if no deals found.
 	 */
-	public ArrayList<Deal> getYipitDeals(LatLng coor, Double radius, Integer limit, ArrayList<Category> tags) {
+	public ArrayList<Deal> getYipitDeals(LatLngCoor coor, Double radius, Integer limit, ArrayList<Category> tags) {
 		/*
 		 * TODO: Implement this method.  Get the deals using the Yipit API and parse the result into
 		 * Deal java items, returning them to the user.  See http://yipit.com/about/api/documentation/
@@ -60,10 +60,10 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 				tags.add(Category.getCategory(tag.slug));
 			}
 			
-			LatLng latLng = null;
+			LatLngCoor latLng = null;
 			if(jsonDeal.business.locations.get(0).lat != null &&
 				jsonDeal.business.locations.get(0).lon != null) {
-				latLng = new LatLng(new Double(jsonDeal.business.locations.get(0).lat),
+				latLng = new LatLngCoor(new Double(jsonDeal.business.locations.get(0).lat),
 						new Double(jsonDeal.business.locations.get(0).lon));
 			}
 			
@@ -100,7 +100,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 				response.indexOf(preEnd)-6) + " }";
 	}
 	
-	private String generateParamterStr(LatLng coor, Double radius, Integer limit, ArrayList<Category> tags) {
+	private String generateParamterStr(LatLngCoor coor, Double radius, Integer limit, ArrayList<Category> tags) {
 		String parameterStr = "";
 		parameterStr += "key=" + apiKey + "&";
 		parameterStr += coor.getLatitude().isNaN() ? "" : "lat=" + coor.getLatitude() + "&";

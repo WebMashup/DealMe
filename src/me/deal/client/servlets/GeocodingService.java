@@ -1,6 +1,6 @@
 package me.deal.client.servlets;
 
-import me.deal.shared.LatLng;
+import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -15,11 +15,11 @@ public interface GeocodingService extends RemoteService {
 	/*
 	 *  Given a lattitude and longitude, convert it to an address
 	 */
-	Location convertLatLngToAddress(LatLng latLng);
+	Location convertLatLngToAddress(LatLngCoor latLng);
 	
 	/*
 	 * Given an address (location where latLng is null), return
 	 * a LatLng 
 	 */
-	LatLng convertAddressToLatLng(Location address);
+	LatLngCoor convertAddressToLatLng(Location address);
 }

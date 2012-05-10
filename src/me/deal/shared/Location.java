@@ -19,12 +19,12 @@ public class Location implements Serializable {
 	// Two letter abbreviation
 	private String state;
 	private String zipCode;
-	private LatLng latLng;
+	private LatLngCoor latLng;
 	
 	public Location() {
 	}
 	
-	public Location(String address, String city, String state, String zipCode, LatLng latLng) {
+	public Location(String address, String city, String state, String zipCode, LatLngCoor latLng) {
 		this.address = address;
 		this.city = city;
 		this.state = state;
@@ -48,7 +48,7 @@ public class Location implements Serializable {
 		return this.zipCode;
 	}
 	
-	public LatLng getLatLng() {
+	public LatLngCoor getLatLng() {
 		return this.latLng;
 	}
 	
@@ -68,7 +68,7 @@ public class Location implements Serializable {
 		this.zipCode = zipCode;
 	}
 	
-	public void setLatLng(LatLng latLng) {
+	public void setLatLng(LatLngCoor latLng) {
 		this.latLng = latLng;
 	}
 }

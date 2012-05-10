@@ -41,6 +41,7 @@ public class ListWidget extends Composite {
 	private final DirectionsServiceAsync directionsService;
 	private final HandlerManager eventBus;
 	private Boolean dealsLoaded = false;
+	private final Integer DEFAULT_NUM_DEALS = 20;
 	
 	public ListWidget(final DealServiceAsync dealService,
 			final DirectionsServiceAsync directionsService,
@@ -65,7 +66,7 @@ public class ListWidget extends Composite {
 			@Override
 			public void onDealsLocation(DealsLocationEvent event) {
 				dealService.getYipitDeals(DealsLocation.getInstance().getDealsLocation().getLatLng(),
-						DealsLocation.getInstance().DEFAULT_RADIUS, 100, new ArrayList<Category>(),
+						DealsLocation.getInstance().DEFAULT_RADIUS, DEFAULT_NUM_DEALS, new ArrayList<Category>(),
 						new AsyncCallback<ArrayList<Deal>>() {
 							@Override
 							public void onFailure(Throwable caught) {

@@ -14,7 +14,7 @@ import me.deal.client.view.main.ListWidget;
 import me.deal.client.view.menubar.FilterWidget;
 import me.deal.client.view.menubar.LocationWidget;
 import me.deal.client.view.menubar.MenuWidget;
-import me.deal.shared.LatLng;
+import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 
 import com.google.gwt.core.client.Callback;
@@ -92,7 +92,7 @@ public class DealMe implements EntryPoint {
 					@Override
 					public void onSuccess(Position result) {
 						Coordinates userCoor = result.getCoordinates();
-						LatLng userLatLng = new LatLng(userCoor.getLatitude(), userCoor.getLongitude());
+						LatLngCoor userLatLng = new LatLngCoor(userCoor.getLatitude(), userCoor.getLongitude());
 						geocodingService.convertLatLngToAddress(userLatLng, new AsyncCallback<Location>() {
 							@Override
 							public void onFailure(Throwable caught) {
