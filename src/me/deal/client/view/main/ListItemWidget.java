@@ -63,6 +63,8 @@ public class ListItemWidget extends Composite {
 	Label numDaysLeft;
 	@UiField
 	Label dealSource;
+	@UiField
+	Image avgYelpRating;
 	
 	private void intialize() {
 		/*
@@ -74,6 +76,7 @@ public class ListItemWidget extends Composite {
 		 * the ListItem and add a close button so that the user can easily close
 		 * get rid of the directions.
 		 */
+		String yelpRatingURL= deal.getDealBusinessInfo().getAvgRatingImageUrl();
 		
 		dealImage.setUrl(deal.getBigImageUrl());
 		dealTitle.setText(deal.getTitle());
@@ -81,5 +84,8 @@ public class ListItemWidget extends Composite {
 		dealPrice.setText(deal.getPrice().toString());
 		discountPercentage.setText(deal.getDiscountPercentage() + "%");
 		numDaysLeft.setText(deal.getEndDate());
+		
+		if(yelpRatingURL!=null)
+			avgYelpRating.setUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
 	}
 }

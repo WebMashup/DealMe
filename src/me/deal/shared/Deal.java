@@ -33,6 +33,7 @@ public class Deal implements Serializable {
 	private String businessPhoneNumber; // The phone number of the businesses (containing no '-' or '(', ')')
 	private Boolean paid; // Is this deal part of the Yipit affiliates program?
 	private ArrayList<Category> tags; // The categories that this deal falls under
+	private BusinessInfo dealBusinessInfo;
 	
 	public Deal() {
 	}
@@ -53,7 +54,8 @@ public class Deal implements Serializable {
 		final Location businessAddress,
 		final String businessPhoneNumber,
 		final Boolean paid,
-		final ArrayList<Category> tags) {
+		final ArrayList<Category> tags,
+		final BusinessInfo dealBusinessInfo) {
 			this.yipitDealID = yipitDealID;
 			this.addDate = addDate;
 			this.endDate = endDate;
@@ -70,6 +72,7 @@ public class Deal implements Serializable {
 			this.businessPhoneNumber = businessPhoneNumber;
 			this.paid = paid;
 			this.tags = tags;
+			this.dealBusinessInfo= dealBusinessInfo;
 	}
 	
 	public Integer getYipitDealID() {
@@ -198,5 +201,13 @@ public class Deal implements Serializable {
 	public void addTag(final Category tag) {
 		if(!tags.contains(tag))
 			tags.add(tag);
+	}
+
+	public void setDealBusinessInfo(BusinessInfo dealBusinessInfo) {
+		this.dealBusinessInfo = dealBusinessInfo;
+	}
+
+	public BusinessInfo getDealBusinessInfo() {
+		return dealBusinessInfo;
 	}
 }

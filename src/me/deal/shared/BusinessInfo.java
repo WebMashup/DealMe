@@ -86,7 +86,7 @@ public class BusinessInfo implements Serializable {
 		return this.numReviews;
 	}
 	
-	public void setAvgRatingImageUrl(final Integer numReviews) {
+	public void setNumReviews(final Integer numReviews) {
 		this.numReviews = numReviews;
 	}
 	

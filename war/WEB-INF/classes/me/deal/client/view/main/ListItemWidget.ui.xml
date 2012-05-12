@@ -37,6 +37,10 @@
 					<g:Label>DISCOUNT:</g:Label>
 					<g:Label ui:field="discountPercentage"></g:Label>
 				</g:VerticalPanel>
+				<g:VerticalPanel>
+					<g:Label>Yelp Ratings:</g:Label>
+					<g:Image ui:field="avgYelpRating"></g:Image>
+				</g:VerticalPanel>
 			</g:HorizontalPanel>
 			<g:HorizontalPanel>
 				<g:Label ui:field="numDaysLeft"></g:Label>

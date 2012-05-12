@@ -1,6 +1,7 @@
 package me.deal.server;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import me.deal.client.servlets.DealService;
 import me.deal.shared.BusinessInfo;
@@ -8,6 +9,7 @@ import me.deal.shared.Category;
 import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
 import me.deal.shared.json.JSONYipitDeals;
+import me.deal.shared.json.JSONYelp;
 import me.deal.shared.json.JSONYipitDeals.JSONYipitDeal;
 import me.deal.shared.json.JSONYipitDeals.JSONYipitDeal.JSONTag;
 import me.deal.shared.Location;
@@ -24,6 +26,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		DealService {
 
 	final String apiKey = "tvw7u8QvGqetCNUf";
+	final String apiKeyYelp="ijeImBEdt2K2hS2Abub6FQ";
 	
 	/*
 	 *  Implemented using the Yipit API.  Returns deals relating to the tags within radius distance of
@@ -67,6 +70,8 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 						new Double(jsonDeal.business.locations.get(0).lon));
 			}
 			
+			
+			BusinessInfo dealBusinessInfo=lookupYelpByPhone(jsonDeal.business.locations.get(0).phone);
 			Deal deal = new Deal(
 					jsonDeal.id,
 					jsonDeal.date_added,
@@ -85,7 +90,8 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 							jsonDeal.business.locations.get(0).zip_code, latLng),
 					jsonDeal.business.locations.get(0).phone,
 					new Boolean(jsonDeal.source.paid != 0),
-					tags);
+					tags,
+					dealBusinessInfo);
 			
 			deals.add(deal);
 		}
@@ -114,6 +120,14 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		
 		return parameterStr;
 	}
+	// overloaded generateParamterStr for Yelp
+	private String generateParamterStr(String phoneNumber) 
+	{
+		String parameterStr = "";
+		parameterStr += "ywsid=" + apiKeyYelp + "&";
+		parameterStr += "phone="+phoneNumber;
+		return parameterStr;
+	}
 	
 	private String getCategoryParams(ArrayList<Category> tags) {
 		
@@ -136,6 +150,51 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		 * Yelp API Key = ijeImBEdt2K2hS2Abub6FQ
 		 */
 		
-		return null;
+		String endPoint = "http://api.yelp.com/phone_search";
+		String requestParameters = generateParamterStr(phoneNumber);
+		
+		Gson gson = new GsonBuilder().create();
+		String response = HttpSender.sendGetRequest(endPoint, requestParameters);
+		System.out.println(response);
+		//JSONYelp yelp = gson.fromJson(response, JSONYelp.class);
+		
+		
+		SearchResponse searchResponse = new Gson().fromJson(response, SearchResponse.class);
+		ArrayList<JSONYelp> yelp= searchResponse.businesses;//response = formatResponse(response);
+		
+		return convertYelp(yelp);
+	
+	}
+	private class SearchResponse {
+		public ArrayList<JSONYelp> businesses;
+	}
+	
+	private BusinessInfo convertYelp(ArrayList<JSONYelp> yelp) {
+		
+		BusinessInfo instance =new BusinessInfo();
+		Iterator<JSONYelp> i = yelp.iterator();
+		JSONYelp oneRecord;
+		while(i.hasNext())
+		{
+			oneRecord= i.next();
+			instance.setAvgRating(Double.parseDouble(oneRecord.avg_rating));
+			instance.setAvgRatingImageUrl(oneRecord.rating_img_url_small);
+			instance.setName(oneRecord.name);
+			instance.setWebUrl(oneRecord.url);
+			instance.setMobileUrl(oneRecord.mobile_url);
+			instance.setYelpID(oneRecord.id);
+			instance.setNumReviews(Integer.parseInt(oneRecord.review_count));
+			instance.setImageUrl(oneRecord.photo_url_small);
+			
+			
+		}
+		
+		// for debugging
+		System.out.println("inside yelp");
+		System.out.println(instance.getImageUrl()+instance.getAvgRatingImageUrl()+instance.getMobileUrl()+instance.getName()+instance.getWebUrl()+instance.getYelpID()+instance.getAvgRating()+instance.getNumReviews());
+		
+		return instance;
+		
+		
 	}
 }
