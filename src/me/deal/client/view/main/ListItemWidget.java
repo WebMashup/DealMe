@@ -76,7 +76,16 @@ public class ListItemWidget extends Composite {
 		 * the ListItem and add a close button so that the user can easily close
 		 * get rid of the directions.
 		 */
-		String yelpRatingURL= deal.getDealBusinessInfo().getAvgRatingImageUrl();
+		//yelp details
+		BusinessInfo yelpInformation = deal.getDealBusinessInfo();
+		if(yelpInformation!=null)
+		{
+			String yelpRatingURL= yelpInformation.getAvgRatingImageUrl();
+			String yelpURL = yelpInformation.getWebUrl();
+			int yelpNoOfReviews= yelpInformation.getNumReviews();
+		}
+		// yelp details ends
+		
 		
 		dealImage.setUrl(deal.getBigImageUrl());
 		dealTitle.setText(deal.getTitle());
@@ -85,7 +94,7 @@ public class ListItemWidget extends Composite {
 		discountPercentage.setText(deal.getDiscountPercentage() + "%");
 		numDaysLeft.setText(deal.getEndDate());
 		
-		if(yelpRatingURL!=null)
-			avgYelpRating.setUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
+		
+		//	avgYelpRating.setUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
 	}
 }

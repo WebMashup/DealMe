@@ -162,6 +162,9 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		SearchResponse searchResponse = new Gson().fromJson(response, SearchResponse.class);
 		ArrayList<JSONYelp> yelp= searchResponse.businesses;//response = formatResponse(response);
 		
+		if(yelp.size()==0)
+			return null;
+		
 		return convertYelp(yelp);
 	
 	}
@@ -173,10 +176,14 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		
 		BusinessInfo instance =new BusinessInfo();
 		Iterator<JSONYelp> i = yelp.iterator();
+		if(yelp==null)
+			return null;
 		JSONYelp oneRecord;
 		while(i.hasNext())
 		{
 			oneRecord= i.next();
+		
+			
 			instance.setAvgRating(Double.parseDouble(oneRecord.avg_rating));
 			instance.setAvgRatingImageUrl(oneRecord.rating_img_url_small);
 			instance.setName(oneRecord.name);
