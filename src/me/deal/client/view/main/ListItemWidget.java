@@ -2,6 +2,7 @@ package me.deal.client.view.main;
 
 import me.deal.shared.BusinessInfo;
 import me.deal.shared.Deal;
+import me.deal.shared.Location;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -85,6 +86,18 @@ public class ListItemWidget extends Composite {
 			int yelpNoOfReviews= yelpInformation.getNumReviews();
 		}
 		// yelp details ends
+		
+		// location details with latitude and longitude
+		Location dealLocation = deal.getBusinessAddress();
+		if(dealLocation !=null)
+		{
+			dealLocation.getAddress(); // address
+			dealLocation.getCity();
+			dealLocation.getState();
+			dealLocation.getZipCode();
+			dealLocation.getLatLng().getLatitude();
+			dealLocation.getLatLng().getLongitude();
+		}
 		
 		
 		dealImage.setUrl(deal.getBigImageUrl());
