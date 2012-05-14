@@ -11,6 +11,7 @@ import me.deal.shared.Location;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -44,7 +45,7 @@ public class LocationWidget extends Composite {
 	@UiField
 	Button changeAddressButton;
 	
-	public LocationWidget(final GeocodingServiceAsync geocodingService,
+	public @UiConstructor LocationWidget(final GeocodingServiceAsync geocodingService,
 			final HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.geocodingService = geocodingService;

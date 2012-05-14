@@ -1,11 +1,53 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" xmlns:m="urn:import:me.deal.client.view.menubar"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
 	<ui:style>
 		.important {
 			font-weight: bold;
 		}
 	</ui:style>
 	<g:HTMLPanel>
+		<b:ResponsiveNavbar>
+			<b:Brand>deal.me</b:Brand>
+			<b:Nav>
+				<m:ModifiedDropdown ui:field="FilterDropdown"
+					text="Filters">
+					<b:NavWidget>
+						<b:CheckBox ui:field="DiningCheckBox">Dining</b:CheckBox>
+					</b:NavWidget>
+					<b:NavWidget>
+						<b:CheckBox ui:field="HealthCheckBox">Health</b:CheckBox>
+					</b:NavWidget>
+					<b:NavWidget>
+						<b:CheckBox ui:field="FitnessCheckBox">Fitness</b:CheckBox>
+					</b:NavWidget>
+					<b:NavWidget>
+						<b:CheckBox ui:field="RetailCheckBox">Retail</b:CheckBox>
+					</b:NavWidget>
+					<b:NavWidget>
+						<b:CheckBox ui:field="ServicesCheckBox">Services</b:CheckBox>
+					</b:NavWidget>
+<!-- 					<b:NavWidget> -->
+<!-- 						<b:CheckBox ui:field="ActivitiesCheckBox">Activities</b:CheckBox> -->
+<!-- 					</b:NavWidget> -->
+					<b:NavWidget>
+						<b:CheckBox ui:field="EventsCheckBox">Events</b:CheckBox>
+					</b:NavWidget>
+					<b:NavWidget>
+						<b:CheckBox ui:field="SpecialInterestCheckBox">Special Interests</b:CheckBox>
+					</b:NavWidget>
+				</m:ModifiedDropdown>
+				<m:ModifiedDropdown text="Location">
+					<b:NavLink>Test 1</b:NavLink>
+					<b:NavLink>Test 2</b:NavLink>
+				</m:ModifiedDropdown>
+			</b:Nav>
+			<b:Nav alignment="RIGHT">
+				<b:NavLink>About</b:NavLink>
+				<b:NavLink>Contact Us</b:NavLink>
+			</b:Nav>
+		</b:ResponsiveNavbar>
 	</g:HTMLPanel>
 </ui:UiBinder> 

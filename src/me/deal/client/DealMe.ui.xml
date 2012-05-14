@@ -1,24 +1,42 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:header="urn:import:me.deal.client.view.header"
-	xmlns:menubar="urn:import:me.deal.client.view.menubar"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:header="urn:import:me.deal.client.view.header" xmlns:menubar="urn:import:me.deal.client.view.menubar"
 	xmlns:main="urn:import:me.deal.client.view.main">
+
 	<ui:style>
 		.important {
 			font-weight: bold;
 		}
 	</ui:style>
-	<g:VerticalPanel>
-		<header:HeaderWidget ui:field="headerWidget"></header:HeaderWidget>
+	<g:HTMLPanel>
 		<menubar:MenuWidget ui:field="menuWidget"></menubar:MenuWidget>
-		<g:Hidden>
-			<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
-			<menubar:FilterWidget ui:field="filterWidget"></menubar:FilterWidget>
-		</g:Hidden>
-		<g:HorizontalPanel>
-			<main:ListWidget ui:field="listWidget"></main:ListWidget>
-			<main:GoogleMapWidget ui:field="googleMapWidget"></main:GoogleMapWidget>
-		</g:HorizontalPanel>
-	</g:VerticalPanel>
+		<b:Container>
+			<b:Row>
+				<b:Column size="7">
+					<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
+				</b:Column>
+				<b:Column size="1">
+				</b:Column>
+			</b:Row>
+			<b:Row>
+				<b:Column size="7">
+					<b:Hero>
+						<b:Heading size="1">Deals Go Here</b:Heading>
+						<b:Paragraph>Some filler text.</b:Paragraph>
+						<b:Paragraph>More text.</b:Paragraph>
+					</b:Hero>
+					<main:ListWidget ui:field="listWidget"></main:ListWidget>
+				</b:Column>
+				<b:Column size="5">
+					<main:GoogleMapWidget ui:field="googleMapWidget"></main:GoogleMapWidget>
+					<b:Hero>
+						<b:Heading size="1">Map Goes Here</b:Heading>
+						<b:Paragraph>Some filler text.</b:Paragraph>
+						<b:Paragraph>More text.</b:Paragraph>
+					</b:Hero>
+				</b:Column>
+			</b:Row>
+		</b:Container>
+	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -6,6 +6,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
@@ -25,7 +26,7 @@ public class GoogleMapWidget extends Composite {
 	private final DealServiceAsync dealService;
 	private final HandlerManager eventBus;
 	
-	public GoogleMapWidget(final DealServiceAsync dealService,
+	public @UiConstructor GoogleMapWidget(final DealServiceAsync dealService,
 			final HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.dealService = dealService;

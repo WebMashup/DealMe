@@ -25,58 +25,69 @@ import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
 import com.google.gwt.geolocation.client.Position.Coordinates;
 import com.google.gwt.geolocation.client.PositionError;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiConstructor;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class DealMe implements EntryPoint {
 	
-	
+    interface MyUiBinder extends UiBinder<Widget,DealMe> {
+        MyUiBinder INSTANCE = GWT.create(MyUiBinder.class);
+}
+
+
 	private final DealServiceAsync dealService =  GWT.create(DealService.class);
 	private final DirectionsServiceAsync directionsService = GWT.create(DirectionsService.class);
 	private final GeocodingServiceAsync geocodingService = GWT.create(GeocodingService.class);
 	
 	private final HandlerManager eventBus = new HandlerManager(null);
+
 	
-	HeaderWidget headerWidget;
+//	@UiField
+//	HeaderWidget headerWidget;
+	
+//	@UiField
+//	FilterWidget filterWidget;	
+	
+	@UiField (provided=true)
 	MenuWidget menuWidget;
-	FilterWidget filterWidget;
-	LocationWidget locationWidget;
-	ListWidget listWidget;
-	GoogleMapWidget googleMapWidget;
 	
-	VerticalPanel mainDisplay;
-	HorizontalPanel dealsDisplay;
+	@UiField (provided=true)
+	LocationWidget locationWidget;
+	
+	@UiField (provided=true)
+	ListWidget listWidget;
+	
+	@UiField (provided=true)
+	GoogleMapWidget googleMapWidget;
 	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		mainDisplay = new VerticalPanel();
-		dealsDisplay = new HorizontalPanel();
-		
-		headerWidget = new HeaderWidget();
+
+//		headerWidget = new HeaderWidget();
+//		filterWidget = new FilterWidget(dealService, eventBus);
 		menuWidget = new MenuWidget(eventBus);
-		filterWidget = new FilterWidget(dealService, eventBus);
 		locationWidget = new LocationWidget(geocodingService, eventBus);
 		listWidget = new ListWidget(dealService, directionsService, eventBus);
 		googleMapWidget = new GoogleMapWidget(dealService, eventBus);
 		
-		mainDisplay.add(headerWidget);
-		mainDisplay.add(menuWidget);
-		mainDisplay.add(locationWidget);
-		mainDisplay.add(filterWidget);
-		dealsDisplay.add(listWidget);
-		dealsDisplay.add(googleMapWidget);
-		mainDisplay.add(dealsDisplay);
+		getUserLocation(); 
 		
-		RootPanel.get().add(mainDisplay);
-		getUserLocation();
+		Widget w = MyUiBinder.INSTANCE.createAndBindUi(this);
+        RootLayoutPanel.get().add(w);
 	}
 	
 	private void getUserLocation() {
