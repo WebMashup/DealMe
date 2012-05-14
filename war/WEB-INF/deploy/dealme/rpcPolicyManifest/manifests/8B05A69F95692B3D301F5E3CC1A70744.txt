@@ -1,2 +1,0 @@
-serviceClass: me.deal.client.servlets.DealService
-path: 48F77054DBF01A1D555B1553E42E7922.gwt.rpc

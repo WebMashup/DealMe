@@ -1,5 +1,7 @@
 package me.deal.client.view.main;
 
+import java.util.Date;
+
 import me.deal.shared.BusinessInfo;
 import me.deal.shared.Deal;
 import me.deal.shared.Location;
@@ -14,6 +16,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+
 public class ListItemWidget extends Composite {
 
 	private static ListItemWidgetUiBinder uiBinder = GWT
@@ -24,6 +27,7 @@ public class ListItemWidget extends Composite {
 	
 	private Deal deal;
 	private BusinessInfo businessInfo;
+	final int MILLSECS_PER_DAY = 86400000;
 
 	public ListItemWidget(final Deal deal, final BusinessInfo businessInfo) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -33,8 +37,8 @@ public class ListItemWidget extends Composite {
 		intialize();
 	}
 
-	@UiField
-	Button formatMapButton;
+	//@UiField
+	//Button formatMapButton;
 	@UiField
 	Image dealImage;
 	@UiField
@@ -63,10 +67,14 @@ public class ListItemWidget extends Composite {
 	@UiField
 	Label numDaysLeft;
 	@UiField
+	Label daysText;
+	@UiField
 	Label dealSource;
 	@UiField
 	Image avgYelpRating;
 	
+	
+	@SuppressWarnings("deprecation")
 	private void intialize() {
 		/*
 		 * TODO: Use the data from the deal and businessInfo variables to fill in the
@@ -77,37 +85,44 @@ public class ListItemWidget extends Composite {
 		 * the ListItem and add a close button so that the user can easily close
 		 * get rid of the directions.
 		 */
-		//yelp details
-		BusinessInfo yelpInformation = deal.getDealBusinessInfo();
-		if(yelpInformation!=null)
-		{
-			String yelpRatingURL= yelpInformation.getAvgRatingImageUrl();
-			String yelpURL = yelpInformation.getWebUrl();
-			int yelpNoOfReviews= yelpInformation.getNumReviews();
-		}
-		// yelp details ends
-		
-		// location details with latitude and longitude
-		Location dealLocation = deal.getBusinessAddress();
-		if(dealLocation !=null)
-		{
-			dealLocation.getAddress(); // address
-			dealLocation.getCity();
-			dealLocation.getState();
-			dealLocation.getZipCode();
-			dealLocation.getLatLng().getLatitude();
-			dealLocation.getLatLng().getLongitude();
-		}
 		
 		
+		
+		String yelpRatingURL= deal.getDealBusinessInfo().getAvgRatingImageUrl();
+		
+		String url = deal.getBigImageUrl();
+		Location dealAddr = deal.getBusinessAddress();
 		dealImage.setUrl(deal.getBigImageUrl());
 		dealTitle.setText(deal.getTitle());
+		dealTitle.addStyleName("titleStyle");
 		dealSubtitle.setText(deal.getSubtitle());
+		businessName.setText(deal.getDealBusinessInfo().getName());
+		addressLine1.setText(deal.getBusinessAddress().getAddress());
+		addressLine2.setText(dealAddr.getCity() + "," + dealAddr.getState());
+		System.out.println("City: " + dealAddr.getCity());
+				
 		dealPrice.setText(deal.getPrice().toString());
 		discountPercentage.setText(deal.getDiscountPercentage() + "%");
-		numDaysLeft.setText(deal.getEndDate());
+		dealSource.setText("TempDealSource");		
 		
+		//parse date strings to determine how many days are left compared to current date
+		Date today = new Date();
+		String endDate = deal.getEndDate();
+		Date endDay = new Date();
+		endDay.setYear(Integer.parseInt(endDate.substring(0, 4))-1900);
+		endDay.setMonth(Integer.parseInt(endDate.substring(5, 7))-1);
+		endDay.setDate(Integer.parseInt(endDate.substring(8, 10)));
+		long deltaDays = (endDay.getTime() - today.getTime()) / MILLSECS_PER_DAY;		
+		numDaysLeft.setText(String.valueOf(deltaDays));
+		//set days to plural if needed
+		if (deltaDays > 1){
+			daysText.setText("\t     days left on");
+		}
+		else {
+			daysText.setText("\tday left on ");
+		}		
 		
-		//	avgYelpRating.setUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
+		if(yelpRatingURL!=null)
+			avgYelpRating.setUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
 	}
 }

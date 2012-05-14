@@ -72,6 +72,9 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 			
 			
 			BusinessInfo dealBusinessInfo=lookupYelpByPhone(jsonDeal.business.locations.get(0).phone);
+			if (dealBusinessInfo == null){
+				dealBusinessInfo = new BusinessInfo();
+			}
 			Deal deal = new Deal(
 					jsonDeal.id,
 					jsonDeal.date_added,
