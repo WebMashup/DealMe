@@ -16,6 +16,7 @@ import me.deal.shared.Deal;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -43,7 +44,7 @@ public class ListWidget extends Composite {
 	private Boolean dealsLoaded = false;
 	private final Integer DEFAULT_NUM_DEALS = 20;
 	
-	public ListWidget(final DealServiceAsync dealService,
+	public @UiConstructor ListWidget(final DealServiceAsync dealService,
 			final DirectionsServiceAsync directionsService,
 			final HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
