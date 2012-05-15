@@ -8,23 +8,30 @@
 		.important {
 			font-weight: bold;
 		}
+		.bottomdivider {
+		margin-top: 5px;
+		margin-bottom: 10px;
+        border-bottom: 1px solid rgb(221,221,221);
+		}
+		.rightdivider {
+        border-right: 1px solid rgb(221,221,221);
+		}
 	</ui:style>
 	<g:HTMLPanel>
 		<menubar:MenuWidget ui:field="menuWidget"></menubar:MenuWidget>
 		<b:Container>
 			<b:Row>
-				<b:Column size="7">
+				<b:Column size="12" styleName='{style.bottomdivider}'>
+					<b:Heading size="5">Location: </b:Heading>
 					<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
-				</b:Column>
-				<b:Column size="1">
 				</b:Column>
 			</b:Row>
 			<b:Row>
 				<b:Column size="7">
 					<b:Hero>
 						<b:Heading size="1">Deals Go Here</b:Heading>
-						<b:Paragraph>Some filler text.</b:Paragraph>
-						<b:Paragraph>More text.</b:Paragraph>
+						<b:Paragraph>   Some filler text.</b:Paragraph>
+						<b:Paragraph>   More text.</b:Paragraph>
 					</b:Hero>
 					<main:ListWidget ui:field="listWidget"></main:ListWidget>
 				</b:Column>
