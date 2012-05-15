@@ -32,6 +32,8 @@ public class MenuWidget extends Composite {
 		initialize();
 	}
 
+	//TODO: bind handlers for onhide filters ->
+	//TODO: stop click propagation for dropdown
 	private void bind(){
 		
 		DiningCheckBox.addClickHandler(new ClickHandler() {
