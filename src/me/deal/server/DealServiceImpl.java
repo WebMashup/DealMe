@@ -86,7 +86,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 					jsonDeal.mobile_url,
 					jsonDeal.images.image_big,
 					jsonDeal.images.image_small,
-					new Location(jsonDeal.business.locations.get(0).address, "",
+					new Location(jsonDeal.business.locations.get(0).address, jsonDeal.business.locations.get(0).locality,
 							jsonDeal.business.locations.get(0).state,
 							jsonDeal.business.locations.get(0).zip_code, latLng),
 					jsonDeal.business.locations.get(0).phone,

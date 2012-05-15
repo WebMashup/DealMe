@@ -51,6 +51,7 @@ public class JSONYipitDeals {
 			
 			public class JSONLocation {
 				public String address;
+				public String locality;
 				public String phone;
 				public String lat;
 				public String lon;
