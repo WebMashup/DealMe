@@ -70,15 +70,16 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 						new Double(jsonDeal.business.locations.get(0).lon));
 			}
 			
-			
+			//Temporary fix for discount.
 			BusinessInfo dealBusinessInfo=lookupYelpByPhone(jsonDeal.business.locations.get(0).phone);
 			Deal deal = new Deal(
 					jsonDeal.id,
 					jsonDeal.date_added,
 					jsonDeal.end_date,
-					jsonDeal.value.raw == null ? null : new Double(jsonDeal.discount.raw),
+					jsonDeal.value.raw == null ? null : new Double(jsonDeal.value.raw),
 					jsonDeal.price.raw == null? null : new Double(jsonDeal.price.raw),
-					jsonDeal.discount.raw == null ? null : new Double(jsonDeal.value.raw),
+	//			    jsonDeal.discount.raw == null ? null : new Double(jsonDeal.discount.raw),
+					jsonDeal.discount.raw == null ? null : new Double(0),
 					jsonDeal.title,
 					jsonDeal.yipit_title,
 					jsonDeal.yipit_url,
@@ -95,7 +96,6 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 			
 			deals.add(deal);
 		}
-		
 		return deals;
 	}
 	
