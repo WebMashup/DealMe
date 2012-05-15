@@ -155,7 +155,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		
 		Gson gson = new GsonBuilder().create();
 		String response = HttpSender.sendGetRequest(endPoint, requestParameters);
-		System.out.println(response);
+		// System.out.println(response);
 		//JSONYelp yelp = gson.fromJson(response, JSONYelp.class);
 		
 		
@@ -197,8 +197,8 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		}
 		
 		// for debugging
-		System.out.println("inside yelp");
-		System.out.println(instance.getImageUrl()+instance.getAvgRatingImageUrl()+instance.getMobileUrl()+instance.getName()+instance.getWebUrl()+instance.getYelpID()+instance.getAvgRating()+instance.getNumReviews());
+		// System.out.println("inside yelp");
+		// System.out.println(instance.getImageUrl()+instance.getAvgRatingImageUrl()+instance.getMobileUrl()+instance.getName()+instance.getWebUrl()+instance.getYelpID()+instance.getAvgRating()+instance.getNumReviews());
 		
 		return instance;
 		

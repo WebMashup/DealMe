@@ -1,6 +1,6 @@
 package me.deal.client.servlets;
 
-import me.deal.shared.LatLng;
+import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -15,8 +15,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("geolocation")
 public interface GeolocationService extends RemoteService {
 	// Convert the user's IP address into a LatLng
-	LatLng getUserLatLng();
+	LatLngCoor getUserLatLng();
 	
 	// Given an address, return a latitude and longitude coordinate
-	LatLng geolocateLocation(Location loc);
+	LatLngCoor geolocateLocation(Location loc);
 }

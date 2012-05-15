@@ -8,10 +8,18 @@
 		.important {
 			font-weight: bold;
 		}
+		.scrollable {
+                height: 100%;
+                overflow: auto;
+        }
+        .maxheight {
+				height: 100%;
+		}
 	</ui:style>
-	<g:HTMLPanel>
+	<g:HTMLPanel styleName='{style.maxheight}'>
 		<g:Image resource="{res.loadingSpinner}" ui:field="loadingSpinnerImage" />
-		<g:VerticalPanel ui:field="listItemContainer">
-		</g:VerticalPanel>
+		<g:ScrollPanel ui:field="listWidgetScrollPanel">
+			<g:VerticalPanel ui:field="listItemContainer" styleName='{style.scrollable}'></g:VerticalPanel>
+		</g:ScrollPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>

@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -35,6 +36,8 @@ public class ListWidget extends Composite {
 
 	@UiField
 	Image loadingSpinnerImage;
+	@UiField
+	ScrollPanel listWidgetScrollPanel;
 	@UiField
 	VerticalPanel listItemContainer;
 	
@@ -61,6 +64,9 @@ public class ListWidget extends Composite {
 		 * changes in the model.
 		 * 
 		 */
+		
+		listWidgetScrollPanel.setHeight("600px");
+		listWidgetScrollPanel.setWidth("600px");
 		
 		eventBus.addHandler(DealsLocationEvent.TYPE,
 				new DealsLocationEventHandler() {
@@ -91,7 +97,7 @@ public class ListWidget extends Composite {
 					ArrayList<Deal> deals = Deals.getInstance().getDeals();
 					for(Deal deal : deals) {
 						// change null to business info after YELP api is complete
-						System.out.println("adding to page");
+						// System.out.println("adding to page");
 						ListItemWidget listItem = new ListItemWidget(deal, null); 
 						listItemContainer.add(listItem);
 					}

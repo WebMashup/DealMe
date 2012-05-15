@@ -2,6 +2,8 @@ package me.deal.shared;
 
 import java.io.Serializable;
 
+import com.google.gwt.maps.client.geom.LatLng;
+
 @SuppressWarnings("serial")
 public class LatLngCoor implements Serializable {
 	
@@ -31,4 +33,9 @@ public class LatLngCoor implements Serializable {
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
+	
+	public LatLng convert()
+    {
+        return LatLng.newInstance(this.latitude, this.longitude);
+    }
 }

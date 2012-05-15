@@ -104,7 +104,7 @@ public class ListItemWidget extends Composite {
 		dealSubtitle.setText(deal.getSubtitle());
 		addressLine1.setText(deal.getBusinessAddress().getAddress());
 		addressLine2.setText(dealAddr.getCity() + "," + dealAddr.getState());
-		System.out.println("City: " + dealAddr.getCity());
+		// System.out.println("City: " + dealAddr.getCity());
 				
 		dealPrice.setText(deal.getPrice().toString());
 		discountPercentage.setText(deal.getDiscountPercentage() + "%");

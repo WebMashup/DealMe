@@ -1,11 +1,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:gm="urn:import:com.google.gwt.maps.client">
 	<ui:style>
 		.important {
 			font-weight: bold;
 		}
 	</ui:style>
-	<g:HTMLPanel>
-	</g:HTMLPanel>
+	<gm:MapWidget ui:field="mapWidget" />
 </ui:UiBinder> 

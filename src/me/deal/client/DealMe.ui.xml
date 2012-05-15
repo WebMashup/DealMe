@@ -29,28 +29,30 @@
 		<b:Container>
 			<b:Row>
 				<b:Column size="12" styleName='{style.bottomdivider}'>
-					<b:Heading size="5">Location: </b:Heading>
-					<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
+					<g:HorizontalPanel>
+						<b:Heading size="5">Location: </b:Heading>
+						<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
+					</g:HorizontalPanel>
 				</b:Column>
 			</b:Row>
 			<b:Row>
 				<b:Column size="7">
-					<b:Hero>
+					<!-- <b:Hero>
 						<b:Heading size="1">Deals Go Here</b:Heading>
 						<b:Paragraph>   Some filler text.</b:Paragraph>
 						<b:Paragraph>   More text.</b:Paragraph>
-					</b:Hero>
+					</b:Hero> -->
 					<g:ScrollPanel>
-					<main:ListWidget ui:field="listWidget" styleName='{style.maxheight}'></main:ListWidget>
+						<main:ListWidget ui:field="listWidget" styleName='{style.maxheight}'></main:ListWidget>
 					</g:ScrollPanel>
 				</b:Column>
 				<b:Column size="5">
 					<main:GoogleMapWidget ui:field="googleMapWidget"></main:GoogleMapWidget>
-					<b:Hero>
+					<!-- <b:Hero>
 						<b:Heading size="1">Map Goes Here</b:Heading>
 						<b:Paragraph>Some filler text.</b:Paragraph>
 						<b:Paragraph>More text.</b:Paragraph>
-					</b:Hero>
+					</b:Hero> -->
 				</b:Column>
 			</b:Row>
 		</b:Container>
