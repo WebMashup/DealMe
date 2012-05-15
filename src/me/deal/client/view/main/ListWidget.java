@@ -91,6 +91,7 @@ public class ListWidget extends Composite {
 					ArrayList<Deal> deals = Deals.getInstance().getDeals();
 					for(Deal deal : deals) {
 						// change null to business info after YELP api is complete
+						System.out.println("adding to page");
 						ListItemWidget listItem = new ListItemWidget(deal, null); 
 						listItemContainer.add(listItem);
 					}

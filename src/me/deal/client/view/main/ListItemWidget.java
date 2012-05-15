@@ -34,7 +34,7 @@ public class ListItemWidget extends Composite {
 		
 		this.deal = deal;
 		this.businessInfo = businessInfo;
-		intialize();
+		initialize();
 	}
 
 	//@UiField
@@ -75,7 +75,7 @@ public class ListItemWidget extends Composite {
 	
 	
 	@SuppressWarnings("deprecation")
-	private void intialize() {
+	private void initialize() {
 		/*
 		 * TODO: Use the data from the deal and businessInfo variables to fill in the
 		 * UI with the relevant data.  Add UiHandlers to handle clicks on buttons.
@@ -88,7 +88,13 @@ public class ListItemWidget extends Composite {
 		
 		
 		
-		String yelpRatingURL= deal.getDealBusinessInfo().getAvgRatingImageUrl();
+		String yelpRatingURL = null;
+		
+		if (deal.getDealBusinessInfo() != null)
+		{
+			yelpRatingURL = deal.getDealBusinessInfo().getAvgRatingImageUrl();
+			businessName.setText(deal.getDealBusinessInfo().getName());
+		}
 		
 		String url = deal.getBigImageUrl();
 		Location dealAddr = deal.getBusinessAddress();
@@ -96,7 +102,6 @@ public class ListItemWidget extends Composite {
 		dealTitle.setText(deal.getTitle());
 		dealTitle.addStyleName("titleStyle");
 		dealSubtitle.setText(deal.getSubtitle());
-		businessName.setText(deal.getDealBusinessInfo().getName());
 		addressLine1.setText(deal.getBusinessAddress().getAddress());
 		addressLine2.setText(dealAddr.getCity() + "," + dealAddr.getState());
 		System.out.println("City: " + dealAddr.getCity());

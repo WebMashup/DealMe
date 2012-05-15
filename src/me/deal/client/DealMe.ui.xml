@@ -16,6 +16,13 @@
 		.rightdivider {
         border-right: 1px solid rgb(221,221,221);
 		}
+		.scrollable {
+                height: 100%;
+                overflow: auto;
+        }
+        .maxheight {
+				height: 100%;
+		}
 	</ui:style>
 	<g:HTMLPanel>
 		<menubar:MenuWidget ui:field="menuWidget"></menubar:MenuWidget>
@@ -33,7 +40,9 @@
 						<b:Paragraph>   Some filler text.</b:Paragraph>
 						<b:Paragraph>   More text.</b:Paragraph>
 					</b:Hero>
-					<main:ListWidget ui:field="listWidget"></main:ListWidget>
+					<g:ScrollPanel>
+					<main:ListWidget ui:field="listWidget" styleName='{style.maxheight}'></main:ListWidget>
+					</g:ScrollPanel>
 				</b:Column>
 				<b:Column size="5">
 					<main:GoogleMapWidget ui:field="googleMapWidget"></main:GoogleMapWidget>
