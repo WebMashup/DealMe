@@ -15,14 +15,14 @@
 	</ui:style>	
 	<g:HTMLPanel>
 
-	<div class="container">
+	<div class="itemContainer">
 	
 		<div class="leftPanel">
 			<div class="leftPic">
 				<g:Image ui:field="dealImage"></g:Image>
 			</div>
 			<div class="leftText">
-				<g:Label ui:field="dealTitle"  ></g:Label>
+				<g:Label ui:field="dealTitle" addStyleNames="titleStyle" ></g:Label>
 			</div>
 		</div>
 		<div class="rightPanel">		
