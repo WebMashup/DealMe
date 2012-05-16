@@ -63,13 +63,13 @@ h1 {
 }
 
 .leftPic {
-	width: 400px;
+	width: 250px;
 	height: 180px;
 	float: left;
 }
 
 .leftText{
-	width: 362px;
+	width: 250px;
 	height: 60px;
 	padding: 5px;
 	z-index: 9999;
@@ -85,17 +85,17 @@ h1 {
 
 .rightPanel {
 	float: left;
-	width: 300px;
+	width: 250px;
 	height: 180px;
 	padding-left: 10px;
 }
 
-.container{
+.itemContainer{
 	/*width: 400px;
 	height: 200px;*/
 	margin-top: 50px;
-	border-width:3px;
-  	border-color:black;
+	border-width:1px;
+  	border-color: rgb(122,122,122);
   	border-style: solid;
 }
 
