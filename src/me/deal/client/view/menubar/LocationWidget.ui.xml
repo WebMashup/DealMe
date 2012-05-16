@@ -5,10 +5,14 @@
 		.important {
 			font-weight: bold;
 		}
+		.addressPadding {
+			padding-left: 2px;
+
+		}
 	</ui:style>
 	<g:HorizontalPanel>
-		<g:Label ui:field="addressLine1"></g:Label>
-		<g:Label ui:field="addressLine2"></g:Label>
-		<g:Button ui:field="changeAddressButton">Change Address</g:Button>
+		<g:Label ui:field="addressLine1" styleName='{style.addressPadding}'></g:Label>
+		<g:Label ui:field="addressLine2" styleName='{style.addressPadding}'></g:Label>
+		<g:Button ui:field="changeAddressButton" styleName='{style.addressPadding}'>Change Address</g:Button>
 	</g:HorizontalPanel>
 </ui:UiBinder> 

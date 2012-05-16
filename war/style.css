@@ -34,7 +34,7 @@ h1 {
 }
 
 .boldText{
-	font-weight: 600;
+	font-weight: 400;
 	padding-right: 20px;
 }
 
@@ -63,13 +63,13 @@ h1 {
 }
 
 .leftPic {
-	width: 250px;
-	height: 180px;
+	width: 300px;
+	height: 200px;
 	float: left;
 }
 
 .leftText{
-	width: 250px;
+	width: 300px;
 	height: 60px;
 	padding: 5px;
 	z-index: 9999;
@@ -79,8 +79,9 @@ h1 {
 	font-size: 14px;
 	font-weight: 600;
 	position: absolute;
-	top:0px;
+	top:140px;
 	left:0px;
+	text-align: center;
 }
 
 .rightPanel {
@@ -108,4 +109,5 @@ ul li {
 	margin-left: 50px;
 	margin-bottom: 5px;
 	padding-left: 50px;
+	text-align: center;
 }

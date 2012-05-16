@@ -96,14 +96,18 @@ public class ListItemWidget extends Composite {
 			businessName.setText(deal.getDealBusinessInfo().getName());
 		}
 		
+		//set image to be middle 200 x 300 of the full-size image
 		String url = deal.getBigImageUrl();
 		Location dealAddr = deal.getBusinessAddress();
 		dealImage.setUrl(deal.getBigImageUrl());
-		dealTitle.setText(deal.getTitle());
-		dealTitle.addStyleName("titleStyle");
-		dealSubtitle.setText(deal.getSubtitle());
+		int centeredTop = dealImage.getHeight() > 200 ? (dealImage.getHeight() - 200)/2 : 0;
+		int centeredLeft = dealImage.getWidth() > 300 ? (dealImage.getWidth() - 300)/2 : 0;
+		dealImage.setVisibleRect(centeredLeft, centeredTop, 300, 200);
+		
+		dealTitle.setText(deal.getSubtitle());
+		dealSubtitle.setText(deal.getTitle());
 		addressLine1.setText(deal.getBusinessAddress().getAddress());
-		addressLine2.setText(dealAddr.getCity() + "," + dealAddr.getState());
+		addressLine2.setText(dealAddr.getCity() + ", " + dealAddr.getState());
 		// System.out.println("City: " + dealAddr.getCity());
 				
 		dealPrice.setText(deal.getPrice().toString());

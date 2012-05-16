@@ -162,7 +162,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		SearchResponse searchResponse = new Gson().fromJson(response, SearchResponse.class);
 		ArrayList<JSONYelp> yelp= searchResponse.businesses;//response = formatResponse(response);
 		// if there does not exists any record for the business on yelp 
-		if(yelp.size()==0)
+		if(yelp == null || yelp.size()==0)
 			return null;
 		
 		return convertYelp(yelp);
