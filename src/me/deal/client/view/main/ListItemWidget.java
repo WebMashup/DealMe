@@ -4,6 +4,7 @@ import java.util.Date;
 
 import me.deal.shared.BusinessInfo;
 import me.deal.shared.Deal;
+import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 
 import com.google.gwt.core.client.GWT;
@@ -56,8 +57,10 @@ public class ListItemWidget extends Composite {
 	Label addressLine1;
 	@UiField
 	Label addressLine2;
+	//@UiField
+	//Button getDirectionsButton;
 	@UiField
-	Button getDirectionsButton;
+	Anchor getDirectionsLink;
 	
 	@UiField
 	Label dealPrice;
@@ -93,6 +96,7 @@ public class ListItemWidget extends Composite {
 		if (deal.getDealBusinessInfo() != null)
 		{
 			yelpRatingURL = deal.getDealBusinessInfo().getAvgRatingImageUrl();
+			avgYelpRating.setUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
 			businessName.setText(deal.getDealBusinessInfo().getName());
 		}
 		
@@ -112,7 +116,15 @@ public class ListItemWidget extends Composite {
 				
 		dealPrice.setText(deal.getPrice().toString());
 		discountPercentage.setText(deal.getDiscountPercentage() + "%");
-		dealSource.setText("TempDealSource");		
+		dealSource.setText("TempDealSource");	
+		
+		//set the directions url
+		//http://maps.google.com/?saddr=34.052222,-118.243611&daddr=37.322778,-122.031944
+		LatLngCoor latlng = deal.getBusinessAddress().getLatLng();
+		String directionsURL = "http://maps.google.com/?q="+latlng.getLatitude()+","+latlng.getLongitude();
+		getDirectionsLink.setHref(directionsURL);
+		getDirectionsLink.setText("Directions");
+	
 		
 		//parse date strings to determine how many days are left compared to current date
 		Date today = new Date();
@@ -125,13 +137,12 @@ public class ListItemWidget extends Composite {
 		numDaysLeft.setText(String.valueOf(deltaDays));
 		//set days to plural if needed
 		if (deltaDays > 1){
-			daysText.setText("\t     days left on");
+			daysText.setText("\tdays left on");
 		}
 		else {
 			daysText.setText("\tday left on ");
 		}		
 		
-		if(yelpRatingURL!=null)
-			avgYelpRating.setUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
+			
 	}
 }

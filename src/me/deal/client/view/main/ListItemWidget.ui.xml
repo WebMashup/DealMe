@@ -38,7 +38,8 @@
 					<g:Label ui:field="businessName"></g:Label>
 					<g:Label ui:field="addressLine1"></g:Label>
 					<g:Label ui:field="addressLine2"></g:Label>
-					<g:Button ui:field="getDirectionsButton" addStyleNames="dirButton">Get Directions</g:Button>			
+					<!-- <g:Button ui:field="getDirectionsButton" addStyleNames="dirButton">Get Directions</g:Button>	 -->	
+					<g:Anchor ui:field="getDirectionsLink"></g:Anchor>	
 				</g:VerticalPanel>
 				<g:HorizontalPanel>
 					<g:VerticalPanel>
