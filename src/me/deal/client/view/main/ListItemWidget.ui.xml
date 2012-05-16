@@ -56,6 +56,11 @@
 					<g:Label ui:field="daysText" addStyleNames="boldText2"></g:Label>
 					<g:Label ui:field="dealSource" addStyleNames="boldText2"></g:Label>
 				</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<g:Anchor ui:field="facebookLink" target="_blank" ></g:Anchor>
+					<g:Anchor ui:field="twitterLink" target="_blank" ></g:Anchor>
+					<g:Anchor ui:field="googlePlusLink" target="_blank" ></g:Anchor>	
+				</g:HorizontalPanel>
 			</g:VerticalPanel>			
 		</div>
 	

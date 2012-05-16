@@ -63,6 +63,13 @@ public class ListItemWidget extends Composite {
 	Anchor getDirectionsLink;
 	
 	@UiField
+	Anchor facebookLink;
+	@UiField
+	Anchor twitterLink;
+	@UiField
+	Anchor googlePlusLink;
+	
+	@UiField
 	Label dealPrice;
 	@UiField
 	Label discountPercentage;
@@ -124,7 +131,24 @@ public class ListItemWidget extends Composite {
 		String directionsURL = "http://maps.google.com/?q="+latlng.getLatitude()+","+latlng.getLongitude();
 		getDirectionsLink.setHref(directionsURL);
 		getDirectionsLink.setText("Directions");
-	
+		
+		//social media integration
+		String yipitURL= deal.getYipitWebUrl();
+		String facebookLinkURL="https://www.facebook.com/sharer.php?u="+yipitURL;
+		String twitterLinkURL="http://twitter.com/share?count=horiztonal&url="+yipitURL+"&text="+deal.getTitle();
+		String googlePlusLinkURL="https://plusone.google.com/_/+1/confirm?hl=en-US&url="+yipitURL;
+		facebookLink.setHref(facebookLinkURL);
+		Image facebookImage = new Image("images/facebook.png");
+		facebookLink.getElement().appendChild(facebookImage.getElement());
+		twitterLink.setHref(twitterLinkURL);
+		Image twitterImage = new Image("images/twitter.png");
+		twitterLink.getElement().appendChild(twitterImage.getElement());
+		googlePlusLink.setHref(googlePlusLinkURL);
+		Image googlePlusImage= new Image("images/google.png");
+		googlePlusLink.getElement().appendChild(googlePlusImage.getElement());
+		
+		
+		
 		
 		//parse date strings to determine how many days are left compared to current date
 		Date today = new Date();
