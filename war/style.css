@@ -43,6 +43,15 @@ h1 {
 	padding-right: 5px;
 }
 
+.miscStyle{
+	font-weight: 600;
+	
+}
+
+.miscStyle2{
+	padding-left: 5px;;
+}
+
 .titleStyle{	
 	color: white;
 	opacity: 1;	
