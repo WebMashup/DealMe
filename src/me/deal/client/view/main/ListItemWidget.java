@@ -43,7 +43,7 @@ public class ListItemWidget extends Composite {
 	@UiField
 	Image dealImage;
 	@UiField
-	Label dealTitle;
+	Anchor dealTitle;
 	@UiField
 	Label dealSubtitle;
 	
@@ -102,28 +102,32 @@ public class ListItemWidget extends Composite {
 		
 		if (deal.getDealBusinessInfo() != null)
 		{
-			yelpRatingURL = deal.getDealBusinessInfo().getAvgRatingImageUrl();
-			avgYelpRating.setUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
-			businessName.setText(deal.getDealBusinessInfo().getName());
+			BusinessInfo bizInfo = deal.getDealBusinessInfo();
+			yelpRatingURL = bizInfo.getAvgRatingImageUrl();
+			avgYelpRating.setUrl(bizInfo.getAvgRatingImageUrl());
+			businessName.setText(bizInfo.getName());
+			numReviews.setText(Integer.toString(bizInfo.getNumReviews())+ " Reviews");
+			numReviews.setHref(bizInfo.getWebUrl());
+			numReviews.setTarget("_blank");
 		}
 		
 		//set image to be middle 200 x 300 of the full-size image
 		String url = deal.getBigImageUrl();
 		Location dealAddr = deal.getBusinessAddress();
 		dealImage.setUrl(deal.getBigImageUrl());
-		int centeredTop = dealImage.getHeight() > 200 ? (dealImage.getHeight() - 200)/2 : 0;
 		int centeredLeft = dealImage.getWidth() > 300 ? (dealImage.getWidth() - 300)/2 : 0;
+		int centeredTop = dealImage.getHeight() > 200 ? (dealImage.getHeight() - 200)/2 : 0;		
 		dealImage.setVisibleRect(centeredLeft, centeredTop, 300, 200);
 		
 		dealTitle.setText(deal.getSubtitle());
+		dealTitle.setHref(deal.getYipitWebUrl());
+		dealTitle.setTarget("_blank");
 		dealSubtitle.setText(deal.getTitle());
 		addressLine1.setText(deal.getBusinessAddress().getAddress());
 		addressLine2.setText(dealAddr.getCity() + ", " + dealAddr.getState());
-		// System.out.println("City: " + dealAddr.getCity());
 				
 		dealPrice.setText(deal.getPrice().toString());
-		discountPercentage.setText(deal.getDiscountPercentage() + "%");
-		dealSource.setText("TempDealSource");	
+		discountPercentage.setText(deal.getDiscountPercentage() + "%");		
 		
 		//set the directions url
 		//http://maps.google.com/?saddr=34.052222,-118.243611&daddr=37.322778,-122.031944
@@ -146,9 +150,7 @@ public class ListItemWidget extends Composite {
 		googlePlusLink.setHref(googlePlusLinkURL);
 		Image googlePlusImage= new Image("images/google.png");
 		googlePlusLink.getElement().appendChild(googlePlusImage.getElement());
-		
-		
-		
+				
 		
 		//parse date strings to determine how many days are left compared to current date
 		Date today = new Date();
@@ -165,7 +167,9 @@ public class ListItemWidget extends Composite {
 		}
 		else {
 			daysText.setText("\tday left on ");
-		}		
+		}
+		//TODO: parse deal source from yipit
+		dealSource.setText("TempDealSource");	
 		
 			
 	}

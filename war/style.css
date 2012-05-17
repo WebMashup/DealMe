@@ -34,7 +34,7 @@ h1 {
 }
 
 .boldText{
-	font-weight: 400;
+	font-weight: 500;
 	padding-right: 20px;
 }
 
@@ -90,6 +90,7 @@ h1 {
 	top:140px;
 	left:0px;
 	text-align: center;
+	target-new: tab;
 }
 
 .rightPanel {
@@ -118,4 +119,13 @@ ul li {
 	margin-bottom: 5px;
 	padding-left: 50px;
 	text-align: center;
+}
+
+.bizNameStyle {
+	font-weight: 600;
+	font-size: 1.25em;
+}
+
+.subTitleStyle {
+	color: #C0C0C0;	
 }
