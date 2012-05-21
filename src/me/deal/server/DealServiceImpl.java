@@ -112,7 +112,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		parameterStr += coor.getLatitude().isNaN() ? "" : "lat=" + coor.getLatitude() + "&";
 		parameterStr += coor.getLongitude().isNaN() ? "" : "lon=" + coor.getLongitude() + "&";
 		parameterStr += radius.isNaN() ? "" : "radius=" + radius + "&";
-		parameterStr += limit.equals(null) ? "" : "limit=" + limit + "&";
+		parameterStr += limit == null ? "" : "limit=" + limit + "&";
 		parameterStr += "tag="+getCategoryParams(tags);
 		
 		while(parameterStr.endsWith("&"))

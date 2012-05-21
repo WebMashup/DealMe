@@ -1,6 +1,7 @@
 package me.deal.client.view.main;
 
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 import me.deal.client.events.DealsEvent;
 import me.deal.client.events.DealsEventHandler;
@@ -18,7 +19,9 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ScrollEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -64,9 +67,14 @@ public class ListWidget extends Composite {
 		 * changes in the model.
 		 * 
 		 */
-		
 		listWidgetScrollPanel.setHeight("600px");
-		listWidgetScrollPanel.setWidth("600px");
+		Window.enableScrolling(true);
+		Window.addWindowScrollHandler(new Window.ScrollHandler() {
+			@Override
+			public void onWindowScroll(ScrollEvent event) {
+				listWidgetScrollPanel.setVerticalScrollPosition(Window.getScrollTop());
+			}
+		});
 		
 		eventBus.addHandler(DealsLocationEvent.TYPE,
 				new DealsLocationEventHandler() {
@@ -84,6 +92,7 @@ public class ListWidget extends Composite {
 							public void onSuccess(ArrayList<Deal> result) {
 								Deals.getInstance().setDeals(result);
 								eventBus.fireEvent(new DealsEvent());
+								System.out.println("Got deals and fired deal event!");
 							}
 				});
 			}
@@ -93,14 +102,21 @@ public class ListWidget extends Composite {
 				new DealsEventHandler() {
 				@Override
 				public void onDeals(DealsEvent event) {
+					System.out.println("here");
 					loadingSpinnerImage.setVisible(true);
-					ArrayList<Deal> deals = Deals.getInstance().getDeals();
-					for(Deal deal : deals) {
-						// change null to business info after YELP api is complete
-						// System.out.println("adding to page");
-						ListItemWidget listItem = new ListItemWidget(deal, null); 
-						listItemContainer.add(listItem);
-					}
+					final ArrayList<Deal> deals = Deals.getInstance().getDeals();
+					final Timer dealTimer = new Timer() {
+						Integer dealIndex = 0;
+						public void run() {
+							if(dealIndex != deals.size()) {
+								System.out.println("Added " + deals.get(dealIndex).getTitle());
+								listItemContainer.add(new ListItemWidget(deals.get(dealIndex), null));
+								this.schedule(1);
+								dealIndex++;
+							}
+						}
+					};
+					dealTimer.schedule(1);
 					loadingSpinnerImage.setVisible(false);
 				}
 		});

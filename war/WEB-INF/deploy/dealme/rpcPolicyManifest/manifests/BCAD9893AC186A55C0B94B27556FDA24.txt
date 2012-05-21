@@ -1,0 +1,2 @@
+serviceClass: me.deal.client.servlets.DirectionsService
+path: 33A325A4C40D9251F54D020E381BF913.gwt.rpc

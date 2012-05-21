@@ -8,12 +8,11 @@ import me.deal.client.servlets.DirectionsService;
 import me.deal.client.servlets.DirectionsServiceAsync;
 import me.deal.client.servlets.GeocodingService;
 import me.deal.client.servlets.GeocodingServiceAsync;
-import me.deal.client.view.header.HeaderWidget;
 import me.deal.client.view.main.GoogleMapWidget;
 import me.deal.client.view.main.ListWidget;
-import me.deal.client.view.menubar.FilterWidget;
 import me.deal.client.view.menubar.LocationWidget;
 import me.deal.client.view.menubar.MenuWidget;
+import me.deal.shared.Directions;
 import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 
@@ -26,15 +25,10 @@ import com.google.gwt.geolocation.client.Position;
 import com.google.gwt.geolocation.client.Position.Coordinates;
 import com.google.gwt.geolocation.client.PositionError;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -52,7 +46,6 @@ public class DealMe implements EntryPoint {
 	private final GeocodingServiceAsync geocodingService = GWT.create(GeocodingService.class);
 	
 	private final HandlerManager eventBus = new HandlerManager(null);
-
 	
 //	@UiField
 //	HeaderWidget headerWidget;
@@ -84,7 +77,7 @@ public class DealMe implements EntryPoint {
 		listWidget = new ListWidget(dealService, directionsService, eventBus);
 		googleMapWidget = new GoogleMapWidget(dealService, eventBus);
 		
-		getUserLocation(); 
+		getUserLocation();
 		
 		Widget w = MyUiBinder.INSTANCE.createAndBindUi(this);
         RootLayoutPanel.get().add(w);
