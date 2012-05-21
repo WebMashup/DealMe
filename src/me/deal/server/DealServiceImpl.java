@@ -72,6 +72,17 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 			
 			//Temporary fix for discount.
 			BusinessInfo dealBusinessInfo=lookupYelpByPhone(jsonDeal.business.locations.get(0).phone);
+			if(dealBusinessInfo == null) {
+				dealBusinessInfo = new BusinessInfo(
+						null,
+						jsonDeal.business.name,
+						jsonDeal.images.image_small,
+						null,
+						null,
+						null,
+						jsonDeal.mobile_url,
+						jsonDeal.business.url);
+			}
 			Deal deal = new Deal(
 					jsonDeal.id,
 					jsonDeal.date_added,

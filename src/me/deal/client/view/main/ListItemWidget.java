@@ -96,18 +96,17 @@ public class ListItemWidget extends Composite {
 		 * get rid of the directions.
 		 */
 		
-		
-		
-		String yelpRatingURL = null;
-		
 		if (deal.getDealBusinessInfo() != null)
 		{
 			BusinessInfo bizInfo = deal.getDealBusinessInfo();
-			yelpRatingURL = bizInfo.getAvgRatingImageUrl();
-			avgYelpRating.setUrl(bizInfo.getAvgRatingImageUrl());
-			businessName.setText(bizInfo.getName());
-			numReviews.setText(Integer.toString(bizInfo.getNumReviews())+ " Reviews");
-			numReviews.setHref(bizInfo.getWebUrl());
+			avgYelpRating.setUrl(
+					bizInfo.getAvgRatingImageUrl() == null ? "" : bizInfo.getAvgRatingImageUrl());
+			businessName.setText(
+					bizInfo.getName() == null ? "" : bizInfo.getName());
+			numReviews.setText(
+					bizInfo.getNumReviews() == null ? "" : Integer.toString(bizInfo.getNumReviews())+ " Reviews");
+			numReviews.setHref(
+					bizInfo.getWebUrl() == null ? "" : bizInfo.getWebUrl());
 			numReviews.setTarget("_blank");
 		}
 		

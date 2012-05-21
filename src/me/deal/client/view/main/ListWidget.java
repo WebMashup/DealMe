@@ -92,7 +92,6 @@ public class ListWidget extends Composite {
 							public void onSuccess(ArrayList<Deal> result) {
 								Deals.getInstance().setDeals(result);
 								eventBus.fireEvent(new DealsEvent());
-								System.out.println("Got deals and fired deal event!");
 							}
 				});
 			}
@@ -102,7 +101,6 @@ public class ListWidget extends Composite {
 				new DealsEventHandler() {
 				@Override
 				public void onDeals(DealsEvent event) {
-					System.out.println("here");
 					loadingSpinnerImage.setVisible(true);
 					final ArrayList<Deal> deals = Deals.getInstance().getDeals();
 					final Timer dealTimer = new Timer() {

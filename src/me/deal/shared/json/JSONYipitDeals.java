@@ -47,6 +47,7 @@ public class JSONYipitDeals {
 		
 		public class JSONBusiness {
 			public String name;
+			public String url;
 			public ArrayList<JSONLocation> locations;
 			
 			public class JSONLocation {
