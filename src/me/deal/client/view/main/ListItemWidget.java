@@ -169,7 +169,7 @@ public class ListItemWidget extends Composite {
 			daysText.setText("\tday left on ");
 		}
 		//TODO: parse deal source from yipit
-		dealSource.setText("TempDealSource");	
+		dealSource.setText(deal.getDealSource());	
 		
 			
 	}

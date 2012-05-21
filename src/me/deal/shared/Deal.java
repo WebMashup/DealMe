@@ -56,7 +56,8 @@ public class Deal implements Serializable {
 		final String businessPhoneNumber,
 		final Boolean paid,
 		final ArrayList<Category> tags,
-		final BusinessInfo dealBusinessInfo) {
+		final BusinessInfo dealBusinessInfo,
+		final String dealSource) {
 			this.yipitDealID = yipitDealID;
 			this.addDate = addDate;
 			this.endDate = endDate;
@@ -74,6 +75,7 @@ public class Deal implements Serializable {
 			this.paid = paid;
 			this.tags = tags;
 			this.dealBusinessInfo= dealBusinessInfo;
+			this.dealSource = dealSource;
 	}
 	
 	public Integer getYipitDealID() {
@@ -210,5 +212,13 @@ public class Deal implements Serializable {
 
 	public BusinessInfo getDealBusinessInfo() {
 		return dealBusinessInfo;
+	}
+	
+	public String getDealSource() {
+		return this.dealSource;
+	}
+	
+	public void setDealSource(String dealSource) {
+		this.dealSource = dealSource;
 	}
 }

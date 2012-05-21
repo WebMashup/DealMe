@@ -62,6 +62,7 @@ public class JSONYipitDeals {
 		
 		public class JSONSource {
 			public Integer paid;
+			public String name;
 		}
 	}
 }
