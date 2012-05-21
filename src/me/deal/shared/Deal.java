@@ -34,6 +34,7 @@ public class Deal implements Serializable {
 	private Boolean paid; // Is this deal part of the Yipit affiliates program?
 	private ArrayList<Category> tags; // The categories that this deal falls under
 	private BusinessInfo dealBusinessInfo;
+	private String dealSource;
 	
 	public Deal() {
 	}

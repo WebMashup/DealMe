@@ -12,7 +12,6 @@ import me.deal.client.view.main.GoogleMapWidget;
 import me.deal.client.view.main.ListWidget;
 import me.deal.client.view.menubar.LocationWidget;
 import me.deal.client.view.menubar.MenuWidget;
-import me.deal.shared.Directions;
 import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 

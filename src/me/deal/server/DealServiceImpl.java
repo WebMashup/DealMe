@@ -47,6 +47,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		
 		Gson gson = new GsonBuilder().create();
 		JSONYipitDeals yipitDeals = gson.fromJson(response, JSONYipitDeals.class);
+		System.out.println(response);
 		ArrayList<Deal> deals = convertYipitDeals(yipitDeals);
 		
 		return deals;
@@ -76,10 +77,9 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 					jsonDeal.id,
 					jsonDeal.date_added,
 					jsonDeal.end_date,
-					jsonDeal.value.raw == null ? null : new Double(jsonDeal.value.raw),
+					jsonDeal.discount.raw == null ? null : new Double(jsonDeal.discount.raw),
 					jsonDeal.price.raw == null? null : new Double(jsonDeal.price.raw),
-	//			    jsonDeal.discount.raw == null ? null : new Double(jsonDeal.discount.raw),
-					jsonDeal.discount.raw == null ? null : new Double(0),
+					jsonDeal.value.raw == null ? null : new Double(jsonDeal.value.raw),
 					jsonDeal.title,
 					jsonDeal.yipit_title,
 					jsonDeal.yipit_url,
