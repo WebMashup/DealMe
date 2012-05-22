@@ -102,6 +102,7 @@ public class ListWidget extends Composite {
 				@Override
 				public void onDeals(DealsEvent event) {
 					loadingSpinnerImage.setVisible(true);
+					listItemContainer.clear();
 					final ArrayList<Deal> deals = Deals.getInstance().getDeals();
 					final Timer dealTimer = new Timer() {
 						Integer dealIndex = 0;
