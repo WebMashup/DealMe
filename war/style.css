@@ -87,7 +87,7 @@ h1 {
 	font-size: 14px;
 	font-weight: 600;
 	position: absolute;
-	top:140px;
+	top:130px;
 	left:0px;
 	text-align: center;
 	target-new: tab;
@@ -95,14 +95,14 @@ h1 {
 
 .rightPanel {
 	float: left;
-	width: 250px;
-	height: 180px;
+	width: 200px;
+	height: 200px;
 	padding-left: 10px;
 }
 
 .itemContainer{
-	/*width: 400px;
-	height: 200px;*/
+	/*width: 400px;*/
+	height: 250px;
 	margin-top: 50px;
 	border-width:1px;
   	border-color: rgb(122,122,122);
@@ -128,4 +128,14 @@ ul li {
 
 .subTitleStyle {
 	color: #C0C0C0;	
+}
+
+.socialMedia{
+	margin-top:40px;
+	text-align: center;
+	width: 300px;
+}
+
+.socialMedia table {
+	margin: 0 auto;
 }
