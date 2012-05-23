@@ -29,10 +29,11 @@
 		<b:Container>
 			<b:Row>
 				<b:Column size="12" styleName='{style.bottomdivider}'>
-					<g:HorizontalPanel>
-						<b:Heading size="5">Location: </b:Heading>
-						<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
-					</g:HorizontalPanel>
+					<b:TabPanel>
+						<b:TabPane heading="Location">
+							<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
+						</b:TabPane>
+					</b:TabPanel>
 				</b:Column>
 			</b:Row>
 			<b:Row>

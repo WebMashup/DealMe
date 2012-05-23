@@ -1,18 +1,13 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style>
-		.important {
-			font-weight: bold;
-		}
-		.addressPadding {
-			padding-left: 2px;
-
-		}
-	</ui:style>
-	<g:VerticalPanel>
-		<g:Label ui:field="addressLine1" addStyleNames="miscStyle2"></g:Label>
-		<g:Label ui:field="addressLine2" addStyleNames="miscStyle2"></g:Label>
-		<g:Button ui:field="changeAddressButton">Change Address</g:Button>
-	</g:VerticalPanel>
-</ui:UiBinder> 
+	<b:WellForm type="VERTICAL">
+		<g:Label ui:field="addressLine1"></g:Label>
+		<b:TextBox ui:field="address" placeholder="Address"/>
+		<b:TextBox ui:field="city" placeholder="City"/>
+		<b:TextBox ui:field="state" placeholder="State (e.g. &quot;CA&quot;, &quot;AZ&quot;)" maxLength="2"/>
+		<b:TextBox ui:field="zip" placeholder="Zip Code" maxLength="5"/>
+		<b:Button ui:field="changeLocationButton">Submit</b:Button>
+	</b:WellForm>
+</ui:UiBinder>

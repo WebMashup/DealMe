@@ -24,13 +24,6 @@
 			<div class="leftText">
 				<g:Anchor ui:field="dealTitle" addStyleNames="titleStyle" ></g:Anchor>
 			</div>
-			<div class="socialMedia">
-				<g:HorizontalPanel>
-					<g:Anchor ui:field="facebookLink" target="_blank" ></g:Anchor>
-					<g:Anchor ui:field="twitterLink" target="_blank" ></g:Anchor>
-					<g:Anchor ui:field="googlePlusLink" target="_blank" ></g:Anchor>	
-				</g:HorizontalPanel>
-			</div>
 		</div>
 		<div class="rightPanel">		
 			<g:VerticalPanel>					
@@ -61,7 +54,12 @@
 					<g:Label ui:field="numDaysLeft" addStyleNames="boldText2"></g:Label>
 					<g:Label ui:field="daysText" addStyleNames="boldText2"></g:Label>
 					<g:Label ui:field="dealSource" addStyleNames="boldText2"></g:Label>
-				</g:HorizontalPanel>				
+				</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<g:Anchor ui:field="facebookLink" target="_blank" ></g:Anchor>
+					<g:Anchor ui:field="twitterLink" target="_blank" ></g:Anchor>
+					<g:Anchor ui:field="googlePlusLink" target="_blank" ></g:Anchor>	
+				</g:HorizontalPanel>
 			</g:VerticalPanel>			
 		</div>
 	

@@ -33,6 +33,7 @@ public class GeocodingServiceImpl extends RemoteServiceServlet implements
 	public LatLngCoor convertAddressToLatLng(Location address) {
 		String endPoint = "http://maps.googleapis.com/maps/api/geocode/json";
 		String requestParameters = generateAddressParamterStr(address);
+		System.out.println("requestParameters");
 		String response = HttpSender.sendGetRequest(endPoint, requestParameters);
 		
 		Gson gson = new GsonBuilder().create();
@@ -79,9 +80,29 @@ public class GeocodingServiceImpl extends RemoteServiceServlet implements
 	}
 	
 	private String generateAddressParamterStr(Location address) {
-		return "address=" + address.getAddress().replaceAll(" ", "+") + ",+" +
-				address.getCity().replaceAll(" ", "+") + ",+" + address.getState() +
-				"+" + address.getZipCode() + "&sensor=false";
-				
+		String addressRequest = "address=";
+		if (address.getAddress() != null && !address.getAddress().isEmpty()) {
+			addressRequest += address.getAddress().replace(" ", "+");
+			addressRequest += ",+";
+		}
+		
+		if (address.getCity() != null && !address.getCity().isEmpty()) {
+			addressRequest += address.getCity().replace(" ", "+");
+			addressRequest += ",+";
+		}
+		
+		if (address.getState() != null && !address.getState().isEmpty()) {
+			addressRequest += address.getState().replace(" ", "+");
+			addressRequest += ",+";
+		}
+		
+		if (address.getZipCode() != null && !address.getZipCode().isEmpty()) {
+			addressRequest += address.getZipCode().replace(" ", "+");
+			addressRequest += ",+";
+		}
+		
+		addressRequest += "&sensor=false";
+		
+		return addressRequest;
 	}
 }
