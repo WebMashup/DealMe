@@ -2,6 +2,7 @@ package me.deal.client.view.main;
 
 import java.util.Date;
 
+import me.deal.client.model.DealsLocation;
 import me.deal.shared.BusinessInfo;
 import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
@@ -131,7 +132,12 @@ public class ListItemWidget extends Composite {
 		//set the directions url
 		//http://maps.google.com/?saddr=34.052222,-118.243611&daddr=37.322778,-122.031944
 		LatLngCoor latlng = deal.getBusinessAddress().getLatLng();
-		String directionsURL = "http://maps.google.com/?q="+latlng.getLatitude()+","+latlng.getLongitude();
+		Location dealLoc = DealsLocation.getInstance().getDealsLocation();
+		LatLngCoor dealLatLng = dealLoc.getLatLng(); 
+		String directionsURL = "http://maps.google.com/maps?saddr="
+				+ dealLatLng.getLatitude() + "," +  dealLatLng.getLongitude() +
+				"&daddr=" +latlng.getLatitude()+","+latlng.getLongitude();
+		//"http://maps.google.com/?q="+latlng.getLatitude()+","+latlng.getLongitude();
 		getDirectionsLink.setHref(directionsURL);
 		getDirectionsLink.setText("Directions");
 		
