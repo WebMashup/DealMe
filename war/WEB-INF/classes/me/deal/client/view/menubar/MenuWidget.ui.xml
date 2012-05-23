@@ -14,29 +14,16 @@
 			<b:Nav>
 				<m:ModifiedDropdown ui:field="FilterDropdown"
 					text="Filters">
-					<b:NavWidget>
+					<b:NavWidget ui:field="FilterForm">
 						<b:CheckBox ui:field="DiningCheckBox">Dining</b:CheckBox>
-					</b:NavWidget>
-					<b:NavWidget>
+						<b:CheckBox ui:field="NightlifeCheckBox">Nightlife</b:CheckBox>
 						<b:CheckBox ui:field="HealthCheckBox">Health</b:CheckBox>
-					</b:NavWidget>
-					<b:NavWidget>
 						<b:CheckBox ui:field="FitnessCheckBox">Fitness</b:CheckBox>
-					</b:NavWidget>
-					<b:NavWidget>
 						<b:CheckBox ui:field="RetailCheckBox">Retail</b:CheckBox>
-					</b:NavWidget>
-					<b:NavWidget>
 						<b:CheckBox ui:field="ServicesCheckBox">Services</b:CheckBox>
-					</b:NavWidget>
-<!-- 					<b:NavWidget> -->
-<!-- 						<b:CheckBox ui:field="ActivitiesCheckBox">Activities</b:CheckBox> -->
-<!-- 					</b:NavWidget> -->
-					<b:NavWidget>
-						<b:CheckBox ui:field="EventsCheckBox">Events</b:CheckBox>
-					</b:NavWidget>
-					<b:NavWidget>
+						<b:CheckBox ui:field="ActivitiesCheckBox">Activities+Events</b:CheckBox>
 						<b:CheckBox ui:field="SpecialInterestCheckBox">Special Interests</b:CheckBox>
+						<b:Button ui:field="SubmitButton">Submit</b:Button>
 					</b:NavWidget>
 				</m:ModifiedDropdown>
 				<m:ModifiedDropdown text="Location">
