@@ -10,16 +10,16 @@ import me.deal.client.model.Deals;
 import me.deal.client.model.DealsLocation;
 import me.deal.client.servlets.DealServiceAsync;
 import me.deal.shared.Deal;
+import me.deal.shared.LatLngCoor;
+import me.deal.shared.Location;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.maps.client.InfoWindow;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
-import com.google.gwt.maps.client.event.MapClickHandler;
+import com.google.gwt.maps.client.event.MapDragEndHandler;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
-import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiConstructor;
@@ -55,29 +55,41 @@ public class GoogleMapWidget extends Composite {
         ArrayList <Marker> currentMarks = new ArrayList();
         mapWidget.setSize("350px", "350px");
         mapWidget.addControl(new LargeMapControl());
+        mapWidget.setZoomLevel(14);
         eventBus.addHandler(DealsLocationEvent.TYPE,
                 new DealsLocationEventHandler() {
             
             @Override
             public void onDealsLocation(DealsLocationEvent event) {
-                mapWidget.setZoomLevel(12);
+                
                 mapWidget.setCenter(DealsLocation.getInstance().getDealsLocation().getLatLng().convert());
+                System.out.println("TEST");
             }
         });
 
 
         eventBus.addHandler(DealsEvent.TYPE,
                 new DealsEventHandler(){
-
-                    @Override
+        			@Override
                     public void onDeals(DealsEvent event) {
-                        markerUpdate(Deals.getInstance().getDeals(), 10);
+                        markerUpdate(Deals.getInstance().getDeals(), 100);
                     }
-
-            
                 }
             );
         
+        mapWidget.addMapDragEndHandler(new MapDragEndHandler(){
+        	public void onDragEnd(MapDragEndEvent e)
+        	{
+        		Location loc = new Location();
+        		loc.setLatLng(new LatLngCoor(mapWidget.getCenter().getLatitude(), mapWidget.getCenter().getLongitude()));
+        		DealsLocation.getInstance().setDealsLocation(loc);
+                eventBus.fireEvent(new DealsLocationEvent() {
+                	}
+                );
+        	}
+   	    }
+        );
+    
     }
     
     private void markerUpdate(ArrayList<Deal> llist, int number)
@@ -95,6 +107,18 @@ public class GoogleMapWidget extends Composite {
         }
     }
     
+    private void centerMarker(final Deal current)
+    {
+        mapWidget.setCenter(current.getBusinessAddress().getLatLng().convert());
+        InfoWindowContent window;
+        try{
+                window  = new InfoWindowContent(current.getDealBusinessInfo().getName() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
+            } catch(NullPointerException n) {
+                window  = new InfoWindowContent(current.getTitle() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
+            }        
+            window.setMaxWidth(25);
+            mapWidget.getInfoWindow().open(mapWidget.getCenter(), window);
+    }
     
     private Marker createMarker(final Deal current)
     {
@@ -102,13 +126,17 @@ public class GoogleMapWidget extends Composite {
         temp.addMarkerClickHandler(new MarkerClickHandler() {
             public void onClick(MarkerClickEvent e)
             {
-                InfoWindowContent window = new InfoWindowContent(current.getTitle() + "<br>" + current.getBusinessPhoneNumber() + "</br>");
+            	InfoWindowContent window;
+                try{
+                    window  = new InfoWindowContent(current.getDealBusinessInfo().getName() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
+                } catch(NullPointerException n) {
+                    window  = new InfoWindowContent(current.getTitle() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
+                }
                 window.setMaxWidth(25);
-            	mapWidget.getInfoWindow().open(temp, window);
+                mapWidget.getInfoWindow().open(temp, window);
             }
         });
         return temp;
     }
     
 }
-
