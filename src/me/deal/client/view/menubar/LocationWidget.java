@@ -42,6 +42,7 @@ public class LocationWidget extends Composite {
 			"Acquiring location..", "Acquiring location..."};
 	private final Integer LOADING_DELAY = 100;
 	private Boolean locationInitialized = false;
+	private String newAddress;
 	
 	@UiField
 	Label addressLine1;
@@ -93,9 +94,9 @@ public class LocationWidget extends Composite {
 		loc.setCity(cityValue);
 		loc.setState(stateValue);
 		loc.setZipCode(zipValue);
-
+		
 		geocodingService.convertAddressToLatLng(loc, new AsyncCallback<LatLngCoor>() {
-
+			
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
@@ -106,8 +107,26 @@ public class LocationWidget extends Composite {
 			@Override
 			public void onSuccess(LatLngCoor result) {
 				// TODO Auto-generated method stub
+				addressLine1.setText(newAddress);
 				Location userLoc = DealsLocation.getInstance().getDealsLocation();
 				userLoc.setLatLng((LatLngCoor) result);
+				
+				geocodingService.convertLatLngToAddress(result, new AsyncCallback<Location>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void onSuccess(Location result) {
+						// TODO Auto-generated method stub
+						String line1 = "Current address: " + result.getAddress() + ", " + result.getCity() + ", " + result.getState() + " " + result.getZipCode();
+						addressLine1.setText(line1);
+					}
+					
+				});
 				eventBus.fireEvent(new DealsLocationEvent());
 			}
 			
