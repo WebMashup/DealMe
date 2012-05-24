@@ -34,15 +34,8 @@
 				</g:HorizontalPanel>
 				<g:VerticalPanel>					
 					<g:Label ui:field="businessName" addStyleNames="bizNameStyle"></g:Label>
-					<g:HorizontalPanel>
-						<g:VerticalPanel>
-							<g:Image ui:field="idIcon"></g:Image>	
-						</g:VerticalPanel>
-						<g:VerticalPanel>
-							<g:Label ui:field="addressLine1"></g:Label>
-							<g:Label ui:field="addressLine2"></g:Label>	
-						</g:VerticalPanel>
-					</g:HorizontalPanel>
+					<g:Label ui:field="addressLine1"></g:Label>
+					<g:Label ui:field="addressLine2"></g:Label>	
 					<!-- <g:Button ui:field="getDirectionsButton" addStyleNames="dirButton">Get Directions</g:Button>	 -->	
 					<g:Anchor ui:field="getDirectionsLink" target="_blank" ></g:Anchor>	
 					<g:Label ui:field="dealSubtitle" addStyleNames="subTitleStyle"></g:Label>

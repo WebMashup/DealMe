@@ -84,10 +84,6 @@ public class ListItemWidget extends Composite {
 	@UiField
 	Image avgYelpRating;
 	
-	//Icon Addition
-	@UiField
-	Image idIcon;
-	
 	@SuppressWarnings("deprecation")
 	private void initialize() {
 		/*
@@ -158,9 +154,6 @@ public class ListItemWidget extends Composite {
 		googlePlusLink.setHref(googlePlusLinkURL);
 		Image googlePlusImage= new Image("images/google.png");
 		googlePlusLink.getElement().appendChild(googlePlusImage.getElement());
-		
-		//Icon Addition
-		idIcon.setUrl("http://www.google.com/mapfiles/marker" + deal.getID() + ".png");		
 		
 		//parse date strings to determine how many days are left compared to current date
 		Date today = new Date();

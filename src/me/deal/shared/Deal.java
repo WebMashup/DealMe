@@ -35,7 +35,7 @@ public class Deal implements Serializable {
 	private ArrayList<Category> tags; // The categories that this deal falls under
 	private BusinessInfo dealBusinessInfo;
 	private String dealSource;
-	private String ID;
+	private String IDUrl;
 	
 	public Deal() {
 	}
@@ -77,7 +77,7 @@ public class Deal implements Serializable {
 			this.tags = tags;
 			this.dealBusinessInfo= dealBusinessInfo;
 			this.dealSource = dealSource;
-			this.ID = "";
+			this.IDUrl = "http://www.google.com/mapfiles/marker.png";
 	}
 	
 	public Integer getYipitDealID() {
@@ -119,9 +119,9 @@ public class Deal implements Serializable {
 		this.price = price;
 	}
 	
-	public void setID(String ID)
+	public void setIDUrl(String ID)
 	{
-		this.ID = ID;
+		this.IDUrl = ID;
 	}
 	
 	public Double getValue() {
@@ -229,9 +229,9 @@ public class Deal implements Serializable {
 		this.dealSource = dealSource;
 	}
 	
-	public String getID()
+	public String getIDUrl()
 	{
-		return this.ID;
+		return this.IDUrl;
 	}
 	
 }

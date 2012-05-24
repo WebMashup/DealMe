@@ -79,15 +79,16 @@ public class GoogleMapWidget extends Composite {
         double c = 2*atan2(sqrt(a), sqrt(1-a))*0.0174532925;
         return 3961.3 * c;
     }
-    private int numberDuplicates(ArrayList <Marker> marks, LatLng current)
+    private String getDuplicateURL(ArrayList<Deal> deals, int check)
     {
-    	int count = 0;
-    	for(int i = 0; i < marks.size(); i++)
+    	LatLng test = deals.get(check).getBusinessAddress().getLatLng().convert();
+    	for(int i = 0; i < currentMarks.size(); i++)
     	{
-    		if(current.getLatitude() == marks.get(i).getLatLng().getLatitude() && current.getLongitude() == marks.get(i).getLatLng().getLongitude())
-    		count++;
+    		if(test.getLatitude() == currentMarks.get(i).getLatLng().getLatitude() && test.getLongitude() == currentMarks.get(i).getLatLng().getLongitude())
+    		{	return deals.get(i).getIDUrl();}
     	}
-    	return count;
+    	return "";
+
     }
     ArrayList <Marker> currentMarks = new ArrayList();
     private void initialize() {
@@ -167,12 +168,15 @@ public class GoogleMapWidget extends Composite {
     {
         for(int i = 0; i < llist.size(); i++)
         {
-        	int numbDups = numberDuplicates(currentMarks, llist.get(i).getBusinessAddress().getLatLng().convert());
-        	if(numbDups != 0)
+        	String url = getDuplicateURL(llist, i);
+        	if(url != "")
+        	{
         		totalDuplicates += 1;
-        	if(i < 26)
-        		llist.get(i).setID("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - totalDuplicates, i - totalDuplicates + 1));
-            Marker temp = createMarker(llist.get(i), llist.get(i).getID());
+        		llist.get(i).setIDUrl(url);
+        	}
+        	else if(i < 26)
+        		llist.get(i).setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - totalDuplicates, i - totalDuplicates + 1) + ".png" );
+            Marker temp = createMarker(llist.get(i), llist.get(i).getIDUrl());
             currentMarks.add(temp);
         }
     }
@@ -193,7 +197,7 @@ public class GoogleMapWidget extends Composite {
     private Marker createMarker(final Deal current, String letter)
     {
         
-        Icon icon = Icon.newInstance("http://www.google.com/mapfiles/marker" + letter + ".png");
+        Icon icon = Icon.newInstance(letter);
         icon.setInfoWindowAnchor(Point.newInstance(10, 10));
         icon.setShadowURL("http://www.google.com/mapfiles/shadow50.png");
         MarkerOptions ops = MarkerOptions.newInstance();
