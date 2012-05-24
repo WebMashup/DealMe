@@ -15,17 +15,29 @@ import me.deal.shared.Location;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.maps.client.InfoWindow;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
+import com.google.gwt.maps.client.event.MapClickHandler;
+import com.google.gwt.maps.client.event.MapClickHandler.MapClickEvent;
 import com.google.gwt.maps.client.event.MapDragEndHandler;
+import com.google.gwt.maps.client.event.MapZoomEndHandler;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
+import com.google.gwt.maps.client.event.MarkerClickHandler.MarkerClickEvent;
+import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.geom.LatLngBounds;
+import com.google.gwt.maps.client.geom.Point;
+import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
+import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import java.lang.Object;
+import static java.lang.Math.*;
 
 public class GoogleMapWidget extends Composite {
 
@@ -48,62 +60,120 @@ public class GoogleMapWidget extends Composite {
         this.eventBus = eventBus;
         initialize();
     }
-
+    
+    private double radius = 0.0;
+    private LatLng currentCenter = LatLng.newInstance(0,0);
+    int totalDuplicates = 0;
+    
+    private void setRadius(LatLngBounds coords)
+    {
+        radius = boundsToRadius(coords);
+    }
+    private double boundsToRadius(LatLngBounds coords)
+    {
+        LatLng NE = coords.getNorthEast();
+        LatLng center = coords.getCenter();
+        double lon = NE.getLongitude() - center.getLongitude();
+        double lat = NE.getLatitude() - center.getLatitude();
+        double a = pow(sin(lat/2), 2) + cos(center.getLatitude())*cos(NE.getLatitude())*pow(sin(lon/2), 2);
+        double c = 2*atan2(sqrt(a), sqrt(1-a))*0.0174532925;
+        return 3961.3 * c;
+    }
+    private int numberDuplicates(ArrayList <Marker> marks, LatLng current)
+    {
+    	int count = 0;
+    	for(int i = 0; i < marks.size(); i++)
+    	{
+    		if(current.getLatitude() == marks.get(i).getLatLng().getLatitude() && current.getLongitude() == marks.get(i).getLatLng().getLongitude())
+    		count++;
+    	}
+    	return count;
+    }
+    ArrayList <Marker> currentMarks = new ArrayList();
     private void initialize() {
         
-        
-        ArrayList <Marker> currentMarks = new ArrayList();
+
         mapWidget.setSize("350px", "350px");
         mapWidget.addControl(new LargeMapControl());
         mapWidget.setZoomLevel(14);
         eventBus.addHandler(DealsLocationEvent.TYPE,
                 new DealsLocationEventHandler() {
-            
             @Override
             public void onDealsLocation(DealsLocationEvent event) {
                 
-                mapWidget.setCenter(DealsLocation.getInstance().getDealsLocation().getLatLng().convert());
-                System.out.println("TEST");
+                currentCenter = DealsLocation.getInstance().getDealsLocation().getLatLng().convert();
+                mapWidget.setCenter(currentCenter);
+                setRadius(mapWidget.getBounds());
             }
         });
 
 
         eventBus.addHandler(DealsEvent.TYPE,
                 new DealsEventHandler(){
-        			@Override
+                    @Override
                     public void onDeals(DealsEvent event) {
-                        markerUpdate(Deals.getInstance().getDeals(), 100);
+                        currentMarks.clear();
+                        totalDuplicates = 0;
+                        dealsToMarkers(Deals.getInstance().getDeals());
+                        markerUpdate(100);
                     }
                 }
             );
         
         mapWidget.addMapDragEndHandler(new MapDragEndHandler(){
-        	public void onDragEnd(MapDragEndEvent e)
-        	{
-        		Location loc = new Location();
-        		loc.setLatLng(new LatLngCoor(mapWidget.getCenter().getLatitude(), mapWidget.getCenter().getLongitude()));
-        		DealsLocation.getInstance().setDealsLocation(loc);
+            public void onDragEnd(MapDragEndEvent e)
+            {
+                
+                if(currentCenter != mapWidget.getCenter())
+                {
+                Location loc = new Location();
+                loc.setLatLng(new LatLngCoor(mapWidget.getCenter().getLatitude(), mapWidget.getCenter().getLongitude()));
+                DealsLocation.getInstance().setDealsLocation(loc);         
                 eventBus.fireEvent(new DealsLocationEvent() {
-                	}
+                    }
                 );
-        	}
-   	    }
+                }
+            }
+           }
         );
-    
+        
+        mapWidget.addMapZoomEndHandler(new MapZoomEndHandler(){
+            public void onZoomEnd(MapZoomEndEvent e)
+            {
+                setRadius(mapWidget.getBounds());
+            }
+        });
+        
     }
     
-    private void markerUpdate(ArrayList<Deal> llist, int number)
+    
+    private void markerUpdate(int number)
     {
         mapWidget.clearOverlays(); 
         int max = 0;
-        if(number >= llist.size())
-            max = llist.size();
+        if(number >= currentMarks.size())
+            max = currentMarks.size();
         else
             max = number;
         
+        
         for(int i = 0; i < max; i++)
         {
-            mapWidget.addOverlay(createMarker(llist.get(i)));
+            mapWidget.addOverlay(currentMarks.get(i));
+        }
+    }
+    
+    private void dealsToMarkers(ArrayList<Deal> llist)
+    {
+        for(int i = 0; i < llist.size(); i++)
+        {
+        	int numbDups = numberDuplicates(currentMarks, llist.get(i).getBusinessAddress().getLatLng().convert());
+        	if(numbDups != 0)
+        		totalDuplicates += 1;
+        	if(i < 26)
+        		llist.get(i).setID("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - totalDuplicates, i - totalDuplicates + 1));
+            Marker temp = createMarker(llist.get(i), llist.get(i).getID());
+            currentMarks.add(temp);
         }
     }
     
@@ -120,13 +190,20 @@ public class GoogleMapWidget extends Composite {
             mapWidget.getInfoWindow().open(mapWidget.getCenter(), window);
     }
     
-    private Marker createMarker(final Deal current)
+    private Marker createMarker(final Deal current, String letter)
     {
-        final Marker temp = new Marker(current.getBusinessAddress().getLatLng().convert());
+        
+        Icon icon = Icon.newInstance("http://www.google.com/mapfiles/marker" + letter + ".png");
+        icon.setInfoWindowAnchor(Point.newInstance(10, 10));
+        icon.setShadowURL("http://www.google.com/mapfiles/shadow50.png");
+        MarkerOptions ops = MarkerOptions.newInstance();
+        ops.setClickable(true);
+        ops.setIcon(icon);
+        final Marker temp = new Marker(current.getBusinessAddress().getLatLng().convert(), ops);
         temp.addMarkerClickHandler(new MarkerClickHandler() {
             public void onClick(MarkerClickEvent e)
             {
-            	InfoWindowContent window;
+                InfoWindowContent window;
                 try{
                     window  = new InfoWindowContent(current.getDealBusinessInfo().getName() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
                 } catch(NullPointerException n) {
@@ -136,7 +213,13 @@ public class GoogleMapWidget extends Composite {
                 mapWidget.getInfoWindow().open(temp, window);
             }
         });
+
         return temp;
+    }
+    
+    private void removeMarker(final Marker mark)
+    {
+        mapWidget.removeOverlay(mark);
     }
     
 }

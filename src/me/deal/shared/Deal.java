@@ -35,6 +35,7 @@ public class Deal implements Serializable {
 	private ArrayList<Category> tags; // The categories that this deal falls under
 	private BusinessInfo dealBusinessInfo;
 	private String dealSource;
+	private String ID;
 	
 	public Deal() {
 	}
@@ -76,6 +77,7 @@ public class Deal implements Serializable {
 			this.tags = tags;
 			this.dealBusinessInfo= dealBusinessInfo;
 			this.dealSource = dealSource;
+			this.ID = "";
 	}
 	
 	public Integer getYipitDealID() {
@@ -115,6 +117,11 @@ public class Deal implements Serializable {
 	
 	public void setPrice(final Double price) {
 		this.price = price;
+	}
+	
+	public void setID(String ID)
+	{
+		this.ID = ID;
 	}
 	
 	public Double getValue() {
@@ -221,4 +228,10 @@ public class Deal implements Serializable {
 	public void setDealSource(String dealSource) {
 		this.dealSource = dealSource;
 	}
+	
+	public String getID()
+	{
+		return this.ID;
+	}
+	
 }
