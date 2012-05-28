@@ -121,9 +121,10 @@ public class GoogleMapWidget extends Composite {
                 loc.setLatLng(new LatLngCoor(mapWidget.getCenter().getLatitude(), mapWidget.getCenter().getLongitude()));
                 deals.setLocation(loc);
                 deals.setOffset(0);
+                Integer numDealsToLoad = 7;
                 dealService.getYipitDeals(deals.getLocation().getLatLng(),
 	        		deals.getRadius(),
-	        		deals.getOffset(),
+	        		numDealsToLoad,
 	        		deals.getTags(),
 	        		new AsyncCallback<ArrayList<Deal>>() {
 						@Override

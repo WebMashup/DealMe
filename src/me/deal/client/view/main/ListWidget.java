@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+
 public class ListWidget extends Composite {
 
 	private static ListWidgetUiBinder uiBinder = GWT
@@ -43,6 +44,7 @@ public class ListWidget extends Composite {
 	private final ScrollPanel mainScrollPanel;
 	private Boolean dealsLoaded = false;
 	private final Integer DEFAULT_NUM_DEALS = 10;
+	private Boolean initialLoad=true;
 	
 	public @UiConstructor ListWidget(final ScrollPanel mainScrollPanel,
 			final DealServiceAsync dealService,
@@ -84,14 +86,80 @@ public class ListWidget extends Composite {
 				@Override
 				public void onDeals(DealsEvent event) {
 					loadingSpinnerImage.setVisible(true);
-					listItemContainer.clear();
-					final ArrayList<Deal> deals = Deals.getInstance().getDeals();
 					
+					listItemContainer.setVisible(false);
+					
+					final ArrayList<Deal> deals = Deals.getInstance().getDeals();
+				
+					
+					if(initialLoad)
+					{
+						
+						for(int i=0;i<deals.size();i++){
+							System.out.println("before item widget");
+							ListItemWidget item=new ListItemWidget();
+							System.out.println("after item widget");
+							System.out.println("before add");
+							listItemContainer.add(item);
+							System.out.println("after add");
+						}
+						initialLoad=false;
+					}
+					
+					// if there are not enough widget as the number of deals, create them
+					if(deals.size()> listItemContainer.getWidgetCount())
+					{ int lessCount=deals.size()-listItemContainer.getWidgetCount();
+						while(lessCount>0)
+						{
+							listItemContainer.add(new ListItemWidget());
+							lessCount--;
+						}
+					}
+					
+					System.out.println("after intial load");
+					int i=0;
+					System.out.println(deals.size());
+					
+					for(Deal deal:deals)
+					{	System.out.println("inside for loop ");
+						
+						ListItemWidget temp=(ListItemWidget)listItemContainer.getWidget(i);
+						System.out.println("Added " + temp.getTitle());
+						if (deal.getDealBusinessInfo() != null)
+						{
+							temp.setAvgRatingImageUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
+							temp.setBusinessName(deal.getDealBusinessInfo().getName());
+							temp.setNumReviews(deal.getDealBusinessInfo().getNumReviews());
+							temp.setReviewsUrl(deal.getDealBusinessInfo().getWebUrl());
+						}
+
+						temp.setTitle(deal.getTitle());
+						temp.setSubtitle(deal.getSubtitle());
+						temp.setPrice(deal.getPrice());
+						temp.setDiscountPercentage(deal.getDiscountPercentage());
+						temp.setBusinessAddress(deal.getBusinessAddress());
+						temp.setBigImageUrl(deal.getBigImageUrl());
+						temp.setYipitUrl(deal.getYipitWebUrl());
+						temp.setEndDate(deal.getEndDate());
+						temp.setDealSource(deal.getDealSource());
+						//listItemContainer.getWidget(i)
+						i++;
+					}
+					/*
+					i=0;
+					
+					for(Deal deal:deals)
+					{
+						ListItemWidget temp=(ListItemWidget)listItemContainer.getWidget(i);
+						temp.setBigImageUrl(deal.getBigImageUrl());
+					}
+					*/
+					/*
 					final Timer dealTimer = new Timer() {
 						Integer dealIndex = 0;
 						public void run() {
 							if(dealIndex != deals.size()) {
-								System.out.println("Added " + deals.get(dealIndex).getTitle());
+								
 								listItemContainer.add(new ListItemWidget(deals.get(dealIndex)));
 								this.schedule(1);
 								dealIndex++;
@@ -99,6 +167,8 @@ public class ListWidget extends Composite {
 						}
 					};
 					dealTimer.schedule(1);
+					*/
+					listItemContainer.setVisible(true);
 					loadingSpinnerImage.setVisible(false);
 					dealsLoaded = true;
 				}

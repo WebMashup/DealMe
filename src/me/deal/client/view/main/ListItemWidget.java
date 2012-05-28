@@ -196,13 +196,18 @@ public class ListItemWidget extends Composite {
 		String googlePlusLinkURL="https://plusone.google.com/_/+1/confirm?hl=en-US&url=" + yipitURL;
 		facebookLink.setHref(facebookLinkURL);
 		Image facebookImage = new Image("images/facebook.png");
-		facebookLink.getElement().appendChild(facebookImage.getElement());
+		if(facebookLink.getElement().getChildCount()==0) // add image only if not existing
+			facebookLink.getElement().appendChild(facebookImage.getElement());
+		
 		twitterLink.setHref(twitterLinkURL);
+		
 		Image twitterImage = new Image("images/twitter.png");
-		twitterLink.getElement().appendChild(twitterImage.getElement());
+		if(twitterLink.getElement().getChildCount()==0)
+			twitterLink.getElement().appendChild(twitterImage.getElement());
 		googlePlusLink.setHref(googlePlusLinkURL);
 		Image googlePlusImage= new Image("images/google.png");
-		googlePlusLink.getElement().appendChild(googlePlusImage.getElement());
+		if(googlePlusLink.getElement().getChildCount()==0)
+			googlePlusLink.getElement().appendChild(googlePlusImage.getElement());
 	}
 	
 	public void setPrice(Double price) {

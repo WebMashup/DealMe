@@ -10,4 +10,8 @@ public interface Resources extends ClientBundle {
 	
 	@Source("images/LoadingSpinner.gif")
 	ImageResource loadingSpinner();
+	@Source("images/facebook.png")
+	ImageResource facebookImage();
+	
+	
 }
