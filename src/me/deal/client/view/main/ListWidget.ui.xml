@@ -18,8 +18,6 @@
 	</ui:style>
 	<g:HTMLPanel styleName='{style.maxheight}'>
 		<g:Image resource="{res.loadingSpinner}" ui:field="loadingSpinnerImage" />
-		<g:ScrollPanel ui:field="listWidgetScrollPanel">
 			<g:VerticalPanel ui:field="listItemContainer" styleName='{style.scrollable}'></g:VerticalPanel>
-		</g:ScrollPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>
