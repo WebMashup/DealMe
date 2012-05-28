@@ -19,6 +19,8 @@ import me.deal.shared.Location;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
@@ -29,6 +31,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -49,6 +52,8 @@ public class DealMe implements EntryPoint {
 	
 //	@UiField
 //	HeaderWidget headerWidget;
+	@UiField (provided=true)
+	ScrollPanel mainScrollPanel;
 	
 	@UiField (provided=true)
 	FilterWidget filterWidget;	
@@ -71,11 +76,12 @@ public class DealMe implements EntryPoint {
 	public void onModuleLoad() {
 
 //		headerWidget = new HeaderWidget();
-		
+
+		mainScrollPanel = new ScrollPanel();
 		filterWidget = new FilterWidget(dealService, eventBus);
 		menuWidget = new MenuWidget(dealService, eventBus);
 		locationWidget = new LocationWidget(geocodingService, eventBus);
-		listWidget = new ListWidget(dealService, directionsService, eventBus);
+		listWidget = new ListWidget(mainScrollPanel, dealService, directionsService, eventBus);
 		googleMapWidget = new GoogleMapWidget(dealService, eventBus);
 		
 		getUserLocation();
@@ -83,6 +89,7 @@ public class DealMe implements EntryPoint {
 		Widget w = MyUiBinder.INSTANCE.createAndBindUi(this);
         RootLayoutPanel.get().add(w);
 	}
+	
 	
 	private void getUserLocation() {
 		Geolocation geo;

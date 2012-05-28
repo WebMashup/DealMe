@@ -12,7 +12,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -28,14 +27,16 @@ public class ListItemWidget extends Composite {
 	}
 	
 	private Deal deal;
-	private BusinessInfo businessInfo;
 	final int MILLSECS_PER_DAY = 86400000;
-
-	public ListItemWidget(final Deal deal, final BusinessInfo businessInfo) {
+	
+	public ListItemWidget() {
+		this.deal = new Deal();
+	}
+	
+	public ListItemWidget(final Deal deal) {
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		this.deal = deal;
-		this.businessInfo = businessInfo;
 		initialize();
 	}
 
@@ -45,8 +46,8 @@ public class ListItemWidget extends Composite {
 	Image dealImage;
 	@UiField
 	Anchor dealTitle;
-//	@UiField
-//	Label dealSubtitle;
+	// @UiField
+	// Label dealSubtitle;
 	
 	@UiField
 	Image avgRating;
@@ -84,6 +85,7 @@ public class ListItemWidget extends Composite {
 	@UiField
 	Image avgYelpRating;
 	
+	
 	@SuppressWarnings("deprecation")
 	private void initialize() {
 		/*
@@ -98,53 +100,98 @@ public class ListItemWidget extends Composite {
 		
 		if (deal.getDealBusinessInfo() != null)
 		{
-			BusinessInfo bizInfo = deal.getDealBusinessInfo();
-			avgYelpRating.setUrl(
-					bizInfo.getAvgRatingImageUrl() == null ? "" : bizInfo.getAvgRatingImageUrl());
-			businessName.setText(
-					bizInfo.getName() == null ? "" : bizInfo.getName());
-			numReviews.setText(
-					bizInfo.getNumReviews() == null ? "" : Integer.toString(bizInfo.getNumReviews())+ " Reviews");
-			numReviews.setHref(
-					bizInfo.getWebUrl() == null ? "" : bizInfo.getWebUrl());
-			numReviews.setTarget("_blank");
+			setAvgRatingImageUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
+			setBusinessName(deal.getDealBusinessInfo().getName());
+			setNumReviews(deal.getDealBusinessInfo().getNumReviews());
+			setReviewsUrl(deal.getDealBusinessInfo().getWebUrl());
 		}
-		
-		//set image to be middle 200 x 300 of the full-size image
-		String url = deal.getBigImageUrl();
-		Location dealAddr = deal.getBusinessAddress();
-		dealImage.setUrl(deal.getBigImageUrl());
-		int centeredLeft = dealImage.getWidth() > 300 ? (dealImage.getWidth() - 300)/2 : 0;
-		int centeredTop = dealImage.getHeight() > 200 ? (dealImage.getHeight() - 200)/2 : 0;		
-		dealImage.setVisibleRect(centeredLeft, centeredTop, 300, 200);
-		
-		dealTitle.setText(deal.getSubtitle());
-		dealTitle.setHref(deal.getYipitWebUrl());
-		dealTitle.setTarget("_blank");
-//		dealSubtitle.setText(deal.getTitle());
+
+		setTitle(deal.getTitle());
+		setSubtitle(deal.getSubtitle());
+		setPrice(deal.getPrice());
+		setDiscountPercentage(deal.getDiscountPercentage());
+		setBusinessAddress(deal.getBusinessAddress());
+		setBigImageUrl(deal.getBigImageUrl());
+		setYipitUrl(deal.getYipitWebUrl());
+		setEndDate(deal.getEndDate());
+		setDealSource(deal.getDealSource());
+	}
+	
+	public void setAvgRatingImageUrl(String avgRatingImageUrl) {
+		if(deal.getDealBusinessInfo() == null)
+			deal.setDealBusinessInfo(new BusinessInfo());
+		deal.getDealBusinessInfo().setAvgRatingImageUrl(avgRatingImageUrl);
+		if(deal.getDealBusinessInfo().getAvgRatingImageUrl() != null)
+			avgYelpRating.setUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
+	}
+	
+	public void setBusinessName(String businessNameStr) {
+		if(deal.getDealBusinessInfo() == null)
+			deal.setDealBusinessInfo(new BusinessInfo());
+		deal.getDealBusinessInfo().setName(businessNameStr);
+		businessName.setText(deal.getDealBusinessInfo().getName());
+	}
+	
+	public void setNumReviews(Integer numReviewsInt) {
+		if(deal.getDealBusinessInfo() == null)
+			deal.setDealBusinessInfo(new BusinessInfo());
+		deal.getDealBusinessInfo().setNumReviews(numReviewsInt);
+		numReviews.setText(deal.getDealBusinessInfo().getNumReviews() + "");
+	}
+	
+	public void setReviewsUrl(String reviewsUrl) {
+		if(deal.getDealBusinessInfo() == null)
+			deal.setDealBusinessInfo(new BusinessInfo());
+		deal.getDealBusinessInfo().setWebUrl(reviewsUrl);
+		numReviews.setHref(deal.getDealBusinessInfo().getWebUrl());
+		numReviews.setTarget("_blank");
+	}
+	
+	public void setBusinessAddress(Location businessAddress) {
+		deal.setBusinessAddress(businessAddress);
 		addressLine1.setText(deal.getBusinessAddress().getAddress());
-		addressLine2.setText(dealAddr.getCity() + ", " + dealAddr.getState());
-				
-		dealPrice.setText(deal.getPrice().toString());
-		discountPercentage.setText(deal.getDiscountPercentage() + "%");		
+		addressLine2.setText(deal.getBusinessAddress().getCity() + ", " +
+				deal.getBusinessAddress().getState());
 		
-		//set the directions url
-		//http://maps.google.com/?saddr=34.052222,-118.243611&daddr=37.322778,-122.031944
 		LatLngCoor latlng = deal.getBusinessAddress().getLatLng();
 		Location dealLoc = DealsLocation.getInstance().getDealsLocation();
 		LatLngCoor dealLatLng = dealLoc.getLatLng(); 
 		String directionsURL = "http://maps.google.com/maps?saddr="
 				+ dealLatLng.getLatitude() + "," +  dealLatLng.getLongitude() +
 				"&daddr=" +latlng.getLatitude()+","+latlng.getLongitude();
-		//"http://maps.google.com/?q="+latlng.getLatitude()+","+latlng.getLongitude();
 		getDirectionsLink.setHref(directionsURL);
 		getDirectionsLink.setText("Directions");
+	}
+	
+	public void setBigImageUrl(String bigImageUrl) {
+		deal.setBigImageUrl(bigImageUrl);
+		dealImage.setUrl(deal.getBigImageUrl());
+		int centeredLeft = dealImage.getWidth() > 300 ? (dealImage.getWidth() - 300)/2 : 0;
+		int centeredTop = dealImage.getHeight() > 200 ? (dealImage.getHeight() - 200)/2 : 0;		
+		dealImage.setVisibleRect(centeredLeft, centeredTop, 300, 200);
+	}
+	
+	public void setSubtitle(String subtitle) {
+		deal.setSubtitle(subtitle);
+		dealTitle.setText(deal.getSubtitle());
+	}
+	
+	public void setTitle(String title) {
+		deal.setTitle(title);
+	//	dealSubtitle.setText(deal.getTitle());
+	}
+	
+	public void setYipitUrl(String yipitWebUrl) {
+		deal.setYipitWebUrl(yipitWebUrl);
+		dealTitle.setHref(deal.getYipitWebUrl());
+		dealTitle.setTarget("_blank");
 		
 		//social media integration
 		String yipitURL= deal.getYipitWebUrl();
-		String facebookLinkURL="https://www.facebook.com/sharer.php?u="+yipitURL;
-		String twitterLinkURL="http://twitter.com/share?count=horiztonal&url="+yipitURL+"&text="+deal.getTitle();
-		String googlePlusLinkURL="https://plusone.google.com/_/+1/confirm?hl=en-US&url="+yipitURL;
+		String facebookLinkURL="https://www.facebook.com/sharer.php?u=" + yipitURL;
+		String twitterLinkURL="http://twitter.com/share?count=horiztonal&url=" + yipitURL + "&text="
+				+ (deal.getTitle() == null ? "" : deal.getTitle());
+		String googlePlusLinkURL="https://plusone.google.com/_/+1/confirm?hl=en-US&url=" + yipitURL;
 		facebookLink.setHref(facebookLinkURL);
 		Image facebookImage = new Image("images/facebook.png");
 		facebookLink.getElement().appendChild(facebookImage.getElement());
@@ -154,10 +201,22 @@ public class ListItemWidget extends Composite {
 		googlePlusLink.setHref(googlePlusLinkURL);
 		Image googlePlusImage= new Image("images/google.png");
 		googlePlusLink.getElement().appendChild(googlePlusImage.getElement());
-		
+	}
+	
+	public void setPrice(Double price) {
+		deal.setPrice(price);
+		dealPrice.setText(deal.getPrice() + "");
+	}
+	
+	public void setDiscountPercentage(Double discountPercentageDbl) {
+		deal.setDiscountPercentage(discountPercentageDbl);
+		discountPercentage.setText(deal.getDiscountPercentage() + "%");
+	}
+	
+	public void setEndDate(String endDate) {
 		//parse date strings to determine how many days are left compared to current date
 		Date today = new Date();
-		String endDate = deal.getEndDate();
+		deal.setEndDate(endDate);
 		Date endDay = new Date();
 		endDay.setYear(Integer.parseInt(endDate.substring(0, 4))-1900);
 		endDay.setMonth(Integer.parseInt(endDate.substring(5, 7))-1);
@@ -171,9 +230,10 @@ public class ListItemWidget extends Composite {
 		else {
 			daysText.setText("\tday left on ");
 		}
-		//TODO: parse deal source from yipit
-		dealSource.setText(deal.getDealSource());	
-		
-			
+	}
+	
+	public void setDealSource(String dealSourceStr) {
+		deal.setDealSource(dealSourceStr);
+		dealSource.setText(deal.getDealSource());
 	}
 }

@@ -15,13 +15,14 @@ import me.deal.shared.Category;
 import me.deal.shared.Deal;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Window.ScrollEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -47,13 +48,17 @@ public class ListWidget extends Composite {
 	private final DealServiceAsync dealService;
 	private final DirectionsServiceAsync directionsService;
 	private final HandlerManager eventBus;
-	private Boolean dealsLoaded = false;
-	private final Integer DEFAULT_NUM_DEALS = 3;
 	
-	public @UiConstructor ListWidget(final DealServiceAsync dealService,
+	private final ScrollPanel mainScrollPanel;
+	private Boolean dealsLoaded = false;
+	private final Integer DEFAULT_NUM_DEALS = 10;
+	
+	public @UiConstructor ListWidget(final ScrollPanel mainScrollPanel,
+			final DealServiceAsync dealService,
 			final DirectionsServiceAsync directionsService,
 			final HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
+		this.mainScrollPanel = mainScrollPanel;
 		this.dealService = dealService;
 		this.directionsService = directionsService;
 		this.eventBus = eventBus;
@@ -67,12 +72,19 @@ public class ListWidget extends Composite {
 		 * changes in the model.
 		 * 
 		 */
-		listWidgetScrollPanel.setHeight("600px");
-		Window.enableScrolling(true);
-		Window.addWindowScrollHandler(new Window.ScrollHandler() {
+		
+		
+		mainScrollPanel.addScrollHandler(new ScrollHandler() {
 			@Override
-			public void onWindowScroll(ScrollEvent event) {
-				listWidgetScrollPanel.setVerticalScrollPosition(Window.getScrollTop());
+			public void onScroll(ScrollEvent event) {
+				if(dealsLoaded) {
+					int maxPos = mainScrollPanel.getMaximumVerticalScrollPosition();
+					int currPos = mainScrollPanel.getVerticalScrollPosition();
+					
+					if(currPos > maxPos - 1000) {
+						dealsLoaded = false;
+					}
+				}
 			}
 		});
 		
@@ -109,7 +121,7 @@ public class ListWidget extends Composite {
 						public void run() {
 							if(dealIndex != deals.size()) {
 								System.out.println("Added " + deals.get(dealIndex).getTitle());
-								listItemContainer.add(new ListItemWidget(deals.get(dealIndex), null));
+								listItemContainer.add(new ListItemWidget(deals.get(dealIndex)));
 								this.schedule(1);
 								dealIndex++;
 							}
@@ -117,6 +129,7 @@ public class ListWidget extends Composite {
 					};
 					dealTimer.schedule(1);
 					loadingSpinnerImage.setVisible(false);
+					dealsLoaded = true;
 				}
 		});
 	}
