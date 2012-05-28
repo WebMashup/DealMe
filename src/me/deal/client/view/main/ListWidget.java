@@ -41,8 +41,6 @@ public class ListWidget extends Composite {
 	@UiField
 	Image loadingSpinnerImage;
 	@UiField
-	ScrollPanel listWidgetScrollPanel;
-	@UiField
 	VerticalPanel listItemContainer;
 	
 	private final DealServiceAsync dealService;
