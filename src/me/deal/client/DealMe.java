@@ -1,7 +1,9 @@
 package me.deal.client;
 
-import me.deal.client.events.DealsLocationEvent;
-import me.deal.client.model.DealsLocation;
+import java.util.ArrayList;
+
+import me.deal.client.events.DealsEvent;
+import me.deal.client.model.Deals;
 import me.deal.client.servlets.DealService;
 import me.deal.client.servlets.DealServiceAsync;
 import me.deal.client.servlets.DirectionsService;
@@ -13,14 +15,13 @@ import me.deal.client.view.main.ListWidget;
 import me.deal.client.view.menubar.FilterWidget;
 import me.deal.client.view.menubar.LocationWidget;
 import me.deal.client.view.menubar.MenuWidget;
+import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
@@ -80,7 +81,7 @@ public class DealMe implements EntryPoint {
 		mainScrollPanel = new ScrollPanel();
 		filterWidget = new FilterWidget(dealService, eventBus);
 		menuWidget = new MenuWidget(dealService, eventBus);
-		locationWidget = new LocationWidget(geocodingService, eventBus);
+		locationWidget = new LocationWidget(geocodingService, dealService, eventBus);
 		listWidget = new ListWidget(mainScrollPanel, dealService, directionsService, eventBus);
 		googleMapWidget = new GoogleMapWidget(dealService, eventBus);
 		
@@ -114,8 +115,28 @@ public class DealMe implements EntryPoint {
 							@Override
 							public void onSuccess(final Location result) {
 								// Window.alert(result.getAddress() + "\n" + result.getCity() + ", " + result.getState() + " " + result.getZipCode());
-								DealsLocation.getInstance().setDealsLocation(result);
-								eventBus.fireEvent(new DealsLocationEvent());
+								Deals.getInstance().setLocation(result);
+								Integer numDealsToLoad = 7;
+								Deals deals = Deals.getInstance();
+								dealService.getYipitDeals(deals.getLocation().getLatLng(),
+										deals.getRadius(),
+										numDealsToLoad,
+										deals.getTags(),
+										new AsyncCallback<ArrayList<Deal>>() {
+											@Override
+											public void onFailure(Throwable caught) {
+												Window.alert("Failed to load deals.");
+											}
+
+											@Override
+											public void onSuccess(ArrayList<Deal> result) {
+												Deals deals = Deals.getInstance();
+												deals.setDeals(result);
+												deals.setOffset(deals.getOffset() + result.size());
+												deals.setLoadsSinceLastReset(new Integer(0));
+												eventBus.fireEvent(new DealsEvent());
+											}
+								});
 							}
 						});
 					}

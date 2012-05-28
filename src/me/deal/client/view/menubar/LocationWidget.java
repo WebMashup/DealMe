@@ -1,9 +1,13 @@
 package me.deal.client.view.menubar;
 
-import me.deal.client.events.DealsLocationEvent;
-import me.deal.client.events.DealsLocationEventHandler;
-import me.deal.client.model.DealsLocation;
+import java.util.ArrayList;
+
+import me.deal.client.events.DealsEvent;
+import me.deal.client.events.DealsEventHandler;
+import me.deal.client.model.Deals;
+import me.deal.client.servlets.DealServiceAsync;
 import me.deal.client.servlets.GeocodingServiceAsync;
+import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 
@@ -22,7 +26,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class LocationWidget extends Composite {
@@ -34,6 +37,7 @@ public class LocationWidget extends Composite {
 	}
 	
 	private final GeocodingServiceAsync geocodingService;
+	private final DealServiceAsync dealService;
 	private final HandlerManager eventBus;
 	
 	private Integer loadingState = 0;
@@ -42,7 +46,6 @@ public class LocationWidget extends Composite {
 			"Acquiring location..", "Acquiring location..."};
 	private final Integer LOADING_DELAY = 100;
 	private Boolean locationInitialized = false;
-	private String newAddress;
 	
 	@UiField
 	Label addressLine1;
@@ -107,8 +110,8 @@ public class LocationWidget extends Composite {
 			@Override
 			public void onSuccess(LatLngCoor result) {
 				// TODO Auto-generated method stub
-				addressLine1.setText(newAddress);
-				Location userLoc = DealsLocation.getInstance().getDealsLocation();
+				addressLine1.setText("");
+				Location userLoc = Deals.getInstance().getLocation();
 				userLoc.setLatLng((LatLngCoor) result);
 				
 				geocodingService.convertLatLngToAddress(result, new AsyncCallback<Location>() {
@@ -124,19 +127,42 @@ public class LocationWidget extends Composite {
 						// TODO Auto-generated method stub
 						String line1 = "Current address: " + result.getAddress() + ", " + result.getCity() + ", " + result.getState() + " " + result.getZipCode();
 						addressLine1.setText(line1);
+						Deals deals = Deals.getInstance();
+						deals.setLocation(result);
+						Integer numDealsToLoad = 7;
+						
+						dealService.getYipitDeals(deals.getLocation().getLatLng(),
+								deals.getRadius(),
+								numDealsToLoad,
+								deals.getTags(),
+								new AsyncCallback<ArrayList<Deal>>() {
+									@Override
+									public void onFailure(Throwable caught) {
+										Window.alert("Failed to load deals.");
+									}
+
+									@Override
+									public void onSuccess(ArrayList<Deal> result) {
+										Deals deals = Deals.getInstance();
+										deals.setDeals(result);
+										deals.setLoadsSinceLastReset(new Integer(0));
+										deals.setOffset(deals.getOffset() + result.size());
+										eventBus.fireEvent(new DealsEvent());
+									}
+						});
 					}
-					
 				});
-				eventBus.fireEvent(new DealsLocationEvent());
 			}
 			
 		});    
 	}
 	
 	public @UiConstructor LocationWidget(final GeocodingServiceAsync geocodingService,
+			final DealServiceAsync dealService,
 			final HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.geocodingService = geocodingService;
+		this.dealService = dealService;
 		this.eventBus = eventBus;
 		
 		initialize();
@@ -156,12 +182,13 @@ public class LocationWidget extends Composite {
 		};
 		t.schedule(LOADING_DELAY);
 		
-		eventBus.addHandler(DealsLocationEvent.TYPE,
-				new DealsLocationEventHandler() {
-			public void onDealsLocation(DealsLocationEvent event) {
+		eventBus.addHandler(DealsEvent.TYPE,
+				new DealsEventHandler() {
+			@Override
+			public void onDeals(DealsEvent event) {
 				if(locationInitialized.equals(false)) {
 					t.cancel();
-					Location userLoc = DealsLocation.getInstance().getDealsLocation();
+					Location userLoc = Deals.getInstance().getLocation();
 					String line1 = "Current address: " + userLoc.getAddress() + ", " + userLoc.getCity() + ", " + userLoc.getState() + " " + userLoc.getZipCode();
 					addressLine1.setText(line1);
 					changeLocationButton.setEnabled(true);
@@ -169,11 +196,5 @@ public class LocationWidget extends Composite {
 				}
 			}
 		});
-		/*
-		 * When you modify the UserLocation singleton be sure to fire this event
-		 * to notify other people the UserLocation singleton has been modified.
-		 * 
-		 * eventBus.fireEvent(new UserLocation());
-		 */
 	}
 }

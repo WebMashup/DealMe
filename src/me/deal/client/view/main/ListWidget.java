@@ -1,17 +1,12 @@
 package me.deal.client.view.main;
 
 import java.util.ArrayList;
-import java.util.TimerTask;
 
 import me.deal.client.events.DealsEvent;
 import me.deal.client.events.DealsEventHandler;
-import me.deal.client.events.DealsLocationEvent;
-import me.deal.client.events.DealsLocationEventHandler;
 import me.deal.client.model.Deals;
-import me.deal.client.model.DealsLocation;
 import me.deal.client.servlets.DealServiceAsync;
 import me.deal.client.servlets.DirectionsServiceAsync;
-import me.deal.shared.Category;
 import me.deal.shared.Deal;
 
 import com.google.gwt.core.client.GWT;
@@ -22,8 +17,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -88,27 +81,6 @@ public class ListWidget extends Composite {
 			}
 		});
 		
-		eventBus.addHandler(DealsLocationEvent.TYPE,
-				new DealsLocationEventHandler() {
-			@Override
-			public void onDealsLocation(DealsLocationEvent event) {
-				dealService.getYipitDeals(DealsLocation.getInstance().getDealsLocation().getLatLng(),
-						DealsLocation.getInstance().DEFAULT_RADIUS, DEFAULT_NUM_DEALS, new ArrayList<Category>(),
-						new AsyncCallback<ArrayList<Deal>>() {
-							@Override
-							public void onFailure(Throwable caught) {
-								Window.alert("Failed to load deals.");
-							}
-
-							@Override
-							public void onSuccess(ArrayList<Deal> result) {
-								Deals.getInstance().setDeals(result);
-								eventBus.fireEvent(new DealsEvent());
-							}
-				});
-			}
-        });
-		
 		eventBus.addHandler(DealsEvent.TYPE,
 				new DealsEventHandler() {
 				@Override
@@ -116,6 +88,7 @@ public class ListWidget extends Composite {
 					loadingSpinnerImage.setVisible(true);
 					listItemContainer.clear();
 					final ArrayList<Deal> deals = Deals.getInstance().getDeals();
+					
 					final Timer dealTimer = new Timer() {
 						Integer dealIndex = 0;
 						public void run() {

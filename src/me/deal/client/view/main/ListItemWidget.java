@@ -2,7 +2,7 @@ package me.deal.client.view.main;
 
 import java.util.Date;
 
-import me.deal.client.model.DealsLocation;
+import me.deal.client.model.Deals;
 import me.deal.shared.BusinessInfo;
 import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
@@ -30,6 +30,7 @@ public class ListItemWidget extends Composite {
 	final int MILLSECS_PER_DAY = 86400000;
 	
 	public ListItemWidget() {
+		initWidget(uiBinder.createAndBindUi(this));
 		this.deal = new Deal();
 	}
 	
@@ -155,7 +156,7 @@ public class ListItemWidget extends Composite {
 				deal.getBusinessAddress().getState());
 		
 		LatLngCoor latlng = deal.getBusinessAddress().getLatLng();
-		Location dealLoc = DealsLocation.getInstance().getDealsLocation();
+		Location dealLoc = Deals.getInstance().getLocation();
 		LatLngCoor dealLatLng = dealLoc.getLatLng(); 
 		String directionsURL = "http://maps.google.com/maps?saddr="
 				+ dealLatLng.getLatitude() + "," +  dealLatLng.getLongitude() +
