@@ -136,7 +136,8 @@ public class ListItemWidget extends Composite {
 		if(deal.getDealBusinessInfo() == null)
 			deal.setDealBusinessInfo(new BusinessInfo());
 		deal.getDealBusinessInfo().setNumReviews(numReviewsInt);
-		numReviews.setText(deal.getDealBusinessInfo().getNumReviews() + "");
+		if(numReviewsInt != null)
+			numReviews.setText(deal.getDealBusinessInfo().getNumReviews() + "");
 	}
 	
 	public void setReviewsUrl(String reviewsUrl) {
