@@ -38,7 +38,7 @@
 					<g:Label ui:field="addressLine2"></g:Label>	
 					<!-- <g:Button ui:field="getDirectionsButton" addStyleNames="dirButton">Get Directions</g:Button>	 -->	
 					<g:Anchor ui:field="getDirectionsLink" target="_blank" ></g:Anchor>	
-					<g:Label ui:field="dealSubtitle" addStyleNames="subTitleStyle"></g:Label>
+<!-- 					<g:Label ui:field="dealSubtitle" addStyleNames="subTitleStyle"></g:Label> -->
 				</g:VerticalPanel>
 				<g:HorizontalPanel>
 					<g:VerticalPanel>

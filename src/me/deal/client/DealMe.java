@@ -10,6 +10,7 @@ import me.deal.client.servlets.GeocodingService;
 import me.deal.client.servlets.GeocodingServiceAsync;
 import me.deal.client.view.main.GoogleMapWidget;
 import me.deal.client.view.main.ListWidget;
+import me.deal.client.view.menubar.FilterWidget;
 import me.deal.client.view.menubar.LocationWidget;
 import me.deal.client.view.menubar.MenuWidget;
 import me.deal.shared.LatLngCoor;
@@ -49,8 +50,8 @@ public class DealMe implements EntryPoint {
 //	@UiField
 //	HeaderWidget headerWidget;
 	
-//	@UiField
-//	FilterWidget filterWidget;	
+	@UiField (provided=true)
+	FilterWidget filterWidget;	
 	
 	@UiField (provided=true)
 	MenuWidget menuWidget;
@@ -70,7 +71,8 @@ public class DealMe implements EntryPoint {
 	public void onModuleLoad() {
 
 //		headerWidget = new HeaderWidget();
-//		filterWidget = new FilterWidget(dealService, eventBus);
+		
+		filterWidget = new FilterWidget(dealService, eventBus);
 		menuWidget = new MenuWidget(dealService, eventBus);
 		locationWidget = new LocationWidget(geocodingService, eventBus);
 		listWidget = new ListWidget(dealService, directionsService, eventBus);

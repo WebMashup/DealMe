@@ -48,7 +48,7 @@ public class ListWidget extends Composite {
 	private final DirectionsServiceAsync directionsService;
 	private final HandlerManager eventBus;
 	private Boolean dealsLoaded = false;
-	private final Integer DEFAULT_NUM_DEALS = 20;
+	private final Integer DEFAULT_NUM_DEALS = 3;
 	
 	public @UiConstructor ListWidget(final DealServiceAsync dealService,
 			final DirectionsServiceAsync directionsService,

@@ -30,6 +30,9 @@
 			<b:Row>
 				<b:Column size="12" styleName='{style.bottomdivider}'>
 					<b:TabPanel>
+						<b:TabPane heading="Filters">
+							<menubar:FilterWidget ui:field="filterWidget"></menubar:FilterWidget>
+						</b:TabPane>
 						<b:TabPane heading="Location">
 							<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
 						</b:TabPane>

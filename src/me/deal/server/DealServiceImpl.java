@@ -148,7 +148,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		}
 		
 		while(parameterStr.endsWith(","))
-			parameterStr = parameterStr.substring(0, parameterStr.length() - 2);
+			parameterStr = parameterStr.substring(0, parameterStr.length() - 1);
 		
 		return parameterStr;
 	}

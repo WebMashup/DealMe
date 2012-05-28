@@ -45,8 +45,8 @@ public class ListItemWidget extends Composite {
 	Image dealImage;
 	@UiField
 	Anchor dealTitle;
-	@UiField
-	Label dealSubtitle;
+//	@UiField
+//	Label dealSubtitle;
 	
 	@UiField
 	Image avgRating;
@@ -121,7 +121,7 @@ public class ListItemWidget extends Composite {
 		dealTitle.setText(deal.getSubtitle());
 		dealTitle.setHref(deal.getYipitWebUrl());
 		dealTitle.setTarget("_blank");
-		dealSubtitle.setText(deal.getTitle());
+//		dealSubtitle.setText(deal.getTitle());
 		addressLine1.setText(deal.getBusinessAddress().getAddress());
 		addressLine2.setText(dealAddr.getCity() + ", " + dealAddr.getState());
 				
