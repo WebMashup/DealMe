@@ -9,9 +9,12 @@ import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -41,8 +44,9 @@ public class ListItemWidget extends Composite {
 		initialize();
 	}
 
-	//@UiField
+	@UiField
 	//Button formatMapButton;
+	Image formatMapButton;
 	@UiField
 	Image dealImage;
 	@UiField
@@ -106,9 +110,9 @@ public class ListItemWidget extends Composite {
 			setNumReviews(deal.getDealBusinessInfo().getNumReviews());
 			setReviewsUrl(deal.getDealBusinessInfo().getWebUrl());
 		}
-
+		
 		setTitle(deal.getTitle());
-		setSubtitle(deal.getSubtitle());
+		//setSubtitle(deal.getSubtitle());
 		setPrice(deal.getPrice());
 		setDiscountPercentage(deal.getDiscountPercentage());
 		setBusinessAddress(deal.getBusinessAddress());
@@ -116,6 +120,21 @@ public class ListItemWidget extends Composite {
 		setYipitUrl(deal.getYipitWebUrl());
 		setEndDate(deal.getEndDate());
 		setDealSource(deal.getDealSource());
+	}
+	
+	public void setMapButton(int i){
+		
+		formatMapButton.setTitle("Test title");
+		if(i < 26)
+			formatMapButton.setUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i,i+1) + ".png" );
+			formatMapButton.addClickHandler(new ClickHandler() {
+			      @Override
+			      public void onClick(ClickEvent event) {
+			    	  
+			       System.out.println("change center to latlng ");
+			        
+			      }
+			    });
 	}
 	
 	public void setAvgRatingImageUrl(String avgRatingImageUrl) {

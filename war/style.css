@@ -78,7 +78,7 @@ h1 {
 }
 
 .leftText{
-	width: 300px;
+	width: 290px;
 	height: 60px;
 	padding: 5px;
 	z-index: 9999;
@@ -138,4 +138,15 @@ ul li {
 
 .socialMedia table {
 	margin: 0 auto;
+}
+
+.leftButton {
+	z-index: 9999;
+	position: absolute;
+	top: 5px;	
+	left: 5px;
+}
+
+.mapButton {
+	
 }
