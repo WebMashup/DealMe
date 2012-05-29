@@ -97,6 +97,7 @@ public class GoogleMapWidget extends Composite {
                 @Override
                 public void onDeals(DealsEvent event) {
                 	LatLng tempCenter = Deals.getInstance().getLocation().getLatLng().convert();
+                	System.out.println("after tempCenter assigned");
                 	if(!mapWidget.getCenter().equals(tempCenter)) {
                     	currentCenter = tempCenter;
                     	mapWidget.setCenter(currentCenter);

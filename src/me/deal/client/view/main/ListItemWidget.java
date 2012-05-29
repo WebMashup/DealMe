@@ -2,6 +2,7 @@ package me.deal.client.view.main;
 
 import java.util.Date;
 
+import me.deal.client.events.DealsEvent;
 import me.deal.client.model.Deals;
 import me.deal.shared.BusinessInfo;
 import me.deal.shared.Deal;
@@ -11,6 +12,7 @@ import me.deal.shared.Location;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
@@ -122,7 +124,7 @@ public class ListItemWidget extends Composite {
 		setDealSource(deal.getDealSource());
 	}
 	
-	public void setMapButton(final int i){
+	public void setMapButton(final int i, final HandlerManager eventBus){
 		
 		formatMapButton.setTitle("Test title");
 		if(i < 26)
@@ -133,6 +135,12 @@ public class ListItemWidget extends Composite {
 			      public void onClick(ClickEvent event) {
 			    	  
 			       System.out.println("clicked button " + String.valueOf(i));
+			       Deals deals = Deals.getInstance();
+			       Location loc = new Location();
+			       loc.setLatLng(deal.getBusinessAddress().getLatLng());
+			       deals.setLocation(loc);
+					
+					eventBus.fireEvent(new DealsEvent());
 			        
 			      }
 			    });

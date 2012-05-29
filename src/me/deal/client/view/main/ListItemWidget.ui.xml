@@ -36,7 +36,7 @@
 					<g:Anchor ui:field="numReviews"></g:Anchor>
 				</g:HorizontalPanel>
 				<g:VerticalPanel>					
-					<g:Anchor ui:field="businessName" addStyleNames="bizNameStyle"></g:Anchor>
+					<g:Anchor ui:field="businessName" addStyleNames="bizNameStyle" target="_blank"></g:Anchor>
 					<g:Label ui:field="addressLine1"></g:Label>
 					<g:Label ui:field="addressLine2"></g:Label>		
 					<g:Anchor ui:field="getDirectionsLink" target="_blank"></g:Anchor>	
