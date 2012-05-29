@@ -104,7 +104,7 @@ h1 {
 .itemContainer{
 	/*width: 400px;*/
 	height: 200px;
-	margin-top: 50px;
+	margin-top: 25px;
 	border-width:1px;
   	border-color: rgb(192,192,192);
   	border-style: solid;
@@ -153,7 +153,7 @@ a:link.bizNameStyle {
 	left: 5px;
 }
 
-.mapButton {
-	
+.numReviews{
+	padding: 3px;
 }
 

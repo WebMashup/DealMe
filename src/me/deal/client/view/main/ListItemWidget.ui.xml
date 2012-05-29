@@ -33,7 +33,7 @@
 				<g:HorizontalPanel>
 					<g:Image ui:field="avgRating"></g:Image>					 
 					<g:Image ui:field="avgYelpRating"></g:Image>
-					<g:Anchor ui:field="numReviews"></g:Anchor>
+					<g:Anchor ui:field="numReviews" addStyleNames="numReviews"></g:Anchor>
 				</g:HorizontalPanel>
 				<g:VerticalPanel>					
 					<g:Anchor ui:field="businessName" addStyleNames="bizNameStyle" target="_blank"></g:Anchor>

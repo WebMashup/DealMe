@@ -129,7 +129,7 @@ public class ListItemWidget extends Composite {
 		formatMapButton.setTitle("Test title");
 		if(i < 26)
 			formatMapButton.setUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i,i+1) + ".png" );
-		
+		//formatMapButton.setUrl(deal.getIDUrl());
 		formatMapButton.addClickHandler(new ClickHandler() {
 			      @Override
 			      public void onClick(ClickEvent event) {
@@ -165,8 +165,10 @@ public class ListItemWidget extends Composite {
 		if(deal.getDealBusinessInfo() == null)
 			deal.setDealBusinessInfo(new BusinessInfo());
 		deal.getDealBusinessInfo().setNumReviews(numReviewsInt);
-		if(numReviewsInt != null)
-			numReviews.setText(deal.getDealBusinessInfo().getNumReviews() + "");
+		if(numReviewsInt != null) {
+			String reviewText = numReviewsInt == 1 ? "Review" : "Reviews";
+			numReviews.setText(deal.getDealBusinessInfo().getNumReviews() + " " + reviewText);
+		}			
 	}
 	
 	public void setReviewsUrl(String reviewsUrl) {
