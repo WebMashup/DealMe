@@ -11,6 +11,7 @@ public class Deals {
 	private static final Deals INSTANCE = new Deals();
 	private ArrayList<Deal> deals;
 	private Location location;
+	private Location userLocation;
 	private Double radius;
 	private Integer offset;
 	private ArrayList<Category> tags;
@@ -47,6 +48,14 @@ public class Deals {
 
 	public void setLocation(final Location location) {
 		this.location = location;
+	}
+	
+	public Location getUserLocation() {
+		return userLocation;
+	}
+
+	public void setUserLocation(final Location userLocation) {
+		this.userLocation = userLocation;
 	}
 
 	public Double getRadius() {

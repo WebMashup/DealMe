@@ -184,10 +184,10 @@ public class ListItemWidget extends Composite {
 				deal.getBusinessAddress().getState());
 		
 		LatLngCoor latlng = deal.getBusinessAddress().getLatLng();
-		Location dealLoc = Deals.getInstance().getLocation();
-		LatLngCoor dealLatLng = dealLoc.getLatLng(); 
+		Location userLoc = Deals.getInstance().getUserLocation();
+		LatLngCoor userLatLng = userLoc.getLatLng(); 
 		String directionsURL = "http://maps.google.com/maps?saddr="
-				+ dealLatLng.getLatitude() + "," +  dealLatLng.getLongitude() +
+				+ userLatLng.getLatitude() + "," +  userLatLng.getLongitude() +
 				"&daddr=" +latlng.getLatitude()+","+latlng.getLongitude();
 		getDirectionsLink.setHref(directionsURL);
 		getDirectionsLink.setText("Directions");

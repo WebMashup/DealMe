@@ -116,6 +116,7 @@ public class DealMe implements EntryPoint {
 							public void onSuccess(final Location result) {
 								// Window.alert(result.getAddress() + "\n" + result.getCity() + ", " + result.getState() + " " + result.getZipCode());
 								Deals.getInstance().setLocation(result);
+								Deals.getInstance().setUserLocation(result);
 								Integer numDealsToLoad = 7;
 								Deals deals = Deals.getInstance();
 								dealService.getYipitDeals(deals.getLocation().getLatLng(),

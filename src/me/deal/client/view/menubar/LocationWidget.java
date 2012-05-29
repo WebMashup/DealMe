@@ -129,6 +129,7 @@ public class LocationWidget extends Composite {
 						addressLine1.setText(line1);
 						Deals deals = Deals.getInstance();
 						deals.setLocation(result);
+						deals.setUserLocation(result);
 						Integer numDealsToLoad = 7;
 						
 						dealService.getYipitDeals(deals.getLocation().getLatLng(),
@@ -189,6 +190,7 @@ public class LocationWidget extends Composite {
 				if(locationInitialized.equals(false)) {
 					t.cancel();
 					Location userLoc = Deals.getInstance().getLocation();
+					Deals.getInstance().setUserLocation(userLoc);
 					String line1 = "Current address: " + userLoc.getAddress() + ", " + userLoc.getCity() + ", " + userLoc.getState() + " " + userLoc.getZipCode();
 					addressLine1.setText(line1);
 					changeLocationButton.setEnabled(true);
