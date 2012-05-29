@@ -100,6 +100,7 @@ public class ListWidget extends Composite {
 							ListItemWidget item=new ListItemWidget();
 							System.out.println("after item widget");
 							item.setMapButton(i);
+							
 							System.out.println("before add");
 							listItemContainer.add(item);
 							System.out.println("after add");

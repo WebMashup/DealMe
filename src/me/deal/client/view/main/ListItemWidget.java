@@ -59,7 +59,7 @@ public class ListItemWidget extends Composite {
 	@UiField
 	Anchor numReviews;
 	@UiField
-	Label businessName;
+	Anchor businessName;
 	@UiField
 	Label addressLine1;
 	@UiField
@@ -122,16 +122,17 @@ public class ListItemWidget extends Composite {
 		setDealSource(deal.getDealSource());
 	}
 	
-	public void setMapButton(int i){
+	public void setMapButton(final int i){
 		
 		formatMapButton.setTitle("Test title");
 		if(i < 26)
 			formatMapButton.setUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i,i+1) + ".png" );
-			formatMapButton.addClickHandler(new ClickHandler() {
+		
+		formatMapButton.addClickHandler(new ClickHandler() {
 			      @Override
 			      public void onClick(ClickEvent event) {
 			    	  
-			       System.out.println("change center to latlng ");
+			       System.out.println("clicked button " + String.valueOf(i));
 			        
 			      }
 			    });
@@ -149,7 +150,7 @@ public class ListItemWidget extends Composite {
 		if(deal.getDealBusinessInfo() == null)
 			deal.setDealBusinessInfo(new BusinessInfo());
 		deal.getDealBusinessInfo().setName(businessNameStr);
-		businessName.setText(deal.getDealBusinessInfo().getName());
+		businessName.setText(deal.getDealBusinessInfo().getName());		
 	}
 	
 	public void setNumReviews(Integer numReviewsInt) {
@@ -206,6 +207,7 @@ public class ListItemWidget extends Composite {
 		deal.setYipitWebUrl(yipitWebUrl);
 		dealTitle.setHref(deal.getYipitWebUrl());
 		dealTitle.setTarget("_blank");
+		businessName.setHref(yipitWebUrl);
 		
 		//social media integration
 		String yipitURL= deal.getYipitWebUrl();

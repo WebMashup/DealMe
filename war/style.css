@@ -2,6 +2,7 @@
 
 
 /** Example rules used by the template application (remove for your app) */
+
 h1 {
   font-size: 2em;
   font-weight: bold;
@@ -126,6 +127,11 @@ ul li {
 	font-size: 1.25em;
 }
 
+a:link.bizNameStyle {
+	color: #000000;
+}
+
+
 .subTitleStyle {
 	color: #999999;	
 }
@@ -150,3 +156,4 @@ ul li {
 .mapButton {
 	
 }
+
