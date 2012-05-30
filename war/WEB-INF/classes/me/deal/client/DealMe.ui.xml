@@ -13,6 +13,12 @@
 		margin-bottom: 10px;
         border-bottom: 1px solid rgb(221,221,221);
 		}
+		.buttonview
+		{
+		font: 14px/20px helvetica,arial,sans-serif;
+		color: rgb(133, 150, 167);
+		line-height: 1;
+		}
 		.rightdivider {
         border-right: 1px solid rgb(221,221,221);
 		}
@@ -25,40 +31,71 @@
 		}
 	</ui:style>
 	<g:ScrollPanel ui:field="mainScrollPanel">
-		<g:HTMLPanel>
-			<menubar:MenuWidget ui:field="menuWidget"></menubar:MenuWidget>
-			<b:Container>
-				<b:Row>
-					<b:Column size="12" styleName='{style.bottomdivider}'>
-						<b:TabPanel>
-							<b:TabPane heading="Filters">
-								<menubar:FilterWidget ui:field="filterWidget"></menubar:FilterWidget>
-							</b:TabPane>
-							<b:TabPane heading="Location">
-								<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
-							</b:TabPane>
-						</b:TabPanel>
-					</b:Column>
-				</b:Row>
-				<b:Row>
-					<b:Column size="7">
-						<!-- <b:Hero>
-							<b:Heading size="1">Deals Go Here</b:Heading>
-							<b:Paragraph>   Some filler text.</b:Paragraph>
-							<b:Paragraph>   More text.</b:Paragraph>
-						</b:Hero> -->
-						<main:ListWidget ui:field="listWidget" styleName='{style.maxheight}'></main:ListWidget>
-					</b:Column>
-					<b:Column size="5">
-						<main:GoogleMapWidget ui:field="googleMapWidget"></main:GoogleMapWidget>
-						<!-- <b:Hero>
-							<b:Heading size="1">Map Goes Here</b:Heading>
-							<b:Paragraph>Some filler text.</b:Paragraph>
-							<b:Paragraph>More text.</b:Paragraph>
-						</b:Hero> -->
-					</b:Column>
-				</b:Row>
-			</b:Container>
-		</g:HTMLPanel>
+	<g:HTMLPanel>
+	<div id="main">
+<!-- 	<header id="site_header"> -->
+<!-- 	<div class="container" style=""> -->
+<!-- 	<div class="logo"> -->
+<!-- 	<b:Label>deal.me</b:Label> -->
+<!-- 	</div> -->
+<!-- 	<nav> -->
+<!-- 	<ul id="menu"> -->
+<!-- 	<li class="filter"> -->
+<!-- 	<ul class="fixedpos"> -->
+<!-- 	<b:Heading size="2">Filters</b:Heading> -->
+<!-- 	</ul> -->
+<!-- 	<ul class="widgett"> -->
+<!-- 	<menubar:FilterWidget ui:field="filterWidget"></menubar:FilterWidget> -->
+<!-- 	</ul> -->
+<!-- 	</li> -->
+<!-- 	<li class="location"> -->
+<!-- 	<ul class="fixedpos"> -->
+<!-- 	<b:Heading size="2">Location</b:Heading> -->
+<!-- 	</ul> -->
+<!-- 	<ul class="widgett"> -->
+<!-- 	<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget> -->
+<!-- 	</ul> -->
+<!-- 	</li> -->
+<!-- 	</ul> -->
+<!-- 	</nav> -->
+<!-- 	</div> -->
+<!-- 	</header> -->
+	<menubar:MenuWidget ui:field="menuWidget"></menubar:MenuWidget>
+	<div class="container" style="">
+	<ul class="menu">
+	<b:Button ui:field="filterButton" styleName='{style.buttonview}'>Filters</b:Button>
+	</ul>
+	<ul class="menu">
+	<b:Button ui:field="locationButton" styleName='{style.buttonview}'>Location</b:Button>
+	</ul>
+	<ul class="menu">
+	<b:Button ui:field="testButton" styleName='{style.buttonview}'>Test</b:Button>
+	</ul>
+	</div>
+	<div class="container" style="">
+	<g:FlowPanel ui:field="filterPanel">
+	<menubar:FilterWidget ui:field="filterWidget"></menubar:FilterWidget>
+	</g:FlowPanel>
+	<g:FlowPanel ui:field="locationPanel">
+	<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget>
+	</g:FlowPanel>
+	<li class="bottonborder"></li>
+	</div>
+	<div class="clear">
+	</div>
+	<div id="content">
+	<div id="cols">
+	<div class="col_large">
+	<main:ListWidget ui:field="listWidget" styleName='{style.maxheight}'></main:ListWidget>
+	</div>
+	<div class="col_small">
+	<div class="fixedpos">
+		<main:GoogleMapWidget ui:field="googleMapWidget"></main:GoogleMapWidget>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</g:HTMLPanel>
 	</g:ScrollPanel>
 </ui:UiBinder> 

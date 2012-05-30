@@ -119,25 +119,7 @@ public class ListWidget extends Composite {
 							System.out.println("before item widget");
 							ListItemWidget item=new ListItemWidget();
 							System.out.println("after item widget");
-							
-							
-							
-							
-							
-						
-						String url = getDuplicateURL(deals, deals.get(i), i);
-                            if(url != "")
-                           {
-                                Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
-                               deals.get(i).setIDUrl(url);
-                           }
-                            else if(i < 26)
-                            {
-                                deals.get(i).setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - Deals.getInstance().getDuplicates(), i - Deals.getInstance().getDuplicates() + 1) + ".png" );
-
-                            }
-                           item.setMapButton(i, deals.get(i).getIDUrl(), eventBus);
-							
+                            item.setMapButton(i, deals.get(i).getIDUrl(), eventBus);
 							System.out.println("before add");
 							listItemContainer.add(item);
 							System.out.println("after add");
@@ -183,10 +165,10 @@ public class ListWidget extends Composite {
 						temp.setDealSource(deal.getDealSource());
 						String url = getDuplicateURL(deals, deals.get(i), i);
                         if(url != "")
-                       {
+                        {
                             Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
                            deals.get(i).setIDUrl(url);
-                       }
+                        }
                         else if(i < 26)
                         {
                             deals.get(i).setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - Deals.getInstance().getDuplicates(), i - Deals.getInstance().getDuplicates() + 1) + ".png" );

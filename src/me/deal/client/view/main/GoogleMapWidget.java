@@ -60,7 +60,6 @@ public class GoogleMapWidget extends Composite {
     
     private double radius = 0.0;
     private LatLng currentCenter = LatLng.newInstance(0,0);
-    int totalDuplicates = 0;
     
     private void setRadius(LatLngBounds coords)
     {
@@ -76,17 +75,7 @@ public class GoogleMapWidget extends Composite {
         double c = 2*atan2(sqrt(a), sqrt(1-a))*0.0174532925;
         return 3961.3 * c;
     }
-    private String getDuplicateURL(ArrayList<Deal> deals, int check)
-    {
-    	LatLng test = deals.get(check).getBusinessAddress().getLatLng().convert();
-    	for(int i = 0; i < currentMarks.size(); i++)
-    	{
-    		if(test.getLatitude() == currentMarks.get(i).getLatLng().getLatitude() && test.getLongitude() == currentMarks.get(i).getLatLng().getLongitude())
-    		{	return deals.get(i).getIDUrl();}
-    	}
-    	return "";
 
-    }
     ArrayList <Marker> currentMarks = new ArrayList();
     private void initialize() {
         
@@ -109,7 +98,6 @@ public class GoogleMapWidget extends Composite {
                     	setRadius(mapWidget.getBounds());
                 	}
                     currentMarks.clear();
-                    totalDuplicates = 0;
                     dealsToMarkers(Deals.getInstance().getDeals());
                     markerUpdate(100);
                 }
@@ -174,7 +162,9 @@ public class GoogleMapWidget extends Composite {
         
         for(int i = 0; i < max; i++)
         {
-            mapWidget.addOverlay(currentMarks.get(i));
+        	mapWidget.addOverlay(currentMarks.get(i));
+        	if(i > 0 && currentMarks.get(i).getLatLng().getLatitude() == currentMarks.get(i - 1).getLatLng().getLatitude() && currentMarks.get(i).getLatLng().getLongitude() == currentMarks.get(i - 1).getLatLng().getLongitude())
+        		currentMarks.get(i).setVisible(false);
         }
     }
     
@@ -182,36 +172,17 @@ public class GoogleMapWidget extends Composite {
     {
         for(int i = 0; i < llist.size(); i++)
         {
-        	String url = getDuplicateURL(llist, i);
-        	if(url != "")
-        	{
-        		totalDuplicates += 1;
-        		llist.get(i).setIDUrl(url);
-        	}
-        	else if(i < 26)
-        		llist.get(i).setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - totalDuplicates, i - totalDuplicates + 1) + ".png" );
-            Marker temp = createMarker(llist.get(i), llist.get(i).getIDUrl());
+        	
+        	Marker temp = createMarker(llist.get(i));
             currentMarks.add(temp);
         }
     }
     
-    private void centerMarker(final Deal current)
-    {
-        mapWidget.setCenter(current.getBusinessAddress().getLatLng().convert());
-        InfoWindowContent window;
-        try{
-                window  = new InfoWindowContent(current.getDealBusinessInfo().getName() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
-            } catch(NullPointerException n) {
-                window  = new InfoWindowContent(current.getTitle() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
-            }        
-            window.setMaxWidth(25);
-            mapWidget.getInfoWindow().open(mapWidget.getCenter(), window);
-    }
     
-    private Marker createMarker(final Deal current, String letter)
+    private Marker createMarker(final Deal current)
     {
         
-        Icon icon = Icon.newInstance(letter);
+        Icon icon = Icon.newInstance(current.getIDUrl());
         icon.setInfoWindowAnchor(Point.newInstance(10, 10));
         icon.setShadowURL("http://www.google.com/mapfiles/shadow50.png");
         MarkerOptions ops = MarkerOptions.newInstance();
@@ -234,10 +205,5 @@ public class GoogleMapWidget extends Composite {
 
         return temp;
     }
-    
-    private void removeMarker(final Marker mark)
-    {
-        mapWidget.removeOverlay(mark);
-    }
-    
+        
 }
