@@ -13,7 +13,19 @@ body, div, dl, dt, dd, ul, ol, li{
 	margin: 0pt;
 	padding: 0 pt;
 }
-
+.buttonview
+{
+		font: 14px/20px helvetica,arial,sans-serif;
+		color: rgb(133, 150, 167);
+		line-height: 1;
+		padding-top: 5px;
+}
+.mapStyle
+{
+	position: absolute;
+	margin-top: 40px;
+	height: 100%;
+}
 .filter:hover ul.widgett
 {
 	display: block;

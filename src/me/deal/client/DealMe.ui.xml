@@ -68,6 +68,9 @@
 	<ul class="menu">
 	<b:Button ui:field="locationButton" styleName='{style.buttonview}'>Location</b:Button>
 	</ul>
+	<ul class="menu">
+	<b:Button ui:field="testButton" styleName='{style.buttonview}'>Test</b:Button>
+	</ul>
 	</div>
 	<div class="container" style="">
 	<g:FlowPanel ui:field="filterPanel">

@@ -43,15 +43,18 @@ public class GoogleMapWidget extends Composite {
 
     private final DealServiceAsync dealService;
     private final HandlerManager eventBus;
+    private final boolean largeMap;
     
     @UiField
     MapWidget mapWidget;
     
     public @UiConstructor GoogleMapWidget(final DealServiceAsync dealService,
-            final HandlerManager eventBus) {
+            final HandlerManager eventBus, boolean largeMap) {
         initWidget(uiBinder.createAndBindUi(this));
         this.dealService = dealService;
         this.eventBus = eventBus;
+        this.largeMap = largeMap;
+        
         initialize();
     }
     
@@ -87,8 +90,11 @@ public class GoogleMapWidget extends Composite {
     ArrayList <Marker> currentMarks = new ArrayList();
     private void initialize() {
         
-
+    	if (largeMap)
+    		mapWidget.setSize("100%", "100%");
+    	else
         mapWidget.setSize("350px", "350px");
+    	
         mapWidget.addControl(new LargeMapControl());
         mapWidget.setZoomLevel(14);
 
