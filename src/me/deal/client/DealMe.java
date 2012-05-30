@@ -182,8 +182,9 @@ public class DealMe implements EntryPoint {
 		newMapWidget.setStylePrimaryName("mapStyle");
 //		RootLayoutPanel.get().add(menuWidget);
 //		headerWidget = new HeaderWidget(dealService, directionsService, eventBus);
+//		RootLayoutPanel.get().add(newMapWidget);
+//		RootLayoutPanel.get().add(verti);
 		RootLayoutPanel.get().add(newMapWidget);
-		RootLayoutPanel.get().add(verti);
 		eventBus.fireEvent(new DealsEvent());
 	}
 	
