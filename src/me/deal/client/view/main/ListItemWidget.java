@@ -124,12 +124,12 @@ public class ListItemWidget extends Composite {
 		setDealSource(deal.getDealSource());
 	}
 	
-	public void setMapButton(final int i, final HandlerManager eventBus){
+	public void setMapButton(final int i, final String s, final HandlerManager eventBus){
 		
-		formatMapButton.setTitle("Test title");
-		if(i < 26)
-			formatMapButton.setUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i,i+1) + ".png" );
-		//formatMapButton.setUrl(deal.getIDUrl());
+		//formatMapButton.setTitle("Test title");
+		//if(i < 26)
+		//	formatMapButton.setUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i,i+1) + ".png" );
+		formatMapButton.setUrl(s);
 		formatMapButton.addClickHandler(new ClickHandler() {
 			      @Override
 			      public void onClick(ClickEvent event) {
@@ -144,6 +144,11 @@ public class ListItemWidget extends Composite {
 			        
 			      }
 			    });
+	}
+	
+	public void setIcon(final String s)
+	{
+		formatMapButton.setUrl(s);
 	}
 	
 	public void setAvgRatingImageUrl(String avgRatingImageUrl) {

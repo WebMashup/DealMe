@@ -24,20 +24,22 @@
 			<div class="leftText">
 				<g:Anchor ui:field="dealTitle" addStyleNames="titleStyle" ></g:Anchor>
 			</div>
+			<div class ="leftButton">
+				<g:Image ui:field="formatMapButton" addStyleNames="mapButton"></g:Image>
+			</div>
 		</div>
 		<div class="rightPanel">		
 			<g:VerticalPanel>					
 				<g:HorizontalPanel>
 					<g:Image ui:field="avgRating"></g:Image>					 
 					<g:Image ui:field="avgYelpRating"></g:Image>
-					<g:Anchor ui:field="numReviews"></g:Anchor>
+					<g:Anchor ui:field="numReviews" addStyleNames="numReviews"></g:Anchor>
 				</g:HorizontalPanel>
 				<g:VerticalPanel>					
-					<g:Label ui:field="businessName" addStyleNames="bizNameStyle"></g:Label>
+					<g:Anchor ui:field="businessName" addStyleNames="bizNameStyle" target="_blank"></g:Anchor>
 					<g:Label ui:field="addressLine1"></g:Label>
-					<g:Label ui:field="addressLine2"></g:Label>	
-					<!-- <g:Button ui:field="getDirectionsButton" addStyleNames="dirButton">Get Directions</g:Button>	 -->	
-					<g:Anchor ui:field="getDirectionsLink" target="_blank" ></g:Anchor>	
+					<g:Label ui:field="addressLine2"></g:Label>		
+					<g:Anchor ui:field="getDirectionsLink" target="_blank"></g:Anchor>	
 <!-- 					<g:Label ui:field="dealSubtitle" addStyleNames="subTitleStyle"></g:Label> -->
 				</g:VerticalPanel>
 				<g:HorizontalPanel>

@@ -8,6 +8,7 @@ import me.deal.client.model.Deals;
 import me.deal.client.servlets.DealServiceAsync;
 import me.deal.client.servlets.DirectionsServiceAsync;
 import me.deal.shared.Deal;
+import me.deal.shared.LatLngCoor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ScrollEvent;
@@ -58,6 +59,25 @@ public class ListWidget extends Composite {
 		initialize();
 	}
 	
+	private String getDuplicateURL(ArrayList<Deal> deals, Deal current, int size)
+    {
+        LatLngCoor test = current.getBusinessAddress().getLatLng();
+        for(int i = 0; i < size; i++)
+        {
+            double lat1 = test.getLatitude();
+            double lat2 = deals.get(i).getBusinessAddress().getLatLng().getLatitude();
+            double lon1 = test.getLongitude();
+            double lon2 = deals.get(i).getBusinessAddress().getLatLng().getLongitude();
+            
+            if(lat1 == lat2 && lon1 == lon2)
+            {    
+                return deals.get(i).getIDUrl();
+            }
+        }
+        return "";
+
+    }
+	
 	private void initialize() {
 		/*
 		 * TODO: Add code to observe the DealsData model and automatically
@@ -99,7 +119,24 @@ public class ListWidget extends Composite {
 							System.out.println("before item widget");
 							ListItemWidget item=new ListItemWidget();
 							System.out.println("after item widget");
-							item.setMapButton(i, eventBus);
+							
+							
+							
+							
+							
+						
+						String url = getDuplicateURL(deals, deals.get(i), i);
+                            if(url != "")
+                           {
+                                Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
+                               deals.get(i).setIDUrl(url);
+                           }
+                            else if(i < 26)
+                            {
+                                deals.get(i).setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - Deals.getInstance().getDuplicates(), i - Deals.getInstance().getDuplicates() + 1) + ".png" );
+
+                            }
+                           item.setMapButton(i, deals.get(i).getIDUrl(), eventBus);
 							
 							System.out.println("before add");
 							listItemContainer.add(item);
@@ -121,7 +158,7 @@ public class ListWidget extends Composite {
 					System.out.println("after intial load");
 					int i=0;
 					System.out.println(deals.size());
-					
+					Deals.getInstance().setDuplicates(0);
 					for(Deal deal:deals)
 					{	System.out.println("inside for loop ");
 						
@@ -144,6 +181,18 @@ public class ListWidget extends Composite {
 						temp.setYipitUrl(deal.getYipitWebUrl());
 						temp.setEndDate(deal.getEndDate());
 						temp.setDealSource(deal.getDealSource());
+						String url = getDuplicateURL(deals, deals.get(i), i);
+                        if(url != "")
+                       {
+                            Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
+                           deals.get(i).setIDUrl(url);
+                       }
+                        else if(i < 26)
+                        {
+                            deals.get(i).setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - Deals.getInstance().getDuplicates(), i - Deals.getInstance().getDuplicates() + 1) + ".png" );
+
+                        }
+                        temp.setIcon(deals.get(i).getIDUrl());
 						//listItemContainer.getWidget(i)
 						i++;
 					}

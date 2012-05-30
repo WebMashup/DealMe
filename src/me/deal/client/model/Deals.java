@@ -16,14 +16,16 @@ public class Deals {
 	private Integer offset;
 	private ArrayList<Category> tags;
 	private Integer loadsSinceLastReset;
-	
-	private Deals() {
+	   private int duplicates;
+
+	   private Deals() {
 		deals = new ArrayList<Deal>();
 		location = new Location();
 		radius = new Double(20);
 		offset = new Integer(0);
 		tags = new ArrayList<Category>();
 		loadsSinceLastReset = new Integer(0);
+		duplicates = 0;
 	}
 	
 	public static Deals getInstance() {
@@ -97,4 +99,14 @@ public class Deals {
 	public void incrementLoadsSinceLastReset() {
 		this.loadsSinceLastReset++;
 	}
+	
+    public int getDuplicates()
+    {
+        return this.duplicates;
+    }
+    
+    public void setDuplicates(int dup)
+    {
+        this.duplicates = dup;
+    }
 }
