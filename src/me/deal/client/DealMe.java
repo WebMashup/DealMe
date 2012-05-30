@@ -19,9 +19,11 @@ import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
 
+import com.github.gwtbootstrap.client.ui.Button;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
@@ -29,8 +31,12 @@ import com.google.gwt.geolocation.client.Position.Coordinates;
 import com.google.gwt.geolocation.client.PositionError;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -71,6 +77,50 @@ public class DealMe implements EntryPoint {
 	@UiField (provided=true)
 	GoogleMapWidget googleMapWidget;
 	
+	@UiField 
+	FlowPanel filterPanel;
+	
+	@UiField
+	FlowPanel locationPanel;
+	
+	@UiField
+	Button filterButton;
+	
+	@UiField
+	Button locationButton;
+	
+	@UiHandler("filterButton")
+	void handleClick1(ClickEvent e) {
+		if (filterPanel.isVisible())
+			filterPanel.setVisible(false);
+		else
+		{
+			if (locationPanel.isVisible())
+			{
+				locationPanel.setVisible(false);
+				filterPanel.setVisible(true);
+			}
+			else
+				filterPanel.setVisible(true);
+		}
+	}
+	
+	@UiHandler("locationButton")
+	void handleClick(ClickEvent e) {
+		if (locationPanel.isVisible())
+			locationPanel.setVisible(false);
+		else
+		{
+			if (filterPanel.isVisible())
+			{
+				filterPanel.setVisible(false);
+				locationPanel.setVisible(true);
+			}
+			else
+				locationPanel.setVisible(true);
+		}
+	}
+	
 	/**
 	 * This is the entry point method.
 	 */
@@ -87,8 +137,16 @@ public class DealMe implements EntryPoint {
 		
 		getUserLocation();
 		
+		filterPanel = new FlowPanel();
+		locationPanel = new FlowPanel();
+		
+		filterButton = new Button("Filters");
+		locationButton = new Button("Location");		
+		
 		Widget w = MyUiBinder.INSTANCE.createAndBindUi(this);
         RootLayoutPanel.get().add(w);
+		filterPanel.setVisible(false);
+		locationPanel.setVisible(false);
 	}
 	
 	

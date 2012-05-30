@@ -1,6 +1,118 @@
 /** Add css rules here for your application. */
 
+.logo
+{
+	float: left;
+	margin: 0pt 14px 0 pt 0 pt;
+	padding: 2px 0 pt;
+	width: 140px;
+	height: 44px;
+}
 
+body, div, dl, dt, dd, ul, ol, li{
+	margin: 0pt;
+	padding: 0 pt;
+}
+
+.filter:hover ul.widgett
+{
+	display: block;
+}
+
+.location:hover ul.widgett
+{
+	display: block;
+}
+
+li
+{
+	list-style: none outside none;
+}
+.clear{
+	clear: both;
+	display: block;
+	visibility: hidden;
+	height: 0pt;
+	font-size: 0pt;
+}
+#content
+{
+	position: relative;
+	width: 960px;
+	margin: 0pt auto;
+	padding: 20px 0 pt 40px;
+}
+#cols
+{
+	padding-bottom: 30px;
+}
+
+#cols .col_large
+{
+	min-height: 1px;
+	float: left;
+	margin-right: 30 px;
+	width: 600px;
+	padding-left: 10px;
+}
+#cols .col_small
+{
+	float: left;
+	width: 330px;
+	font-size: 12px;
+	line-height: 16px;
+	margin-top: 10px;
+}
+.main
+{
+	margin: 0pt auto;
+	position: relative;
+	padding: 0pt;
+	font: 14px/20px helvetica, arial, sans-serif;
+	color:rgb(123,128,132);
+}
+#site_header
+{
+	display: block;
+	background: none repeat scroll 0% 0% rgb(240,241,244);
+	border-bottom: 1px solid rgb(216,221,225);
+}
+
+.container
+{
+	position: relative;
+	margin: 0pt auto;
+	padding: 11px 0 pt;
+	width: 960 px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid rgb(221,221,221);
+}
+
+.container ul > li
+{
+	border-bottom: 1px solid rgb(221,221,221);
+}
+
+.container ul.menu
+{
+	float: left;
+}
+#site_header nav, #site_header .submenus, #site_header nav > ul > li {
+	float: left;
+}
+.fixedpos
+{
+	position: fixed;
+}
+
+#site_header nav > ul > li > ul.fixedpos
+{
+	position: absolute;
+}
+#site_header nav > ul > li.filter:hover ul.widgett
+{
+	display: block;
+}
 /** Example rules used by the template application (remove for your app) */
 
 h1 {
