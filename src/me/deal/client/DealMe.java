@@ -190,7 +190,7 @@ public class DealMe implements EntryPoint {
 		
 		Button contactLink = new Button("Contact Us");
 		contactLink.setStylePrimaryName("buttonview");
-		contactLink.setHref("mailto:aditya.ucla@gmail.com");
+		contactLink.setHref("mailto:dealmedev@gmail.com");
 		Nav nav = new Nav();
 		nav.setAlignment(Alignment.RIGHT);
 		nav.add(contactLink);
