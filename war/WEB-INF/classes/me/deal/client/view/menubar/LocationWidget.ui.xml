@@ -8,6 +8,6 @@
 		<b:TextBox ui:field="city" placeholder="City"/>
 		<b:TextBox ui:field="state" placeholder="State (e.g. &quot;CA&quot;, &quot;AZ&quot;)" maxLength="2"/>
 		<b:TextBox ui:field="zip" placeholder="Zip Code" maxLength="5"/>
-		<b:Button ui:field="changeLocationButton">Submit</b:Button>
+		<b:Button  type="PRIMARY" ui:field="changeLocationButton">Submit</b:Button>
 	</b:WellForm>
 </ui:UiBinder>
