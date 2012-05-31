@@ -37,34 +37,6 @@
 	<g:ScrollPanel ui:field="mainScrollPanel">
 	<g:HTMLPanel>
 	<div id="main">
-<!-- 	<header id="site_header"> -->
-<!-- 	<div class="container" style=""> -->
-<!-- 	<div class="logo"> -->
-<!-- 	<b:Label>deal.me</b:Label> -->
-<!-- 	</div> -->
-<!-- 	<nav> -->
-<!-- 	<ul id="menu"> -->
-<!-- 	<li class="filter"> -->
-<!-- 	<ul class="fixedpos"> -->
-<!-- 	<b:Heading size="2">Filters</b:Heading> -->
-<!-- 	</ul> -->
-<!-- 	<ul class="widgett"> -->
-<!-- 	<menubar:FilterWidget ui:field="filterWidget"></menubar:FilterWidget> -->
-<!-- 	</ul> -->
-<!-- 	</li> -->
-<!-- 	<li class="location"> -->
-<!-- 	<ul class="fixedpos"> -->
-<!-- 	<b:Heading size="2">Location</b:Heading> -->
-<!-- 	</ul> -->
-<!-- 	<ul class="widgett"> -->
-<!-- 	<menubar:LocationWidget ui:field="locationWidget"></menubar:LocationWidget> -->
-<!-- 	</ul> -->
-<!-- 	</li> -->
-<!-- 	</ul> -->
-<!-- 	</nav> -->
-<!-- 	</div> -->
-<!-- 	</header> -->
-<!-- 	<menubar:MenuWidget ui:field="menuWidget"></menubar:MenuWidget> -->
 	<div class="container" style="">
 	<ul class="menu">
 	<b:Button ui:field="filterButton" styleName='{style.buttonview}'>Filters</b:Button>

@@ -22,8 +22,10 @@ import me.deal.shared.Location;
 
 import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.Nav;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.ResponsiveNavbar;
+import com.github.gwtbootstrap.client.ui.constants.Alignment;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -186,10 +188,26 @@ public class DealMe implements EntryPoint {
 		navbar.add(listLink);
 		navbar.add(mapLink);
 		
+		Button contactLink = new Button("Contact Us");
+		contactLink.setStylePrimaryName("buttonview");
+		Nav nav = new Nav();
+		nav.setAlignment(Alignment.RIGHT);
+		nav.add(contactLink);
+		
+		navbar.add(nav);
+		
 		verti = new VerticalPanel();
 		verti.setWidth("100%");
 		verti.add(navbar);
 		verti.setHeight("40px");
+		
+		contactLink.addClickHandler(new ClickHandler() {
+	          public void onClick(ClickEvent event) {
+	        	  /*CONTACT US BUTTON EMAIL CODE GOES HERE **/
+
+	             
+	          }
+	      });
 		
 		mapLink.addClickHandler(new ClickHandler() {
 	          public void onClick(ClickEvent event) {
