@@ -232,16 +232,22 @@ public class ListItemWidget extends Composite {
 		String googlePlusLinkURL="https://plusone.google.com/_/+1/confirm?hl=en-US&url=" + yipitURL;
 		facebookLink.setHref(facebookLinkURL);
 		Image facebookImage = new Image("images/facebook.png");
+		facebookImage.setWidth("25px");
+		facebookImage.setHeight("25px");
 		if(facebookLink.getElement().getChildCount()==0) // add image only if not existing
 			facebookLink.getElement().appendChild(facebookImage.getElement());
 		
 		twitterLink.setHref(twitterLinkURL);
 		
 		Image twitterImage = new Image("images/twitter.png");
+		twitterImage.setWidth("25px");
+		twitterImage.setHeight("25px");
 		if(twitterLink.getElement().getChildCount()==0)
 			twitterLink.getElement().appendChild(twitterImage.getElement());
 		googlePlusLink.setHref(googlePlusLinkURL);
 		Image googlePlusImage= new Image("images/google.png");
+		googlePlusImage.setWidth("25px");
+		googlePlusImage.setHeight("25px");
 		if(googlePlusLink.getElement().getChildCount()==0)
 			googlePlusLink.getElement().appendChild(googlePlusImage.getElement());
 	}
