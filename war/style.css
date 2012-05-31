@@ -9,10 +9,10 @@
 	height: 44px;
 }
 
-body, div, dl, dt, dd, ul, ol, li{
-	margin: 0pt;
-	padding: 0 pt;
-}
+/* body, div, dl, dt, dd, ul, ol, li{ */
+/* 	margin: 0pt; */
+/* 	padding: 0 pt; */
+/* } */
 .buttonview
 {
 		font: 14px/20px helvetica,arial,sans-serif;
@@ -23,19 +23,28 @@ body, div, dl, dt, dd, ul, ol, li{
 .mapStyle
 {
 	position: absolute;
-	margin-top: 40px;
 	height: 100%;
 }
 .filter:hover ul.widgett
 {
 	display: block;
 }
-
+.nopadding
+{
+	margin-bottom: 0px;
+/* 	overflow: visible; */
+}
 .location:hover ul.widgett
 {
 	display: block;
 }
-
+.popupPlacement
+{
+	bottom: 0px !important;
+	position: absolute !important;
+	right: auto !important;
+	top: auto !important;
+}
 li
 {
 	list-style: none outside none;
@@ -75,13 +84,16 @@ li
 	line-height: 16px;
 	margin-top: 10px;
 }
-.main
+#main
 {
 	margin: 0pt auto;
 	position: relative;
-	padding: 0pt;
 	font: 14px/20px helvetica, arial, sans-serif;
 	color:rgb(123,128,132);
+}
+#main .marginal
+{
+	margin-top: 60px;
 }
 #site_header
 {

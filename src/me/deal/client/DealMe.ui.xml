@@ -29,6 +29,10 @@
         .maxheight {
 				height: 100%;
 		}
+		.marginal {
+		margin-top: 60px;
+		}
+		
 	</ui:style>
 	<g:ScrollPanel ui:field="mainScrollPanel">
 	<g:HTMLPanel>
@@ -60,16 +64,13 @@
 <!-- 	</nav> -->
 <!-- 	</div> -->
 <!-- 	</header> -->
-	<menubar:MenuWidget ui:field="menuWidget"></menubar:MenuWidget>
+<!-- 	<menubar:MenuWidget ui:field="menuWidget"></menubar:MenuWidget> -->
 	<div class="container" style="">
 	<ul class="menu">
 	<b:Button ui:field="filterButton" styleName='{style.buttonview}'>Filters</b:Button>
 	</ul>
 	<ul class="menu">
 	<b:Button ui:field="locationButton" styleName='{style.buttonview}'>Location</b:Button>
-	</ul>
-	<ul class="menu">
-	<b:Button ui:field="testButton" styleName='{style.buttonview}'>Test</b:Button>
 	</ul>
 	</div>
 	<div class="container" style="">

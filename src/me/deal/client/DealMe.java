@@ -27,6 +27,7 @@ import com.github.gwtbootstrap.client.ui.ResponsiveNavbar;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -39,6 +40,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -75,8 +77,8 @@ public class DealMe implements EntryPoint {
 	@UiField (provided=true)
 	FilterWidget filterWidget;	
 	
-	@UiField (provided=true)
-	MenuWidget menuWidget;
+//	@UiField (provided=true)
+//	MenuWidget menuWidget;
 	
 	@UiField (provided=true)
 	LocationWidget locationWidget;
@@ -99,16 +101,23 @@ public class DealMe implements EntryPoint {
 	@UiField
 	Button locationButton;
 	
-	@UiField
-	Button testButton;
-	
 	Widget w;
+	
+	ResponsiveNavbar navbar;
+	
+	VerticalPanel verti;
+	
+	FlowPanel listVert;
+	
+	FlowPanel mapVert;
 	
 	boolean mapView = false;
 	
 	boolean listView = true;
 	
 	PopupPanel popup;
+	
+	FlowPanel vert;
 	
 	@UiHandler("filterButton")
 	void handleClick1(ClickEvent e) {
@@ -124,68 +133,6 @@ public class DealMe implements EntryPoint {
 			else
 				filterPanel.setVisible(true);
 		}
-	}
-	
-	@UiHandler("testButton")
-	void handleClick2(ClickEvent e) {
-		RootLayoutPanel.get().clear();
-		newMapWidget = new GoogleMapWidget(dealService, eventBus, true);
-		newMapWidget.setStyleName("mapStyle");
-		popup = new PopupPanel();
-		FlowPanel vert = new FlowPanel();
-		popup.setHeight("600px");
-		popup.add(vert);
-		vert.add(locationWidget);
-		vert.add(filterWidget);
-		int left = (20);
-		int top = (Window.getClientHeight() - 20);
-		
-		ResponsiveNavbar navBar = new ResponsiveNavbar();
-		Brand brand = new Brand("Deal.Me");
-		Button listLink = new Button("List View");
-		Button mapLink = new Button("Map View");
-		
-		listLink.setStylePrimaryName("buttonview");
-		mapLink.setStylePrimaryName("buttonview");
-		
-		navBar.add(brand);
-		navBar.add(listLink);
-		navBar.add(mapLink);
-		
-		mapLink.addClickHandler(new ClickHandler() {
-	          public void onClick(ClickEvent event) {
-	              if (!mapView) {
-	            	  mapView = true;
-	            	  listView = false;
-	              } else {
-	            	  
-	              }
-	          }
-	      });
-		
-		listLink.addClickHandler(new ClickHandler() {
-	          public void onClick(ClickEvent event) {
-	              if (!listView) {
-	            	  setListView();
-	            	  listView = true;
-	            	  mapView = false;
-	              } else {
-	            	  
-	              }
-	          }
-	      });
-		popup.setPopupPosition(left, top);
-		popup.show();
-		VerticalPanel verti = new VerticalPanel();
-		verti.setWidth("100%");
-		verti.add(navBar);
-		newMapWidget.setStylePrimaryName("mapStyle");
-//		RootLayoutPanel.get().add(menuWidget);
-//		headerWidget = new HeaderWidget(dealService, directionsService, eventBus);
-//		RootLayoutPanel.get().add(newMapWidget);
-//		RootLayoutPanel.get().add(verti);
-		RootLayoutPanel.get().add(newMapWidget);
-		eventBus.fireEvent(new DealsEvent());
 	}
 	
 	@UiHandler("locationButton")
@@ -210,10 +157,10 @@ public class DealMe implements EntryPoint {
 	public void onModuleLoad() {
 
 //		headerWidget = new HeaderWidget(dealService, directionsService, eventBus);
-
+		
 		mainScrollPanel = new ScrollPanel();
 		filterWidget = new FilterWidget(dealService, eventBus);
-		menuWidget = new MenuWidget(dealService, eventBus);
+//		menuWidget = new MenuWidget(dealService, eventBus);
 		locationWidget = new LocationWidget(geocodingService, dealService, eventBus);
 		listWidget = new ListWidget(mainScrollPanel, dealService, directionsService, eventBus);
 		googleMapWidget = new GoogleMapWidget(dealService, eventBus, false);
@@ -225,10 +172,73 @@ public class DealMe implements EntryPoint {
 		
 		filterButton = new Button("Filters");
 		locationButton = new Button("Location");	
-		testButton = new Button("Test");
 		
-		w = MyUiBinder.INSTANCE.createAndBindUi(this);
-        RootLayoutPanel.get().add(w);
+		/** NAVIGATION BAR **/
+		navbar = new ResponsiveNavbar();
+		Brand brand = new Brand("Deal.Me");
+		Button listLink = new Button("List View");
+		Button mapLink = new Button("Map View");
+		
+		listLink.setStylePrimaryName("buttonview");
+		mapLink.setStylePrimaryName("buttonview");
+		
+		navbar.add(brand);
+		navbar.add(listLink);
+		navbar.add(mapLink);
+		
+		verti = new VerticalPanel();
+		verti.setWidth("100%");
+		verti.add(navbar);
+		verti.setHeight("40px");
+		
+		mapLink.addClickHandler(new ClickHandler() {
+	          public void onClick(ClickEvent event) {
+	              if (!mapView) {
+	            	  setMapView();
+	            	  mapView = true;
+	            	  listView = false;
+	          		eventBus.fireEvent(new DealsEvent());
+
+	              } 
+	          }
+	      });
+		
+		listLink.addClickHandler(new ClickHandler() {
+	          public void onClick(ClickEvent event) {
+	              if (!listView) {
+	            	  setListView();
+	            	  listView = true;
+	            	  mapView = false;
+	          		eventBus.fireEvent(new DealsEvent());
+
+	              } 
+	          }
+	      });
+		
+		/**POPUPPANEL FOR LARGEMAP FILTER/LOCATION**/
+		newMapWidget = new GoogleMapWidget(dealService, eventBus, true);
+		newMapWidget.setStylePrimaryName("mapStyle");
+		popup = new PopupPanel();
+		vert = new FlowPanel();
+		popup.setHeight("300px");
+		popup.add(vert);
+		vert.add(locationWidget);
+		vert.add(filterWidget);
+		int left = (20);
+		int top = (Window.getClientHeight() - 20);
+		popup.setPopupPosition(left, top);
+
+		w = MyUiBinder.INSTANCE.createAndBindUi(this);		
+
+		listVert = new FlowPanel();
+		listVert.setWidth("100%");
+		listVert.add(verti);
+		listVert.add(w);
+		
+		mapVert = new FlowPanel();
+		mapVert.setWidth("100%");
+		w.setHeight("100%");
+		RootLayoutPanel.get().add(listVert);
 		filterPanel.setVisible(false);
 		locationPanel.setVisible(false);
 	}
@@ -236,7 +246,10 @@ public class DealMe implements EntryPoint {
 	private void setListView()
 	{
 		RootLayoutPanel.get().clear();
-		RootLayoutPanel.get().add(w);
+		listVert.clear();
+		listVert.add(verti);
+		listVert.add(w);
+		RootLayoutPanel.get().add(listVert);
 		filterPanel.setVisible(false);
 		locationPanel.setVisible(false);
 		popup.setVisible(false);
@@ -244,8 +257,20 @@ public class DealMe implements EntryPoint {
 	
 	private void setMapView()
 	{
-		popup.setVisible(true);
+		RootLayoutPanel.get().clear();
+		mapVert.clear();
+		mapVert.add(verti);
+		mapVert.add(newMapWidget);
+		RootLayoutPanel.get().add(mapVert);
+		
+		vert.clear();
+		vert.add(locationWidget);
+		vert.add(filterWidget);
+		popup.setStylePrimaryName("popupPlacement");
+		popup.show();
+		
 	}
+	
 	private void getUserLocation() {
 		Geolocation geo;
 		if((geo = Geolocation.getIfSupported()) != null) {
