@@ -45,7 +45,7 @@
 				<g:HorizontalPanel>
 					<g:VerticalPanel>
 						<g:Label addStyleNames="boldText">DEAL PRICE:</g:Label>
-						<g:Label ui:field="dealPrice" addStyleNames="boldNumbers"></g:Label>
+						<g:Label ui:field="dealPrice" addStyleNames="boldNumbers">$</g:Label>
 					</g:VerticalPanel>				
 					<g:VerticalPanel>
 						<g:Label addStyleNames="boldText">DISCOUNT:</g:Label>

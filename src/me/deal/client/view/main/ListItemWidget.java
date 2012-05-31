@@ -248,7 +248,7 @@ public class ListItemWidget extends Composite {
 	
 	public void setPrice(Double price) {
 		deal.setPrice(price);
-		dealPrice.setText(deal.getPrice() + "");
+		dealPrice.setText("$"+deal.getPrice() + "");
 	}
 	
 	public void setDiscountPercentage(Double discountPercentageDbl) {

@@ -194,11 +194,6 @@ h1 {
 	opacity: 1;	
 	}
 
-.boldNumbers{
-	font-size: 2em;
-	font-weight: 600;
-	padding: 5px;
-}
 
 .leftPanel{
 	/*width: 300px;
@@ -292,4 +287,15 @@ a:link.bizNameStyle {
 .numReviews{
 	padding: 3px;
 }
-
+.boldNumbers{
+	font-size: 2em;
+	font-weight: 600;
+	padding: 5px;
+	font-family:Lobster;
+}
+@font-face {
+  font-family: 'Lobster';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Lobster'), url('http://themes.googleusercontent.com/static/fonts/lobster/v5/NIaFDq6p6eLpSvtV2DTNDQLUuEpTyoUstqEm5AMlJo4.woff') format('woff');
+}
