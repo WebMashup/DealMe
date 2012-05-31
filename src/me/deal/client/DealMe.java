@@ -53,293 +53,347 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
+* Entry point classes define <code>onModuleLoad()</code>.
+*/
 public class DealMe implements EntryPoint {
-	
+    
     interface MyUiBinder extends UiBinder<Widget,DealMe> {
         MyUiBinder INSTANCE = GWT.create(MyUiBinder.class);
 }
 
 
-	private final DealServiceAsync dealService =  GWT.create(DealService.class);
-	private final DirectionsServiceAsync directionsService = GWT.create(DirectionsService.class);
-	private final GeocodingServiceAsync geocodingService = GWT.create(GeocodingService.class);
-	
-	private final HandlerManager eventBus = new HandlerManager(null);
-	
-//	@UiField
-//	HeaderWidget headerWidget;
-	
-	GoogleMapWidget newMapWidget;
-	
-	@UiField (provided=true)
-	ScrollPanel mainScrollPanel;
-	
-	@UiField (provided=true)
-	FilterWidget filterWidget;	
-	
-//	@UiField (provided=true)
-//	MenuWidget menuWidget;
-	
-	@UiField (provided=true)
-	LocationWidget locationWidget;
-	
-	@UiField (provided=true)
-	ListWidget listWidget;
-	
-	@UiField (provided=true)
-	GoogleMapWidget googleMapWidget;
-	
-	@UiField 
-	FlowPanel filterPanel;
-	
-	@UiField
-	FlowPanel locationPanel;
-	
-	@UiField
-	Button filterButton;
-	
-	@UiField
-	Button locationButton;
-	
-	Widget w;
-	
-	ResponsiveNavbar navbar;
-	
-	VerticalPanel verti;
-	
-	FlowPanel listVert;
-	
-	FlowPanel mapVert;
-	
-	boolean mapView = false;
-	
-	boolean listView = true;
-	
-	PopupPanel popup;
-	
-	FlowPanel vert;
-	
-	@UiHandler("filterButton")
-	void handleClick1(ClickEvent e) {
-		if (filterPanel.isVisible())
-			filterPanel.setVisible(false);
-		else
-		{
-			if (locationPanel.isVisible())
-			{
-				locationPanel.setVisible(false);
-				filterPanel.setVisible(true);
-			}
-			else
-				filterPanel.setVisible(true);
-		}
-	}
-	
-	@UiHandler("locationButton")
-	void handleClick(ClickEvent e) {
-		if (locationPanel.isVisible())
-			locationPanel.setVisible(false);
-		else
-		{
-			if (filterPanel.isVisible())
-			{
-				filterPanel.setVisible(false);
-				locationPanel.setVisible(true);
-			}
-			else
-				locationPanel.setVisible(true);
-		}
-	}
-	
-	/**
-	 * This is the entry point method.
-	 */
-	public void onModuleLoad() {
+    private final DealServiceAsync dealService =  GWT.create(DealService.class);
+    private final DirectionsServiceAsync directionsService = GWT.create(DirectionsService.class);
+    private final GeocodingServiceAsync geocodingService = GWT.create(GeocodingService.class);
+    
+    private final HandlerManager eventBus = new HandlerManager(null);
+    
+//    @UiField
+//    HeaderWidget headerWidget;
+    
+    GoogleMapWidget newMapWidget;
+    
+    @UiField (provided=true)
+    ScrollPanel mainScrollPanel;
+    
+    @UiField (provided=true)
+    FilterWidget filterWidget;    
+    
+//    @UiField (provided=true)
+//    MenuWidget menuWidget;
+    
+    @UiField (provided=true)
+    LocationWidget locationWidget;
+    
+    @UiField (provided=true)
+    ListWidget listWidget;
+    
+    @UiField (provided=true)
+    GoogleMapWidget googleMapWidget;
+    
+    @UiField 
+    FlowPanel filterPanel;
+    
+    @UiField
+    FlowPanel locationPanel;
+    
+    @UiField
+    Button filterButton;
+    
+    @UiField
+    Button locationButton;
+    
+    Widget w;
+    
+    ResponsiveNavbar navbar;
+    
+    VerticalPanel verti;
+    
+    FlowPanel listVert;
+    
+    FlowPanel mapVert;
+    
+    boolean mapView = false;
+    
+    boolean listView = true;
+    
+    PopupPanel popup;
+    
+    FlowPanel vert;
+    
+    @UiHandler("filterButton")
+    void handleClick1(ClickEvent e) {
+        if (filterPanel.isVisible())
+            filterPanel.setVisible(false);
+        else
+        {
+            if (locationPanel.isVisible())
+            {
+                locationPanel.setVisible(false);
+                filterPanel.setVisible(true);
+            }
+            else
+                filterPanel.setVisible(true);
+        }
+    }
+    
+    @UiHandler("locationButton")
+    void handleClick(ClickEvent e) {
+        if (locationPanel.isVisible())
+            locationPanel.setVisible(false);
+        else
+        {
+            if (filterPanel.isVisible())
+            {
+                filterPanel.setVisible(false);
+                locationPanel.setVisible(true);
+            }
+            else
+                locationPanel.setVisible(true);
+        }
+    }
+    
+    /**
+     * This is the entry point method.
+     */
+    public void onModuleLoad() {
 
-//		headerWidget = new HeaderWidget(dealService, directionsService, eventBus);
-		
-		mainScrollPanel = new ScrollPanel();
-		filterWidget = new FilterWidget(dealService, eventBus);
-//		menuWidget = new MenuWidget(dealService, eventBus);
-		locationWidget = new LocationWidget(geocodingService, dealService, eventBus);
-		listWidget = new ListWidget(mainScrollPanel, dealService, directionsService, eventBus);
-		googleMapWidget = new GoogleMapWidget(dealService, eventBus, false);
-		
-		getUserLocation();
-		
-		filterPanel = new FlowPanel();
-		locationPanel = new FlowPanel();
-		
-		filterButton = new Button("Filters");
-		locationButton = new Button("Location");	
-		
-		/** NAVIGATION BAR **/
-		navbar = new ResponsiveNavbar();
-		Brand brand = new Brand("Deal.Me");
-		Button listLink = new Button("List View");
-		Button mapLink = new Button("Map View");
-		
-		listLink.setStylePrimaryName("buttonview");
-		mapLink.setStylePrimaryName("buttonview");
-		
-		navbar.add(brand);
-		navbar.add(listLink);
-		navbar.add(mapLink);
-		
-		Button contactLink = new Button("Contact Us");
-		contactLink.setStylePrimaryName("buttonview");
-		contactLink.setHref("mailto:dealmedev@gmail.com");
-		Nav nav = new Nav();
-		nav.setAlignment(Alignment.RIGHT);
-		nav.add(contactLink);
-		
-		navbar.add(nav);
-		
-		verti = new VerticalPanel();
-		verti.setWidth("100%");
-		verti.add(navbar);
-		verti.setHeight("40px");
-		
-		contactLink.addClickHandler(new ClickHandler() {
-	          public void onClick(ClickEvent event) {
-	        	  /*CONTACT US BUTTON EMAIL CODE GOES HERE **/
+//        headerWidget = new HeaderWidget(dealService, directionsService, eventBus);
+        
+        mainScrollPanel = new ScrollPanel();
+        filterWidget = new FilterWidget(dealService, eventBus);
+//        menuWidget = new MenuWidget(dealService, eventBus);
+        locationWidget = new LocationWidget(geocodingService, dealService, eventBus);
+        listWidget = new ListWidget(mainScrollPanel, dealService, directionsService, eventBus);
+        googleMapWidget = new GoogleMapWidget(dealService, eventBus, false);
+        
+        getUserLocation();
+        
+        filterPanel = new FlowPanel();
+        locationPanel = new FlowPanel();
+        
+        filterButton = new Button("Filters");
+        locationButton = new Button("Location");    
+        
+        /** NAVIGATION BAR **/
+        navbar = new ResponsiveNavbar();
+        Brand brand = new Brand("Deal.Me");
+        Button listLink = new Button("List View");
+        Button mapLink = new Button("Map View");
+        
+        listLink.setStylePrimaryName("buttonview");
+        mapLink.setStylePrimaryName("buttonview");
+        
+        navbar.add(brand);
+        navbar.add(listLink);
+        navbar.add(mapLink);
+        
+        Button contactLink = new Button("Contact Us");
+        contactLink.setStylePrimaryName("buttonview");
+        contactLink.setHref("mailto:dealmedev@gmail.com");
+        Nav nav = new Nav();
+        nav.setAlignment(Alignment.RIGHT);
+        nav.add(contactLink);
+        
+        navbar.add(nav);
+        
+        verti = new VerticalPanel();
+        verti.setWidth("100%");
+        verti.add(navbar);
+        verti.setHeight("40px");
+        
+        contactLink.addClickHandler(new ClickHandler() {
+              public void onClick(ClickEvent event) {
+                  /*CONTACT US BUTTON EMAIL CODE GOES HERE **/
 
-	             
-	          }
-	      });
-		
-		mapLink.addClickHandler(new ClickHandler() {
-	          public void onClick(ClickEvent event) {
-	              if (!mapView) {
-	            	  setMapView();
-	            	  mapView = true;
-	            	  listView = false;
-	          		eventBus.fireEvent(new DealsEvent());
+                 
+              }
+          });
+        
+        mapLink.addClickHandler(new ClickHandler() {
+              public void onClick(ClickEvent event) {
+                  if (!mapView) {
+                      setMapView();
+                      mapView = true;
+                      listView = false;
+                      googleMapWidget.setMapSize(mapView);
+                      listWidget.setMapSize(mapView);
+                      filterWidget.setMapSize(mapView);
+                      locationWidget.setMapSize(mapView);
+                      
+                      Deals deals = Deals.getInstance();
+                      deals.setOffset(0);
+                      Integer numDealsToLoad = 7;
+                      if(mapView)
+                          numDealsToLoad = 20;
+                      dealService.getYipitDeals(deals.getLocation().getLatLng(),
+                          deals.getRadius(),
+                          numDealsToLoad,
+                          deals.getTags(),
+                          new AsyncCallback<ArrayList<Deal>>() {
+                              @Override
+                              public void onFailure(Throwable caught) {
+                                  Window.alert("Failed to load deals.");
+                              }
+          
+                              @Override
+                              public void onSuccess(ArrayList<Deal> result) {
+                                  Deals deals = Deals.getInstance();
+                                  deals.setOffset(result.size());
+                                  deals.setLoadsSinceLastReset(new Integer(0));
+                                  deals.setDeals(result);
+                                  eventBus.fireEvent(new DealsEvent());
+                              }
+                          });
+                      
+                  } 
+              }
+          });
+        
+        listLink.addClickHandler(new ClickHandler() {
+              public void onClick(ClickEvent event) {
+                  if (!listView) {
+                      setListView();
+                      listView = true;
+                      mapView = false;
+                      googleMapWidget.setMapSize(mapView);
+                      listWidget.setMapSize(mapView);
+                      filterWidget.setMapSize(mapView);
+                      locationWidget.setMapSize(mapView);
+                      Deals deals = Deals.getInstance();
+                      deals.setOffset(0);
+                      Integer numDealsToLoad = 7;
+                      if(mapView)
+                          numDealsToLoad = 20;
+                      dealService.getYipitDeals(deals.getLocation().getLatLng(),
+                          deals.getRadius(),
+                          numDealsToLoad,
+                          deals.getTags(),
+                          new AsyncCallback<ArrayList<Deal>>() {
+                              @Override
+                              public void onFailure(Throwable caught) {
+                                  Window.alert("Failed to load deals.");
+                              }
+          
+                              @Override
+                              public void onSuccess(ArrayList<Deal> result) {
+                                  Deals deals = Deals.getInstance();
+                                  deals.setOffset(result.size());
+                                  deals.setLoadsSinceLastReset(new Integer(0));
+                                  deals.setDeals(result);
+                                  eventBus.fireEvent(new DealsEvent());
+                              }
+                          });
+                  } 
+              }
+          });
+        
+        /**POPUPPANEL FOR LARGEMAP FILTER/LOCATION**/
+        newMapWidget = new GoogleMapWidget(dealService, eventBus, true);
+        newMapWidget.setStylePrimaryName("mapStyle");
+        popup = new PopupPanel();
+        vert = new FlowPanel();
+        popup.setHeight("300px");
+        popup.add(vert);
+        vert.add(locationWidget);
+        vert.add(filterWidget);
+        int left = (20);
+        int top = (Window.getClientHeight() - 20);
+        popup.setPopupPosition(left, top);
 
-	              } 
-	          }
-	      });
-		
-		listLink.addClickHandler(new ClickHandler() {
-	          public void onClick(ClickEvent event) {
-	              if (!listView) {
-	            	  setListView();
-	            	  listView = true;
-	            	  mapView = false;
-	          		eventBus.fireEvent(new DealsEvent());
+        w = MyUiBinder.INSTANCE.createAndBindUi(this);        
 
-	              } 
-	          }
-	      });
-		
-		/**POPUPPANEL FOR LARGEMAP FILTER/LOCATION**/
-		newMapWidget = new GoogleMapWidget(dealService, eventBus, true);
-		newMapWidget.setStylePrimaryName("mapStyle");
-		popup = new PopupPanel();
-		vert = new FlowPanel();
-		popup.setHeight("300px");
-		popup.add(vert);
-		vert.add(locationWidget);
-		vert.add(filterWidget);
-		int left = (20);
-		int top = (Window.getClientHeight() - 20);
-		popup.setPopupPosition(left, top);
+        listVert = new FlowPanel();
+        listVert.setWidth("100%");
+        listVert.add(verti);
+        listVert.add(w);
+        
+        mapVert = new FlowPanel();
+        mapVert.setWidth("100%");
+        w.setHeight("100%");
+        RootLayoutPanel.get().add(listVert);
+        filterPanel.setVisible(false);
+        locationPanel.setVisible(false);
+    }
+    
+    private void setListView()
+    {
+        RootLayoutPanel.get().clear();
+        listVert.clear();
+        listVert.add(verti);
+        listVert.add(w);
+        RootLayoutPanel.get().add(listVert);
+        filterPanel.setVisible(false);
+        locationPanel.setVisible(false);
+        popup.setVisible(false);
+    }
+    
+    private void setMapView()
+    {
+        RootLayoutPanel.get().clear();
+        mapVert.clear();
+        mapVert.add(verti);
+        mapVert.add(newMapWidget);
+        RootLayoutPanel.get().add(mapVert);
+        
+        vert.clear();
+        vert.add(locationWidget);
+        vert.add(filterWidget);
+        popup.setStylePrimaryName("popupPlacement");
+        popup.show();
+        
+    }
+    
+    private void getUserLocation() {
+        Geolocation geo;
+        if((geo = Geolocation.getIfSupported()) != null) {
+            geo.getCurrentPosition(
+            new Callback<Position, PositionError>() {
+                    @Override
+                    public void onFailure(PositionError reason) {
+                        Window.alert(reason.toString());
+                    }
 
-		w = MyUiBinder.INSTANCE.createAndBindUi(this);		
+                    @Override
+                    public void onSuccess(Position result) {
+                        Coordinates userCoor = result.getCoordinates();
+                        LatLngCoor userLatLng = new LatLngCoor(userCoor.getLatitude(), userCoor.getLongitude());
+                        geocodingService.convertLatLngToAddress(userLatLng, new AsyncCallback<Location>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                Window.alert("Failed to geocode!");
+                            }
 
-		listVert = new FlowPanel();
-		listVert.setWidth("100%");
-		listVert.add(verti);
-		listVert.add(w);
-		
-		mapVert = new FlowPanel();
-		mapVert.setWidth("100%");
-		w.setHeight("100%");
-		RootLayoutPanel.get().add(listVert);
-		filterPanel.setVisible(false);
-		locationPanel.setVisible(false);
-	}
-	
-	private void setListView()
-	{
-		RootLayoutPanel.get().clear();
-		listVert.clear();
-		listVert.add(verti);
-		listVert.add(w);
-		RootLayoutPanel.get().add(listVert);
-		filterPanel.setVisible(false);
-		locationPanel.setVisible(false);
-		popup.setVisible(false);
-	}
-	
-	private void setMapView()
-	{
-		RootLayoutPanel.get().clear();
-		mapVert.clear();
-		mapVert.add(verti);
-		mapVert.add(newMapWidget);
-		RootLayoutPanel.get().add(mapVert);
-		
-		vert.clear();
-		vert.add(locationWidget);
-		vert.add(filterWidget);
-		popup.setStylePrimaryName("popupPlacement");
-		popup.show();
-		
-	}
-	
-	private void getUserLocation() {
-		Geolocation geo;
-		if((geo = Geolocation.getIfSupported()) != null) {
-			geo.getCurrentPosition(
-			new Callback<Position, PositionError>() {
-					@Override
-					public void onFailure(PositionError reason) {
-						Window.alert(reason.toString());
-					}
+                            @Override
+                            public void onSuccess(final Location result) {
+                                // Window.alert(result.getAddress() + "\n" + result.getCity() + ", " + result.getState() + " " + result.getZipCode());
+                                Deals.getInstance().setLocation(result);
+                                Deals.getInstance().setUserLocation(result);
+                                Integer numDealsToLoad = 7;
+                                Deals deals = Deals.getInstance();
+                                dealService.getYipitDeals(deals.getLocation().getLatLng(),
+                                        deals.getRadius(),
+                                        numDealsToLoad,
+                                        deals.getTags(),
+                                        new AsyncCallback<ArrayList<Deal>>() {
+                                            @Override
+                                            public void onFailure(Throwable caught) {
+                                                Window.alert("Failed to load deals.");
+                                            }
 
-					@Override
-					public void onSuccess(Position result) {
-						Coordinates userCoor = result.getCoordinates();
-						LatLngCoor userLatLng = new LatLngCoor(userCoor.getLatitude(), userCoor.getLongitude());
-						geocodingService.convertLatLngToAddress(userLatLng, new AsyncCallback<Location>() {
-							@Override
-							public void onFailure(Throwable caught) {
-								Window.alert("Failed to geocode!");
-							}
-
-							@Override
-							public void onSuccess(final Location result) {
-								// Window.alert(result.getAddress() + "\n" + result.getCity() + ", " + result.getState() + " " + result.getZipCode());
-								Deals.getInstance().setLocation(result);
-								Deals.getInstance().setUserLocation(result);
-								Integer numDealsToLoad = 7;
-								Deals deals = Deals.getInstance();
-								dealService.getYipitDeals(deals.getLocation().getLatLng(),
-										deals.getRadius(),
-										numDealsToLoad,
-										deals.getTags(),
-										new AsyncCallback<ArrayList<Deal>>() {
-											@Override
-											public void onFailure(Throwable caught) {
-												Window.alert("Failed to load deals.");
-											}
-
-											@Override
-											public void onSuccess(ArrayList<Deal> result) {
-												Deals deals = Deals.getInstance();
-												deals.setDeals(result);
-												deals.setOffset(deals.getOffset() + result.size());
-												deals.setLoadsSinceLastReset(new Integer(0));
-												eventBus.fireEvent(new DealsEvent());
-											}
-								});
-							}
-						});
-					}
-			});
-		}
-	}
+                                            @Override
+                                            public void onSuccess(ArrayList<Deal> result) {
+                                                Deals deals = Deals.getInstance();
+                                                deals.setDeals(result);
+                                                deals.setOffset(deals.getOffset() + result.size());
+                                                deals.setLoadsSinceLastReset(new Integer(0));
+                                                eventBus.fireEvent(new DealsEvent());
+                                            }
+                                });
+                            }
+                        });
+                    }
+            });
+        }
+    }
 }
