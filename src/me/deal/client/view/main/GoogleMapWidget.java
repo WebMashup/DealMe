@@ -43,10 +43,15 @@ public class GoogleMapWidget extends Composite {
 
     private final DealServiceAsync dealService;
     private final HandlerManager eventBus;
-    private final boolean largeMap;
+    private boolean largeMap;
     
     @UiField
     MapWidget mapWidget;
+    
+    public void setMapSize(boolean mapView)
+    {
+        this.largeMap = mapView;
+    }
     
     public @UiConstructor GoogleMapWidget(final DealServiceAsync dealService,
             final HandlerManager eventBus, boolean largeMap) {
@@ -79,11 +84,11 @@ public class GoogleMapWidget extends Composite {
     ArrayList <Marker> currentMarks = new ArrayList();
     private void initialize() {
         
-    	if (largeMap)
-    		mapWidget.setSize("100%", "100%");
-    	else
+        if (largeMap)
+            mapWidget.setSize("100%", "100%");
+        else
         mapWidget.setSize("350px", "350px");
-    	
+        
         mapWidget.addControl(new LargeMapControl());
         mapWidget.setZoomLevel(14);
 
@@ -91,12 +96,12 @@ public class GoogleMapWidget extends Composite {
             new DealsEventHandler(){
                 @Override
                 public void onDeals(DealsEvent event) {
-                	LatLng tempCenter = Deals.getInstance().getLocation().getLatLng().convert();                
-                	if(!mapWidget.getCenter().equals(tempCenter)) {
-                    	currentCenter = tempCenter;
-                    	mapWidget.setCenter(currentCenter);
-                    	setRadius(mapWidget.getBounds());
-                	}
+                    LatLng tempCenter = Deals.getInstance().getLocation().getLatLng().convert();                
+                    if(!mapWidget.getCenter().equals(tempCenter)) {
+                        currentCenter = tempCenter;
+                        mapWidget.setCenter(currentCenter);
+                        setRadius(mapWidget.getBounds());
+                    }
                     currentMarks.clear();
                     dealsToMarkers(Deals.getInstance().getDeals());
                     markerUpdate(100);
@@ -110,31 +115,33 @@ public class GoogleMapWidget extends Composite {
                 
                 if(currentCenter != mapWidget.getCenter())
                 {
-                	Deals deals = Deals.getInstance();
+                Deals deals = Deals.getInstance();
                 Location loc = deals.getLocation();
                 loc.setLatLng(new LatLngCoor(mapWidget.getCenter().getLatitude(), mapWidget.getCenter().getLongitude()));
                 deals.setLocation(loc);
                 deals.setOffset(0);
                 Integer numDealsToLoad = 7;
+                if(largeMap)
+                    numDealsToLoad = 20;
                 dealService.getYipitDeals(deals.getLocation().getLatLng(),
-	        		deals.getRadius(),
-	        		numDealsToLoad,
-	        		deals.getTags(),
-	        		new AsyncCallback<ArrayList<Deal>>() {
-						@Override
-						public void onFailure(Throwable caught) {
-							Window.alert("Failed to load deals.");
-						}
-	
-						@Override
-						public void onSuccess(ArrayList<Deal> result) {
-							Deals deals = Deals.getInstance();
-							deals.setOffset(result.size());
-							deals.setLoadsSinceLastReset(new Integer(0));
-							deals.setDeals(result);
-							eventBus.fireEvent(new DealsEvent());
-						}
-                	});
+                    deals.getRadius(),
+                    numDealsToLoad,
+                    deals.getTags(),
+                    new AsyncCallback<ArrayList<Deal>>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert("Failed to load deals.");
+                        }
+    
+                        @Override
+                        public void onSuccess(ArrayList<Deal> result) {
+                            Deals deals = Deals.getInstance();
+                            deals.setOffset(result.size());
+                            deals.setLoadsSinceLastReset(new Integer(0));
+                            deals.setDeals(result);
+                            eventBus.fireEvent(new DealsEvent());
+                        }
+                    });
                 }
             }
            }
@@ -162,9 +169,9 @@ public class GoogleMapWidget extends Composite {
         
         for(int i = 0; i < max; i++)
         {
-        	mapWidget.addOverlay(currentMarks.get(i));
-        	if(i > 0 && currentMarks.get(i).getLatLng().getLatitude() == currentMarks.get(i - 1).getLatLng().getLatitude() && currentMarks.get(i).getLatLng().getLongitude() == currentMarks.get(i - 1).getLatLng().getLongitude())
-        		currentMarks.get(i).setVisible(false);
+            mapWidget.addOverlay(currentMarks.get(i));
+            if(i > 0 && currentMarks.get(i).getLatLng().getLatitude() == currentMarks.get(i - 1).getLatLng().getLatitude() && currentMarks.get(i).getLatLng().getLongitude() == currentMarks.get(i - 1).getLatLng().getLongitude())
+                currentMarks.get(i).setVisible(false);
         }
     }
     
@@ -172,8 +179,8 @@ public class GoogleMapWidget extends Composite {
     {
         for(int i = 0; i < llist.size(); i++)
         {
-        	
-        	Marker temp = createMarker(llist.get(i));
+            
+            Marker temp = createMarker(llist.get(i));
             currentMarks.add(temp);
         }
     }
