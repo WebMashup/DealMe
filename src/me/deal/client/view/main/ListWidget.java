@@ -177,8 +177,22 @@ public class ListWidget extends Composite {
                         }
                         else if(i < 26)
                         {
-                            deals.get(i).setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - Deals.getInstance().getDuplicates(), i - Deals.getInstance().getDuplicates() + 1) + ".png" );
+                            if(mapView)
+                            {
+                                try
+                                {
+                                    deals.get(i).setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + deals.get(i).getColor());
+                                }
+                                catch(NullPointerException n)
+                                {
+                                    deals.get(i).setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF");
 
+                                }
+                            }
+                            else
+                            {
+                                deals.get(i).setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - Deals.getInstance().getDuplicates(), i - Deals.getInstance().getDuplicates() + 1) + ".png" );
+                            }
                         }
                         temp.setIcon(deals.get(i).getIDUrl());
                         //listItemContainer.getWidget(i)

@@ -53,16 +53,18 @@ public class GoogleMapWidget extends Composite {
         this.largeMap = mapView;
     }
     
+    
+    
     public @UiConstructor GoogleMapWidget(final DealServiceAsync dealService,
             final HandlerManager eventBus, boolean largeMap) {
         initWidget(uiBinder.createAndBindUi(this));
         this.dealService = dealService;
         this.eventBus = eventBus;
         this.largeMap = largeMap;
-        
         initialize();
     }
     
+    public boolean dragged = false;
     private double radius = 0.0;
     private LatLng currentCenter = LatLng.newInstance(0,0);
     
@@ -81,17 +83,47 @@ public class GoogleMapWidget extends Composite {
         return 3961.3 * c;
     }
 
+    private int boundsToFarthestDeal(ArrayList<Deal> llist)
+    {
+        double distance = 0;
+        int zoom = 0;
+        for(int i = 0; i < llist.size(); i++)
+        {
+            LatLng sw = Deals.getInstance().getLocation().getLatLng().convert();
+            LatLng ne =  llist.get(i).getBusinessAddress().getLatLng().convert();        
+            if(sw.getLatitude() > ne.getLatitude())
+            {
+                LatLng temp = ne;
+                ne = sw;
+                sw = temp;
+            }
+            if(sw.getLongitude() > ne.getLongitude())
+            {
+                LatLng temp = sw;
+                sw = LatLng.newInstance(temp.getLatitude(), temp.getLongitude() - 2*(temp.getLongitude() - ne.getLongitude()));
+            }
+            LatLngBounds a = LatLngBounds.newInstance(sw, ne);
+            if(boundsToRadius(a) > distance)
+            {
+                distance = boundsToRadius(a);
+                zoom = mapWidget.getBoundsZoomLevel(a);
+            }
+        }
+        return zoom;
+    }
+    
     ArrayList <Marker> currentMarks = new ArrayList();
     private void initialize() {
         
         if (largeMap)
+        {
             mapWidget.setSize("100%", "100%");
+            mapWidget.setZoomLevel(13);
+        }
         else
         mapWidget.setSize("350px", "350px");
-        
-        mapWidget.addControl(new LargeMapControl());
-        mapWidget.setZoomLevel(14);
 
+        mapWidget.addControl(new LargeMapControl());
         eventBus.addHandler(DealsEvent.TYPE,
             new DealsEventHandler(){
                 @Override
@@ -105,14 +137,20 @@ public class GoogleMapWidget extends Composite {
                     currentMarks.clear();
                     dealsToMarkers(Deals.getInstance().getDeals());
                     markerUpdate(100);
-                }
+                    if(!dragged && !largeMap && Deals.getInstance().getResize())
+                    {
+                    mapWidget.setZoomLevel(boundsToFarthestDeal(Deals.getInstance().getDeals()) - 1);
+                    }
+                    Deals.getInstance().setResize(true);
+                    dragged = false;
+              }
+                
             }
         );
         
         mapWidget.addMapDragEndHandler(new MapDragEndHandler(){
             public void onDragEnd(MapDragEndEvent e)
             {
-                
                 if(currentCenter != mapWidget.getCenter())
                 {
                 Deals deals = Deals.getInstance();
@@ -139,6 +177,7 @@ public class GoogleMapWidget extends Composite {
                             deals.setOffset(result.size());
                             deals.setLoadsSinceLastReset(new Integer(0));
                             deals.setDeals(result);
+                            dragged = true;
                             eventBus.fireEvent(new DealsEvent());
                         }
                     });
@@ -150,10 +189,11 @@ public class GoogleMapWidget extends Composite {
         mapWidget.addMapZoomEndHandler(new MapZoomEndHandler(){
             public void onZoomEnd(MapZoomEndEvent e)
             {
-                setRadius(mapWidget.getBounds());
+                Deals.getInstance().setRadius(boundsToRadius(mapWidget.getBounds()));
             }
         });
         
+
     }
     
     
@@ -179,7 +219,6 @@ public class GoogleMapWidget extends Composite {
     {
         for(int i = 0; i < llist.size(); i++)
         {
-            
             Marker temp = createMarker(llist.get(i));
             currentMarks.add(temp);
         }
@@ -200,17 +239,49 @@ public class GoogleMapWidget extends Composite {
             public void onClick(MarkerClickEvent e)
             {
                 InfoWindowContent window;
-                try{
-                    window  = new InfoWindowContent(current.getDealBusinessInfo().getName() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
-                } catch(NullPointerException n) {
-                    window  = new InfoWindowContent(current.getTitle() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
+                if(!largeMap)
+                {
+                    try
+                    {
+                        window  = new InfoWindowContent(current.getDealBusinessInfo().getName() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
+                    } 
+                    catch(NullPointerException n) 
+                    {
+                        window  = new InfoWindowContent(current.getTitle() + "<br>" + current.getBusinessPhoneNumber() + "</br>");                 
+                    }
+                    window.setMaxWidth(25);
                 }
-                window.setMaxWidth(25);
+                else
+                {
+                    ListItemWidget temp = new ListItemWidget();
+                    if (current.getDealBusinessInfo() != null)
+                    {
+                        temp.setAvgRatingImageUrl(current.getDealBusinessInfo().getAvgRatingImageUrl());
+                        temp.setBusinessName(current.getDealBusinessInfo().getName());
+                        temp.setNumReviews(current.getDealBusinessInfo().getNumReviews());
+                        temp.setReviewsUrl(current.getDealBusinessInfo().getWebUrl());
+                    }
+
+                    temp.setTitle(current.getTitle());
+                    temp.setSubtitle(current.getSubtitle());
+                    temp.setPrice(current.getPrice());
+                    temp.setDiscountPercentage(current.getDiscountPercentage());
+                    temp.setBusinessAddress(current.getBusinessAddress());
+                    temp.setBigImageUrl(current.getBigImageUrl());
+                    temp.setYipitUrl(current.getYipitWebUrl());
+                    temp.setEndDate(current.getEndDate());
+                    temp.setDealSource(current.getDealSource());
+                    window = new InfoWindowContent(temp);
+                }
                 mapWidget.getInfoWindow().open(temp, window);
             }
         });
 
         return temp;
     }
-        
+    
+    public void centerMarker(Deal current)
+    {
+        mapWidget.setCenter(current.getBusinessAddress().getLatLng().convert());
+    }
 }
