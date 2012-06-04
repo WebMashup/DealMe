@@ -9,17 +9,19 @@
 	height: 44px;
 }
 
-/* body, div, dl, dt, dd, ul, ol, li{ */
-/* 	margin: 0pt; */
-/* 	padding: 0 pt; */
-/* } */
-.buttonview
+.navBarButtonReplace
 {
-		font: 14px/20px helvetica,arial,sans-serif;
-		color: rgb(133, 150, 167);
-		line-height: 1;
-		padding-top: 5px;
+font: 14px/20px helvetica,arial,sans-serif;
+color: #8596A7;
+padding: 12px 20px 12px;
+display: block;
+float: left;
+padding: 12px 20px 12px;
+margin-left: -20px;
+font-weight: 200;
+line-height: 1;
 }
+
 .mapStyle
 {
 	position: absolute;
@@ -29,6 +31,7 @@
 {
 	display: block;
 }
+
 .nopadding
 {
 	margin-bottom: 0px;
@@ -40,10 +43,11 @@
 }
 .popupPlacement
 {
-	bottom: 0px !important;
+	bottom: 10px !important;
 	position: absolute !important;
 	right: auto !important;
 	top: auto !important;
+	background-color: white;
 }
 li
 {

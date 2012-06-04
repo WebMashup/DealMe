@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import me.deal.client.events.DealsEvent;
 import me.deal.client.model.Deals;
+import me.deal.client.resources.Resources;
 import me.deal.client.servlets.DealService;
 import me.deal.client.servlets.DealServiceAsync;
 import me.deal.client.servlets.DirectionsService;
@@ -15,6 +16,8 @@ import me.deal.client.view.main.GoogleMapWidget;
 import me.deal.client.view.main.ListWidget;
 import me.deal.client.view.menubar.FilterWidget;
 import me.deal.client.view.menubar.LocationWidget;
+import me.deal.client.view.menubar.MapFilterWidget;
+import me.deal.client.view.menubar.MapLocationWidget;
 import me.deal.client.view.menubar.MenuWidget;
 import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
@@ -22,6 +25,8 @@ import me.deal.shared.Location;
 
 import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.Label;
+import com.github.gwtbootstrap.client.ui.Modal;
 import com.github.gwtbootstrap.client.ui.Nav;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.ResponsiveNavbar;
@@ -37,6 +42,8 @@ import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
 import com.google.gwt.geolocation.client.Position.Coordinates;
 import com.google.gwt.geolocation.client.PositionError;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -46,6 +53,7 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -70,6 +78,10 @@ public class DealMe implements EntryPoint {
     
 //    @UiField
 //    HeaderWidget headerWidget;
+    
+    Modal loadingModal;
+    
+    Image loadingSpinnerImage;
     
     GoogleMapWidget newMapWidget;
     
@@ -107,19 +119,23 @@ public class DealMe implements EntryPoint {
     
     ResponsiveNavbar navbar;
     
-    VerticalPanel verti;
+    VerticalPanel navBarPanel;
     
-    FlowPanel listVert;
+    FlowPanel listViewPanel;
     
-    FlowPanel mapVert;
+    FlowPanel mapViewPanel;
     
-    boolean mapView = false;
+    boolean mapViewFlag = false;
     
-    boolean listView = true;
+    boolean listViewFlag = true;
     
     PopupPanel popup;
     
-    FlowPanel vert;
+    FlowPanel popupMainPanel;
+    
+    MapFilterWidget mapFilterWidget;
+    
+    MapLocationWidget mapLocationWidget;
     
     @UiHandler("filterButton")
     void handleClick1(ClickEvent e) {
@@ -158,6 +174,13 @@ public class DealMe implements EntryPoint {
      */
     public void onModuleLoad() {
 
+    	loadingModal = new Modal();
+    	
+    	Resources resources = GWT.create(Resources.class);
+    	Image loadingImage = new Image(resources.loadingSpinner());
+    	
+    	loadingModal.add(loadingImage);
+    	
 //        headerWidget = new HeaderWidget(dealService, directionsService, eventBus);
         
         mainScrollPanel = new ScrollPanel();
@@ -181,15 +204,15 @@ public class DealMe implements EntryPoint {
         Button listLink = new Button("List View");
         Button mapLink = new Button("Map View");
         
-        listLink.setStylePrimaryName("buttonview");
-        mapLink.setStylePrimaryName("buttonview");
+        listLink.setStylePrimaryName("navBarButtonReplace");
+        mapLink.setStylePrimaryName("navBarButtonReplace");
         
         navbar.add(brand);
         navbar.add(listLink);
         navbar.add(mapLink);
         
         Button contactLink = new Button("Contact Us");
-        contactLink.setStylePrimaryName("buttonview");
+        contactLink.setStylePrimaryName("navBarButtonReplace");
         contactLink.setHref("mailto:dealmedev@gmail.com");
         Nav nav = new Nav();
         nav.setAlignment(Alignment.RIGHT);
@@ -197,10 +220,10 @@ public class DealMe implements EntryPoint {
         
         navbar.add(nav);
         
-        verti = new VerticalPanel();
-        verti.setWidth("100%");
-        verti.add(navbar);
-        verti.setHeight("40px");
+        navBarPanel = new VerticalPanel();
+        navBarPanel.setWidth("100%");
+        navBarPanel.add(navbar);
+        navBarPanel.setHeight("40px");
         
         contactLink.addClickHandler(new ClickHandler() {
               public void onClick(ClickEvent event) {
@@ -212,19 +235,22 @@ public class DealMe implements EntryPoint {
         
         mapLink.addClickHandler(new ClickHandler() {
               public void onClick(ClickEvent event) {
-                  if (!mapView) {
+                  if (!mapViewFlag) {
+
                       setMapView();
-                      mapView = true;
-                      listView = false;
-                      googleMapWidget.setMapSize(mapView);
-                      listWidget.setMapSize(mapView);
-                      filterWidget.setMapSize(mapView);
-                      locationWidget.setMapSize(mapView);
+                      mapViewFlag = true;
+                      listViewFlag = false;
+                      googleMapWidget.setMapSize(mapViewFlag);
+                      listWidget.setMapSize(mapViewFlag);
+                      filterWidget.setMapSize(mapViewFlag);
+                      locationWidget.setMapSize(mapViewFlag);
+                      
+                      popup.show();
                       
                       Deals deals = Deals.getInstance();
                       deals.setOffset(0);
                       Integer numDealsToLoad = 7;
-                      if(mapView)
+                      if(mapViewFlag)
                           numDealsToLoad = 20;
                       dealService.getYipitDeals(deals.getLocation().getLatLng(),
                           deals.getRadius(),
@@ -245,6 +271,7 @@ public class DealMe implements EntryPoint {
                                   eventBus.fireEvent(new DealsEvent());
                               }
                           });
+                      loadingModal.setVisible(false);
                       
                   } 
               }
@@ -252,18 +279,20 @@ public class DealMe implements EntryPoint {
         
         listLink.addClickHandler(new ClickHandler() {
               public void onClick(ClickEvent event) {
-                  if (!listView) {
+                  if (!listViewFlag) {
+//                	  loadingModal.setVisible(true);
+//                	  loadingModal.show();
                       setListView();
-                      listView = true;
-                      mapView = false;
-                      googleMapWidget.setMapSize(mapView);
-                      listWidget.setMapSize(mapView);
-                      filterWidget.setMapSize(mapView);
-                      locationWidget.setMapSize(mapView);
+                      listViewFlag = true;
+                      mapViewFlag = false;
+                      googleMapWidget.setMapSize(mapViewFlag);
+                      listWidget.setMapSize(mapViewFlag);
+                      filterWidget.setMapSize(mapViewFlag);
+                      locationWidget.setMapSize(mapViewFlag);
                       Deals deals = Deals.getInstance();
                       deals.setOffset(0);
                       Integer numDealsToLoad = 7;
-                      if(mapView)
+                      if(mapViewFlag)
                           numDealsToLoad = 20;
                       dealService.getYipitDeals(deals.getLocation().getLatLng(),
                           deals.getRadius(),
@@ -284,6 +313,7 @@ public class DealMe implements EntryPoint {
                                   eventBus.fireEvent(new DealsEvent());
                               }
                           });
+                      loadingModal.setVisible(false);
                   } 
               }
           });
@@ -291,27 +321,33 @@ public class DealMe implements EntryPoint {
         /**POPUPPANEL FOR LARGEMAP FILTER/LOCATION**/
         newMapWidget = new GoogleMapWidget(dealService, eventBus, true);
         newMapWidget.setStylePrimaryName("mapStyle");
+        mapFilterWidget = new MapFilterWidget(dealService, eventBus);
+        mapLocationWidget = new MapLocationWidget(geocodingService, dealService, eventBus);
         popup = new PopupPanel();
-        vert = new FlowPanel();
+        popupMainPanel = new FlowPanel();
         popup.setHeight("300px");
-        popup.add(vert);
-        vert.add(locationWidget);
-        vert.add(filterWidget);
+        popup.add(popupMainPanel);
+        popupMainPanel.add(mapLocationWidget);
+        popupMainPanel.add(mapFilterWidget);
         int left = (20);
         int top = (Window.getClientHeight() - 20);
         popup.setPopupPosition(left, top);
 
         w = MyUiBinder.INSTANCE.createAndBindUi(this);        
 
-        listVert = new FlowPanel();
-        listVert.setWidth("100%");
-        listVert.add(verti);
-        listVert.add(w);
+        listViewPanel = new FlowPanel();
+        listViewPanel.setWidth("100%");
+        listViewPanel.add(navBarPanel);
+        listViewPanel.add(w);
+        listViewPanel.add(loadingModal);
         
-        mapVert = new FlowPanel();
-        mapVert.setWidth("100%");
+        mapViewPanel = new FlowPanel();
+        mapViewPanel.setWidth("100%");
         w.setHeight("100%");
-        RootLayoutPanel.get().add(listVert);
+        
+        
+        RootLayoutPanel.get().add(listViewPanel);
+        
         filterPanel.setVisible(false);
         locationPanel.setVisible(false);
     }
@@ -319,10 +355,13 @@ public class DealMe implements EntryPoint {
     private void setListView()
     {
         RootLayoutPanel.get().clear();
-        listVert.clear();
-        listVert.add(verti);
-        listVert.add(w);
-        RootLayoutPanel.get().add(listVert);
+        listViewPanel.clear();
+        listViewPanel.add(navBarPanel);
+        listViewPanel.add(w);
+        listViewPanel.add(loadingModal);
+        RootLayoutPanel.get().add(listViewPanel);
+  	  loadingModal.setVisible(true);
+  	  loadingModal.show();
         filterPanel.setVisible(false);
         locationPanel.setVisible(false);
         popup.setVisible(false);
@@ -331,15 +370,20 @@ public class DealMe implements EntryPoint {
     private void setMapView()
     {
         RootLayoutPanel.get().clear();
-        mapVert.clear();
-        mapVert.add(verti);
-        mapVert.add(newMapWidget);
-        RootLayoutPanel.get().add(mapVert);
-        
-        vert.clear();
-        vert.add(locationWidget);
-        vert.add(filterWidget);
+        mapViewPanel.clear();
+        mapViewPanel.add(navBarPanel);
+        mapViewPanel.add(newMapWidget);
+        mapViewPanel.add(loadingModal);
+        RootLayoutPanel.get().add(mapViewPanel);
+  	  loadingModal.setVisible(true);
+  	  loadingModal.show();
+        popupMainPanel.clear();
+        popupMainPanel.add(new Label("Location"));
+        popupMainPanel.add(mapLocationWidget);
+        popupMainPanel.add(new Label("Filters:"));
+        popupMainPanel.add(mapFilterWidget);
         popup.setStylePrimaryName("popupPlacement");
+        popup.setVisible(true);
         popup.show();
         
     }
