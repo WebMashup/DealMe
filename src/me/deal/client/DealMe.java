@@ -31,6 +31,7 @@ import com.github.gwtbootstrap.client.ui.Nav;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.ResponsiveNavbar;
 import com.github.gwtbootstrap.client.ui.constants.Alignment;
+import com.github.gwtbootstrap.client.ui.constants.BackdropType;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -52,6 +53,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -175,10 +178,15 @@ public class DealMe implements EntryPoint {
     public void onModuleLoad() {
 
     	loadingModal = new Modal();
+    	loadingModal.setBackdrop(BackdropType.NONE);
+    	loadingModal.setKeyboard(true);
+    	loadingModal.setVisible(true);
     	
     	Resources resources = GWT.create(Resources.class);
     	Image loadingImage = new Image(resources.loadingSpinner());
-    	
+    	Label loadingLabel = new Label("Loading Deals");
+    	loadingLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+    	loadingModal.add(loadingLabel);
     	loadingModal.add(loadingImage);
     	
 //        headerWidget = new HeaderWidget(dealService, directionsService, eventBus);
@@ -271,7 +279,8 @@ public class DealMe implements EntryPoint {
                                   eventBus.fireEvent(new DealsEvent());
                               }
                           });
-                      loadingModal.setVisible(false);
+                      loadingModal.hide();
+//                      loadingModal.setVisible(false);
                       
                   } 
               }
@@ -313,7 +322,8 @@ public class DealMe implements EntryPoint {
                                   eventBus.fireEvent(new DealsEvent());
                               }
                           });
-                      loadingModal.setVisible(false);
+//                      loadingModal.setVisible(false);
+                      loadingModal.hide();
                   } 
               }
           });
@@ -350,6 +360,7 @@ public class DealMe implements EntryPoint {
         
         filterPanel.setVisible(false);
         locationPanel.setVisible(false);
+        loadingModal.setVisible(false);
     }
     
     private void setListView()
@@ -358,7 +369,7 @@ public class DealMe implements EntryPoint {
         listViewPanel.clear();
         listViewPanel.add(navBarPanel);
         listViewPanel.add(w);
-        listViewPanel.add(loadingModal);
+//        listViewPanel.add(loadingModal);
         RootLayoutPanel.get().add(listViewPanel);
   	  loadingModal.setVisible(true);
   	  loadingModal.show();
@@ -373,7 +384,7 @@ public class DealMe implements EntryPoint {
         mapViewPanel.clear();
         mapViewPanel.add(navBarPanel);
         mapViewPanel.add(newMapWidget);
-        mapViewPanel.add(loadingModal);
+//        mapViewPanel.add(loadingModal);
         RootLayoutPanel.get().add(mapViewPanel);
   	  loadingModal.setVisible(true);
   	  loadingModal.show();
