@@ -18,6 +18,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -47,6 +49,8 @@ public class ListWidget extends Composite {
     private final Integer DEFAULT_NUM_DEALS = 10;
     private Boolean initialLoad=true;
     private boolean mapView = false;
+    private ArrayList<ListItemWidget> listItems;
+    private Integer usedListItemIndex;
     
     public void setMapSize(boolean mapView)
     {
@@ -65,18 +69,17 @@ public class ListWidget extends Composite {
         initialize();
     }
     
-    private String getDuplicateURL(ArrayList<Deal> deals, Deal current, int size)
+    private String getDuplicateURL(ArrayList<Deal> deals, Deal current, Integer dealIndex)
     {
         LatLngCoor test = current.getBusinessAddress().getLatLng();
-        for(int i = 0; i < size; i++)
+        for(int i = 0; i < dealIndex; i++)
         {
             double lat1 = test.getLatitude();
             double lat2 = deals.get(i).getBusinessAddress().getLatLng().getLatitude();
             double lon1 = test.getLongitude();
             double lon2 = deals.get(i).getBusinessAddress().getLatLng().getLongitude();
             
-            if(lat1 == lat2 && lon1 == lon2)
-            {    
+            if(lat1 == lat2 && lon1 == lon2) {    
                 return deals.get(i).getIDUrl();
             }
         }
@@ -91,8 +94,7 @@ public class ListWidget extends Composite {
          * changes in the model.
          * 
          */
-        
-        
+    	
         mainScrollPanel.addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
@@ -102,6 +104,26 @@ public class ListWidget extends Composite {
                     
                     if(currPos > maxPos - 1000) {
                         dealsLoaded = false;
+                        Deals deals = Deals.getInstance();
+                        dealService.getYipitDeals(deals.getUserLocation().getLatLng(),
+                        		deals.getRadius(),
+                        		deals.DEFAULT_NUM_DEALS,
+                        		deals.getOffset(),
+                        		deals.getTags(), new AsyncCallback<ArrayList<Deal>> () {
+
+									@Override
+									public void onFailure(Throwable caught) {
+		                                  Window.alert("Failed to load deals.");
+									}
+
+									@Override
+									public void onSuccess(ArrayList<Deal> result) {
+										Deals deals = Deals.getInstance();
+		                                deals.setOffset(deals.getOffset() + result.size());
+		                                deals.addDeals(result);
+		                                eventBus.fireEvent(new DealsEvent());
+									}
+                        });
                     }
                 }
             }
@@ -112,119 +134,74 @@ public class ListWidget extends Composite {
                 @Override
                 public void onDeals(DealsEvent event) {
                     loadingSpinnerImage.setVisible(true);
-                    
                     listItemContainer.setVisible(false);
                     
                     final ArrayList<Deal> deals = Deals.getInstance().getDeals();
-                
-                    
-                    if(initialLoad)
-                    {
-                        
-                        for(int i=0;i<deals.size();i++){
-                            System.out.println("before item widget");
-                            ListItemWidget item=new ListItemWidget();
-                            System.out.println("after item widget");
-                            item.setMapButton(i, deals.get(i).getIDUrl(), eventBus);
-                            System.out.println("before add");
-                            listItemContainer.add(item);
-                            System.out.println("after add");
-                        }
-                        initialLoad=false;
-                    }
-                    
-                    // if there are not enough widget as the number of deals, create them
-                    if(deals.size()> listItemContainer.getWidgetCount())
-                    { int lessCount=deals.size()-listItemContainer.getWidgetCount();
-                        while(lessCount>0)
-                        {
-                            listItemContainer.add(new ListItemWidget());
-                            lessCount--;
-                        }
-                    }
-                    
-                    System.out.println("after intial load");
-                    int i=0;
-                    System.out.println(deals.size());
+                    Integer loadsSinceLastReset = Deals.getInstance().getLoadsSinceLastReset();
+
                     Deals.getInstance().setDuplicates(0);
-                    for(Deal deal:deals)
-                    {    System.out.println("inside for loop ");
-                        
-                        ListItemWidget temp=(ListItemWidget)listItemContainer.getWidget(i);
-                        System.out.println("Added " + temp.getTitle());
-                        if (deal.getDealBusinessInfo() != null)
-                        {
-                            temp.setAvgRatingImageUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
-                            temp.setBusinessName(deal.getDealBusinessInfo().getName());
-                            temp.setNumReviews(deal.getDealBusinessInfo().getNumReviews());
-                            temp.setReviewsUrl(deal.getDealBusinessInfo().getWebUrl());
-                        }
-
-                        temp.setTitle(deal.getTitle());
-                        temp.setSubtitle(deal.getSubtitle());
-                        temp.setPrice(deal.getPrice());
-                        temp.setDiscountPercentage(deal.getDiscountPercentage());
-                        temp.setBusinessAddress(deal.getBusinessAddress());
-                        temp.setBigImageUrl(deal.getBigImageUrl());
-                        temp.setYipitUrl(deal.getYipitWebUrl());
-                        temp.setEndDate(deal.getEndDate());
-                        temp.setDealSource(deal.getDealSource());
-                        String url = getDuplicateURL(deals, deals.get(i), i);
-                        if(url != "")
-                        {
-                            Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
-                           deals.get(i).setIDUrl(url);
-                        }
-                        else if(i < 26)
-                        {
-                            if(mapView)
-                            {
-                                try
-                                {
-                                    deals.get(i).setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + deals.get(i).getColor());
-                                }
-                                catch(NullPointerException n)
-                                {
-                                    deals.get(i).setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF");
-
-                                }
-                            }
-                            else
-                            {
-                                deals.get(i).setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i - Deals.getInstance().getDuplicates(), i - Deals.getInstance().getDuplicates() + 1) + ".png" );
-                            }
-                        }
-                        temp.setIcon(deals.get(i).getIDUrl());
-                        //listItemContainer.getWidget(i)
-                        i++;
-                    }
-                    /*
-                    i=0;
                     
-                    for(Deal deal:deals)
-                    {
-                        ListItemWidget temp=(ListItemWidget)listItemContainer.getWidget(i);
-                        temp.setBigImageUrl(deal.getBigImageUrl());
+                    //If there was a reset, remove all the current deals from the view first
+                    if(loadsSinceLastReset != 0 && loadsSinceLastReset == deals.size()) {
+                    	System.out.println("Widget count = " + listItemContainer.getWidgetCount());
+                    	System.out.println("After usedListItemIndex = " + usedListItemIndex);
+                    	Integer numWidgets = listItemContainer.getWidgetCount();
+                    	for(int i = numWidgets-1; i >= 0; i--) {
+                    		listItemContainer.remove(i);
+                    		usedListItemIndex--;
+                    	}
+                    	System.out.println("After usedListItemIndex = " + usedListItemIndex);
                     }
-                    */
-                    /*
-                    final Timer dealTimer = new Timer() {
-                        Integer dealIndex = 0;
-                        public void run() {
-                            if(dealIndex != deals.size()) {
-                                
-                                listItemContainer.add(new ListItemWidget(deals.get(dealIndex)));
-                                this.schedule(1);
-                                dealIndex++;
+                    
+                    for(int i = 0; i < loadsSinceLastReset; i++) {
+                    	Integer dealIndex = deals.size() + i - loadsSinceLastReset;
+                    	System.out.println("DealIndex = " + dealIndex + ", usedListItemIndex = " + usedListItemIndex);
+                    	Deal currDeal = deals.get(dealIndex);
+                    	ListItemWidget currListItemWidget = listItems.get(usedListItemIndex);
+                    	currListItemWidget.setDeal(currDeal);
+                    	listItemContainer.add(currListItemWidget);
+                    	usedListItemIndex++;
+                    	
+                    	String url = getDuplicateURL(deals, currDeal, dealIndex);
+                        if(url != "") {
+                        	System.out.println(url);
+                            Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
+                           currDeal.setIDUrl(url);
+                        } else if(usedListItemIndex < 26) {
+                            if(mapView) {
+                            	if(currDeal.getColor() != null) {
+                                    currDeal.setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + currDeal.getColor());
+                                    System.out.println("here1");
+                            	} else {
+                                    currDeal.setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF");
+                                    System.out.println("here2");
+                            	}
+                            }
+                            else {
+                                currDeal.setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(
+                                		usedListItemIndex - Deals.getInstance().getDuplicates() - 1,
+                                		usedListItemIndex - Deals.getInstance().getDuplicates()) + ".png" );
                             }
                         }
-                    };
-                    dealTimer.schedule(1);
-                    */
+                        currListItemWidget.setIcon(currDeal.getIDUrl());
+                    }
                     listItemContainer.setVisible(true);
                     loadingSpinnerImage.setVisible(false);
                     dealsLoaded = true;
+                    
+                    if(listItems.size() < listItemContainer.getWidgetCount() + Deals.MAP_VIEW_NUM_DEALS) {
+                    	for(int i = 0; i < Deals.MAP_VIEW_NUM_DEALS; i++) {
+                    		listItems.add(new ListItemWidget());
+                    	}
+                    }
                 }
         });
+
+    	Integer listItemSize = 10;
+    	usedListItemIndex = 0;
+        listItems = new ArrayList<ListItemWidget>();
+    	for(int i = 0; i < listItemSize; i++) {
+    		listItems.add(new ListItemWidget());
+    	}
     }
 }

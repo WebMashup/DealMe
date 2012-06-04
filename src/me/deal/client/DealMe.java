@@ -10,12 +10,10 @@ import me.deal.client.servlets.DirectionsService;
 import me.deal.client.servlets.DirectionsServiceAsync;
 import me.deal.client.servlets.GeocodingService;
 import me.deal.client.servlets.GeocodingServiceAsync;
-import me.deal.client.view.header.HeaderWidget;
 import me.deal.client.view.main.GoogleMapWidget;
 import me.deal.client.view.main.ListWidget;
 import me.deal.client.view.menubar.FilterWidget;
 import me.deal.client.view.menubar.LocationWidget;
-import me.deal.client.view.menubar.MenuWidget;
 import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
@@ -23,13 +21,11 @@ import me.deal.shared.Location;
 import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Nav;
-import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.ResponsiveNavbar;
 import com.github.gwtbootstrap.client.ui.constants.Alignment;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -42,10 +38,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -223,12 +216,10 @@ public class DealMe implements EntryPoint {
                       
                       Deals deals = Deals.getInstance();
                       deals.setOffset(0);
-                      Integer numDealsToLoad = 7;
-                      if(mapView)
-                          numDealsToLoad = 20;
                       dealService.getYipitDeals(deals.getLocation().getLatLng(),
                           deals.getRadius(),
-                          numDealsToLoad,
+                          mapView ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                          deals.getOffset(),
                           deals.getTags(),
                           new AsyncCallback<ArrayList<Deal>>() {
                               @Override
@@ -240,7 +231,6 @@ public class DealMe implements EntryPoint {
                               public void onSuccess(ArrayList<Deal> result) {
                                   Deals deals = Deals.getInstance();
                                   deals.setOffset(result.size());
-                                  deals.setLoadsSinceLastReset(new Integer(0));
                                   deals.setDeals(result);
                                   eventBus.fireEvent(new DealsEvent());
                               }
@@ -262,12 +252,10 @@ public class DealMe implements EntryPoint {
                       locationWidget.setMapSize(mapView);
                       Deals deals = Deals.getInstance();
                       deals.setOffset(0);
-                      Integer numDealsToLoad = 7;
-                      if(mapView)
-                          numDealsToLoad = 20;
                       dealService.getYipitDeals(deals.getLocation().getLatLng(),
                           deals.getRadius(),
-                          numDealsToLoad,
+                          mapView ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                          deals.getOffset(),
                           deals.getTags(),
                           new AsyncCallback<ArrayList<Deal>>() {
                               @Override
@@ -279,7 +267,6 @@ public class DealMe implements EntryPoint {
                               public void onSuccess(ArrayList<Deal> result) {
                                   Deals deals = Deals.getInstance();
                                   deals.setOffset(result.size());
-                                  deals.setLoadsSinceLastReset(new Integer(0));
                                   deals.setDeals(result);
                                   eventBus.fireEvent(new DealsEvent());
                               }
@@ -373,7 +360,8 @@ public class DealMe implements EntryPoint {
                                 Deals deals = Deals.getInstance();
                                 dealService.getYipitDeals(deals.getLocation().getLatLng(),
                                         deals.getRadius(),
-                                        numDealsToLoad,
+                                        deals.DEFAULT_NUM_DEALS,
+                                        deals.getOffset(),
                                         deals.getTags(),
                                         new AsyncCallback<ArrayList<Deal>>() {
                                             @Override
@@ -385,8 +373,7 @@ public class DealMe implements EntryPoint {
                                             public void onSuccess(ArrayList<Deal> result) {
                                                 Deals deals = Deals.getInstance();
                                                 deals.setDeals(result);
-                                                deals.setOffset(deals.getOffset() + result.size());
-                                                deals.setLoadsSinceLastReset(new Integer(0));
+                                                deals.setOffset(result.size());
                                                 eventBus.fireEvent(new DealsEvent());
                                             }
                                 });

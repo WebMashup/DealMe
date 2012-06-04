@@ -7,6 +7,9 @@ import me.deal.shared.Deal;
 import me.deal.shared.Location;
 
 public class Deals {
+
+    public static final Integer DEFAULT_NUM_DEALS = 7;
+    public static final Integer MAP_VIEW_NUM_DEALS = 20;
     
     private static final Deals INSTANCE = new Deals();
     private ArrayList<Deal> deals;
@@ -19,7 +22,7 @@ public class Deals {
     private int duplicates;
     private boolean resize;
 
-       private Deals() {
+    private Deals() {
         deals = new ArrayList<Deal>();
         location = new Location();
         radius = new Double(20);
@@ -40,10 +43,19 @@ public class Deals {
     
     public void setDeals(final ArrayList<Deal> deals) {
         this.deals = deals;
+        this.loadsSinceLastReset = deals.size();
     }
     
     public void addDeal(final Deal deal) {
         this.deals.add(deal);
+        this.loadsSinceLastReset++;
+    }
+    
+    public void addDeals(final ArrayList<Deal> deals) {
+    	for(Deal deal : deals) {
+    		this.deals.add(deal);
+    	}
+    	this.loadsSinceLastReset += deals.size();
     }
 
     public Location getLocation() {

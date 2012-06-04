@@ -32,7 +32,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 	 *  Implemented using the Yipit API.  Returns deals relating to the tags within radius distance of
 	 *  the given coordinate.  Returns null if no deals found.
 	 */
-	public ArrayList<Deal> getYipitDeals(LatLngCoor coor, Double radius, Integer limit, ArrayList<Category> tags) {
+	public ArrayList<Deal> getYipitDeals(LatLngCoor coor, Double radius, Integer limit, Integer offset, ArrayList<Category> tags) {
 		/*
 		 * TODO: Implement this method.  Get the deals using the Yipit API and parse the result into
 		 * Deal java items, returning them to the user.  See http://yipit.com/about/api/documentation/
@@ -41,7 +41,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		 */
 		
 		String endPoint = "http://api.yipit.com/v1/deals/";
-		String requestParameters = generateParamterStr(coor, radius, limit, tags);
+		String requestParameters = generateParamterStr(coor, radius, limit, offset, tags);
 		String response = HttpSender.sendGetRequest(endPoint, requestParameters);
 		response = formatResponse(response);
 		
@@ -117,13 +117,14 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 				response.indexOf(preEnd)-6) + " }";
 	}
 	
-	private String generateParamterStr(LatLngCoor coor, Double radius, Integer limit, ArrayList<Category> tags) {
+	private String generateParamterStr(LatLngCoor coor, Double radius, Integer limit, Integer offset, ArrayList<Category> tags) {
 		String parameterStr = "";
 		parameterStr += "key=" + apiKey + "&";
 		parameterStr += coor.getLatitude().isNaN() ? "" : "lat=" + coor.getLatitude() + "&";
 		parameterStr += coor.getLongitude().isNaN() ? "" : "lon=" + coor.getLongitude() + "&";
 		parameterStr += radius.isNaN() ? "" : "radius=" + radius + "&";
 		parameterStr += limit == null ? "" : "limit=" + limit + "&";
+		parameterStr += offset == null ? "" : "offset=" + offset + "&";
 		parameterStr += "tag="+getCategoryParams(tags);
 		
 		while(parameterStr.endsWith("&"))

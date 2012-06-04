@@ -163,7 +163,8 @@ public class GoogleMapWidget extends Composite {
                     numDealsToLoad = 20;
                 dealService.getYipitDeals(deals.getLocation().getLatLng(),
                     deals.getRadius(),
-                    numDealsToLoad,
+                    deals.DEFAULT_NUM_DEALS,
+                    deals.getOffset(),
                     deals.getTags(),
                     new AsyncCallback<ArrayList<Deal>>() {
                         @Override
@@ -175,7 +176,6 @@ public class GoogleMapWidget extends Composite {
                         public void onSuccess(ArrayList<Deal> result) {
                             Deals deals = Deals.getInstance();
                             deals.setOffset(result.size());
-                            deals.setLoadsSinceLastReset(new Integer(0));
                             deals.setDeals(result);
                             dragged = true;
                             eventBus.fireEvent(new DealsEvent());

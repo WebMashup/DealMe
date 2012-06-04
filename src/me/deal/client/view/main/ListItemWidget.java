@@ -114,7 +114,7 @@ public class ListItemWidget extends Composite {
         }
         
         setTitle(deal.getTitle());
-        //setSubtitle(deal.getSubtitle());
+        setSubtitle(deal.getSubtitle());
         setPrice(deal.getPrice());
         setDiscountPercentage(deal.getDiscountPercentage());
         setBusinessAddress(deal.getBusinessAddress());
@@ -122,6 +122,11 @@ public class ListItemWidget extends Composite {
         setYipitUrl(deal.getYipitWebUrl());
         setEndDate(deal.getEndDate());
         setDealSource(deal.getDealSource());
+    }
+    
+    public void setDeal(final Deal newDeal) {
+    	this.deal = newDeal;
+    	initialize();
     }
     
     public void setMapButton(final int i, final String s, final HandlerManager eventBus){
@@ -214,7 +219,7 @@ public class ListItemWidget extends Composite {
     
     public void setTitle(String title) {
         deal.setTitle(title);
-    //    dealSubtitle.setText(deal.getTitle());
+    //  dealSubtitle.setText(deal.getTitle());
     }
     
     public void setYipitUrl(String yipitWebUrl) {
