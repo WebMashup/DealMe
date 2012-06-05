@@ -21,7 +21,10 @@ margin-left: -20px;
 font-weight: 200;
 line-height: 1;
 }
-
+.directionPadding
+{
+	margin-left: 6px;
+}
 .mapStyle
 {
 	position: absolute;
@@ -92,7 +95,7 @@ li
 {
 	margin: 0pt auto;
 	position: relative;
-	font: 14px/20px helvetica, arial, sans-serif;
+	font: 13px/20px helvetica, arial, sans-serif;
 	color:rgb(123,128,132);
 }
 #main .marginal
@@ -175,15 +178,25 @@ h1 {
 }
 
 .boldText{
-	font-weight: 500;
-	padding-right: 20px;
+/* 	font-weight: 500; */
+	padding-right: 60px;
 }
 
 .boldText2{
 	font-weight: 600;
 	padding-right: 5px;
+	font-size: 12px;
+}
+.topPadding{
+	margin-top: 10px;
 }
 
+.bottomItemPosition
+{
+position: absolute;
+bottom: -170px;
+top: auto;
+}
 .miscStyle{
 	font-weight: 600;
 	
@@ -220,7 +233,7 @@ h1 {
 	z-index: 9999;
 	background-color: rgba(0,0,0,.6);
 	color: #FFFFFF;
-	font-size: 14px;
+	font-size: 16px;
 	font-weight: 600;
 	position: absolute;
 	top:130px;

@@ -282,6 +282,9 @@ public class ListItemWidget extends Composite {
     
     public void setDealSource(String dealSourceStr) {
         deal.setDealSource(dealSourceStr);
+        if(deal.getDealSource().contains("Deals"))
+        	dealSource.setText(deal.getDealSource().replaceAll("Deals", ""));
+        else
         dealSource.setText(deal.getDealSource());
     }
 }

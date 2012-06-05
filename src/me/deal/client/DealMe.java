@@ -82,20 +82,18 @@ public class DealMe implements EntryPoint {
 //    @UiField
 //    HeaderWidget headerWidget;
     
-    Modal loadingModal;
+    /**Modal**/
     
+    Modal loadingModal;    
     Image loadingSpinnerImage;
     
-    GoogleMapWidget newMapWidget;
+    /**ListView**/
     
     @UiField (provided=true)
     ScrollPanel mainScrollPanel;
     
     @UiField (provided=true)
     FilterWidget filterWidget;    
-    
-//    @UiField (provided=true)
-//    MenuWidget menuWidget;
     
     @UiField (provided=true)
     LocationWidget locationWidget;
@@ -120,26 +118,25 @@ public class DealMe implements EntryPoint {
     
     Widget w;
     
-    ResponsiveNavbar navbar;
-    
+    /** NavBar **/
+    ResponsiveNavbar navbar;    
     VerticalPanel navBarPanel;
-    
-    FlowPanel listViewPanel;
-    
-    FlowPanel mapViewPanel;
-    
-    boolean mapViewFlag = false;
-    
+    boolean mapViewFlag = false;    
     boolean listViewFlag = true;
     
-    PopupPanel popup;
+    /** MapView **/    
+    GoogleMapWidget newMapWidget;
     
-    FlowPanel popupMainPanel;
-    
-    MapFilterWidget mapFilterWidget;
-    
+    /** PopupPanel **/
+    FlowPanel listViewPanel;    
+    FlowPanel mapViewPanel;    
+    PopupPanel popup;    
+    FlowPanel popupMainPanel;    
+    MapFilterWidget mapFilterWidget;    
     MapLocationWidget mapLocationWidget;
     
+    
+    /** NavBar Buttons **/
     @UiHandler("filterButton")
     void handleClick1(ClickEvent e) {
         if (filterPanel.isVisible())
@@ -177,6 +174,7 @@ public class DealMe implements EntryPoint {
      */
     public void onModuleLoad() {
 
+    	/** Loading Modal **/
     	loadingModal = new Modal();
     	loadingModal.setBackdrop(BackdropType.NONE);
     	loadingModal.setKeyboard(true);
@@ -188,12 +186,10 @@ public class DealMe implements EntryPoint {
     	loadingLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
     	loadingModal.add(loadingLabel);
     	loadingModal.add(loadingImage);
-    	
-//        headerWidget = new HeaderWidget(dealService, directionsService, eventBus);
-        
+    	        
+    	/** ListView **/
         mainScrollPanel = new ScrollPanel();
         filterWidget = new FilterWidget(dealService, eventBus);
-//        menuWidget = new MenuWidget(dealService, eventBus);
         locationWidget = new LocationWidget(geocodingService, dealService, eventBus);
         listWidget = new ListWidget(mainScrollPanel, dealService, directionsService, eventBus);
         googleMapWidget = new GoogleMapWidget(dealService, eventBus, false);
@@ -343,6 +339,7 @@ public class DealMe implements EntryPoint {
         int top = (Window.getClientHeight() - 20);
         popup.setPopupPosition(left, top);
 
+        /** Final Bindings **/
         w = MyUiBinder.INSTANCE.createAndBindUi(this);        
 
         listViewPanel = new FlowPanel();
@@ -354,8 +351,7 @@ public class DealMe implements EntryPoint {
         mapViewPanel = new FlowPanel();
         mapViewPanel.setWidth("100%");
         w.setHeight("100%");
-        
-        
+            
         RootLayoutPanel.get().add(listViewPanel);
         
         filterPanel.setVisible(false);

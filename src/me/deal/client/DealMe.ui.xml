@@ -67,6 +67,7 @@
 	</div>
 	</div>
 	</div>
+	<b:Label>TESTLABEL</b:Label>
 	</div>
 	</div>
 	</g:HTMLPanel>
