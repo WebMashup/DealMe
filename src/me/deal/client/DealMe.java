@@ -253,12 +253,11 @@ public class DealMe implements EntryPoint {
                       
                       Deals deals = Deals.getInstance();
                       deals.setOffset(0);
-                      Integer numDealsToLoad = 7;
-                      if(mapViewFlag)
-                          numDealsToLoad = 20;
+
                       dealService.getYipitDeals(deals.getLocation().getLatLng(),
                           deals.getRadius(),
-                          numDealsToLoad,
+                          mapViewFlag ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                         deals.getOffset(),
                           deals.getTags(),
                           new AsyncCallback<ArrayList<Deal>>() {
                               @Override
@@ -270,7 +269,6 @@ public class DealMe implements EntryPoint {
                               public void onSuccess(ArrayList<Deal> result) {
                                   Deals deals = Deals.getInstance();
                                   deals.setOffset(result.size());
-                                  deals.setLoadsSinceLastReset(new Integer(0));
                                   deals.setDeals(result);
                                   eventBus.fireEvent(new DealsEvent());
                               }
@@ -296,12 +294,10 @@ public class DealMe implements EntryPoint {
                       locationWidget.setMapSize(mapViewFlag);
                       Deals deals = Deals.getInstance();
                       deals.setOffset(0);
-                      Integer numDealsToLoad = 7;
-                      if(mapViewFlag)
-                          numDealsToLoad = 20;
                       dealService.getYipitDeals(deals.getLocation().getLatLng(),
                           deals.getRadius(),
-                          numDealsToLoad,
+                          mapViewFlag ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                          deals.getOffset(),
                           deals.getTags(),
                           new AsyncCallback<ArrayList<Deal>>() {
                               @Override
@@ -313,7 +309,6 @@ public class DealMe implements EntryPoint {
                               public void onSuccess(ArrayList<Deal> result) {
                                   Deals deals = Deals.getInstance();
                                   deals.setOffset(result.size());
-                                  deals.setLoadsSinceLastReset(new Integer(0));
                                   deals.setDeals(result);
                                   eventBus.fireEvent(new DealsEvent());
                               }
@@ -420,11 +415,11 @@ public class DealMe implements EntryPoint {
                                 // Window.alert(result.getAddress() + "\n" + result.getCity() + ", " + result.getState() + " " + result.getZipCode());
                                 Deals.getInstance().setLocation(result);
                                 Deals.getInstance().setUserLocation(result);
-                                Integer numDealsToLoad = 7;
                                 Deals deals = Deals.getInstance();
                                 dealService.getYipitDeals(deals.getLocation().getLatLng(),
                                         deals.getRadius(),
-                                        numDealsToLoad,
+                                        deals.DEFAULT_NUM_DEALS,
+                                        deals.getOffset(),
                                         deals.getTags(),
                                         new AsyncCallback<ArrayList<Deal>>() {
                                             @Override
@@ -436,8 +431,7 @@ public class DealMe implements EntryPoint {
                                             public void onSuccess(ArrayList<Deal> result) {
                                                 Deals deals = Deals.getInstance();
                                                 deals.setDeals(result);
-                                                deals.setOffset(deals.getOffset() + result.size());
-                                                deals.setLoadsSinceLastReset(new Integer(0));
+                                                deals.setOffset(result.size());
                                                 eventBus.fireEvent(new DealsEvent());
                                             }
                                 });

@@ -13,7 +13,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * The async counterpart of @DealService.
  */
 public interface DealServiceAsync {
-	void getYipitDeals(LatLngCoor coor, Double radius, Integer limit, ArrayList<Category> tags,
-			AsyncCallback<ArrayList<Deal>> callback);
+	void getYipitDeals(LatLngCoor coor, Double radius, Integer limit, Integer offset,
+			ArrayList<Category> tags, AsyncCallback<ArrayList<Deal>> callback);
 	void lookupYelpByPhone(String phoneNumber, AsyncCallback<BusinessInfo> callback);
 }

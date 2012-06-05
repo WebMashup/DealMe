@@ -114,7 +114,7 @@ public class ListItemWidget extends Composite {
         }
         
         setTitle(deal.getTitle());
-        //setSubtitle(deal.getSubtitle());
+        setSubtitle(deal.getSubtitle());
         setPrice(deal.getPrice());
         setDiscountPercentage(deal.getDiscountPercentage());
         setBusinessAddress(deal.getBusinessAddress());
@@ -123,6 +123,11 @@ public class ListItemWidget extends Composite {
         setEndDate(deal.getEndDate());
         setDealSource(deal.getDealSource());
     }
+    
+    public void setDeal(final Deal newDeal) {
+    	this.deal = newDeal;
+    	initialize();
+    	}
     
     public void setMapButton(final int i, final String s, final HandlerManager eventBus){
         

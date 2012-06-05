@@ -144,13 +144,11 @@ public class LocationWidget extends Composite {
                         double radiusDouble = Double.parseDouble(radiusString);
                         deals.setRadius(radiusDouble);
                         
-                        Integer numDealsToLoad = 7;
-                        if(mapView)
-                            numDealsToLoad = 20;
                         
                         dealService.getYipitDeals(deals.getLocation().getLatLng(),
                                 deals.getRadius(),
-                                numDealsToLoad,
+                                mapView ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                                deals.getOffset(),
                                 deals.getTags(),
                                 new AsyncCallback<ArrayList<Deal>>() {
                                     @Override
@@ -163,7 +161,6 @@ public class LocationWidget extends Composite {
                                         Deals deals = Deals.getInstance();
                                         deals.setDeals(result);
                                         deals.setLoadsSinceLastReset(new Integer(0));
-                                        deals.setOffset(deals.getOffset() + result.size());
                                         eventBus.fireEvent(new DealsEvent());
                                     }
                         });

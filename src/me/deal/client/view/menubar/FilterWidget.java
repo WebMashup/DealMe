@@ -136,13 +136,11 @@ public class FilterWidget extends Composite {
         Deals deals = Deals.getInstance();
         deals.setTags(filterList);
         deals.setOffset(0);
-        Integer numDealsToLoad = 7;
-        if(mapView)
-            numDealsToLoad = 20;
         
         dealService.getYipitDeals(deals.getLocation().getLatLng(),
                 deals.getRadius(),
-                numDealsToLoad,
+                mapView ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                deals.getOffset(),
                 deals.getTags(), 
                 new AsyncCallback<ArrayList<Deal>>() {
             @Override
@@ -154,7 +152,6 @@ public class FilterWidget extends Composite {
             public void onSuccess(ArrayList<Deal> result) {
                 Deals deals = Deals.getInstance();
                 deals.setDeals(result);
-                deals.setLoadsSinceLastReset(new Integer(0));
                 deals.setOffset(result.size());
                 eventBus.fireEvent(new DealsEvent());
             }
