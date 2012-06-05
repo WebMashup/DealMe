@@ -200,7 +200,7 @@ public class DealMe implements EntryPoint {
         locationPanel = new FlowPanel();
         
         filterButton = new Button("Filters");
-        locationButton = new Button("Location");    
+        locationButton = new Button("Location");   
         
         /** NAVIGATION BAR **/
         navbar = new ResponsiveNavbar();

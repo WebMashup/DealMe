@@ -82,6 +82,7 @@ li
 	margin-right: 30 px;
 	width: 600px;
 	padding-left: 10px;
+	margin-bottom: 80px;
 }
 #cols .col_small
 {
@@ -194,7 +195,7 @@ h1 {
 .bottomItemPosition
 {
 position: absolute;
-bottom: -170px;
+bottom: 5px;
 top: auto;
 }
 .miscStyle{
@@ -256,6 +257,7 @@ top: auto;
 	border-width:1px;
   	border-color: rgb(192,192,192);
   	border-style: solid;
+  	position: relative;
 }
 
 ul li {

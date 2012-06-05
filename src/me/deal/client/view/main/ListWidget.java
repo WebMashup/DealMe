@@ -114,7 +114,7 @@ public class ListWidget extends Composite {
                     loadingSpinnerImage.setVisible(true);
                     
                     listItemContainer.setVisible(false);
-                    
+                    listItemContainer.clear();
                     final ArrayList<Deal> deals = Deals.getInstance().getDeals();
                 
                     

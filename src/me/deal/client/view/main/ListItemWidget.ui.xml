@@ -61,6 +61,7 @@
 						<g:Label ui:field="discountPercentage" addStyleNames="boldNumbers"></g:Label>
 					</g:VerticalPanel>
 				</g:HorizontalPanel>
+				<g:HTMLPanel addStyleNames="bottomItemPosition">
 				<g:HorizontalPanel addStyleNames="topPadding">
 					<g:Label ui:field="numDaysLeft" addStyleNames="boldText2"></g:Label>
 					<g:Label ui:field="daysText" addStyleNames="boldText2"></g:Label>
@@ -71,6 +72,7 @@
 					<g:Anchor ui:field="twitterLink" target="_blank" ></g:Anchor>
 					<g:Anchor ui:field="googlePlusLink" target="_blank" ></g:Anchor>	
 				</g:HorizontalPanel>
+				</g:HTMLPanel>
 			</g:VerticalPanel>			
 		</div>
 	
