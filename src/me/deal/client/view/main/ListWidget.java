@@ -200,6 +200,7 @@ public class ListWidget extends Composite {
                     	}
                 }
         });
+        
         Integer listItemSize = 10;
         usedListItemIndex = 0;
         listItems = new ArrayList<ListItemWidget>();
