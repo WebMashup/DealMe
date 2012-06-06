@@ -67,9 +67,6 @@ public class DealMe implements EntryPoint {
     GoogleMapWidget newMapWidget;
     
     @UiField (provided=true)
-    ScrollPanel mainScrollPanel;
-    
-    @UiField (provided=true)
     FilterWidget filterWidget;    
     
 //    @UiField (provided=true)
@@ -151,13 +148,9 @@ public class DealMe implements EntryPoint {
      */
     public void onModuleLoad() {
 
-//        headerWidget = new HeaderWidget(dealService, directionsService, eventBus);
-        
-        mainScrollPanel = new ScrollPanel();
         filterWidget = new FilterWidget(dealService, eventBus);
-//        menuWidget = new MenuWidget(dealService, eventBus);
         locationWidget = new LocationWidget(geocodingService, dealService, eventBus);
-        listWidget = new ListWidget(mainScrollPanel, dealService, directionsService, eventBus);
+        listWidget = new ListWidget(dealService, directionsService, eventBus);
         googleMapWidget = new GoogleMapWidget(dealService, eventBus, false);
         
         getUserLocation();
@@ -218,7 +211,7 @@ public class DealMe implements EntryPoint {
                       deals.setOffset(0);
                       dealService.getYipitDeals(deals.getLocation().getLatLng(),
                           deals.getRadius(),
-                          mapView ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                          deals.DEFAULT_NUM_DEALS,
                           deals.getOffset(),
                           deals.getTags(),
                           new AsyncCallback<ArrayList<Deal>>() {
@@ -254,7 +247,7 @@ public class DealMe implements EntryPoint {
                       deals.setOffset(0);
                       dealService.getYipitDeals(deals.getLocation().getLatLng(),
                           deals.getRadius(),
-                          mapView ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                          deals.DEFAULT_NUM_DEALS,
                           deals.getOffset(),
                           deals.getTags(),
                           new AsyncCallback<ArrayList<Deal>>() {
@@ -348,6 +341,7 @@ public class DealMe implements EntryPoint {
                         geocodingService.convertLatLngToAddress(userLatLng, new AsyncCallback<Location>() {
                             @Override
                             public void onFailure(Throwable caught) {
+                            	Window.alert(caught.toString());
                                 Window.alert("Failed to geocode!");
                             }
 
@@ -356,7 +350,6 @@ public class DealMe implements EntryPoint {
                                 // Window.alert(result.getAddress() + "\n" + result.getCity() + ", " + result.getState() + " " + result.getZipCode());
                                 Deals.getInstance().setLocation(result);
                                 Deals.getInstance().setUserLocation(result);
-                                Integer numDealsToLoad = 7;
                                 Deals deals = Deals.getInstance();
                                 dealService.getYipitDeals(deals.getLocation().getLatLng(),
                                         deals.getRadius(),

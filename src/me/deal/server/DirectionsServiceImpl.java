@@ -1,5 +1,6 @@
 package me.deal.server;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import me.deal.client.servlets.DirectionsService;
@@ -27,7 +28,13 @@ public class DirectionsServiceImpl extends RemoteServiceServlet implements
 		String endPointAddress = "http://maps.googleapis.com/maps/api/directions/json";
 		String requestParameters = generateParamterStr(startPoint, endPoint);
 		
-		String response = HttpSender.sendGetRequest(endPointAddress, requestParameters);
+		String response;
+		try {
+			response = HttpSender.sendGetRequest(endPointAddress, requestParameters);
+		} catch(SocketTimeoutException e) {
+			return null;
+		}
+		
 		System.out.println(response);
 		
 		Gson gson = new GsonBuilder().create();

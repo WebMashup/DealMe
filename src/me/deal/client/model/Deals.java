@@ -8,8 +8,7 @@ import me.deal.shared.Location;
 
 public class Deals {
 
-    public static final Integer DEFAULT_NUM_DEALS = 7;
-    public static final Integer MAP_VIEW_NUM_DEALS = 20;
+    public static final Integer DEFAULT_NUM_DEALS = 30;
     
     private static final Deals INSTANCE = new Deals();
     private ArrayList<Deal> deals;
@@ -18,7 +17,7 @@ public class Deals {
     private Double radius;
     private Integer offset;
     private ArrayList<Category> tags;
-    private Integer loadsSinceLastReset;
+    private Boolean reset;
     private int duplicates;
     private boolean resize;
 
@@ -28,7 +27,7 @@ public class Deals {
         radius = new Double(20);
         offset = new Integer(0);
         tags = new ArrayList<Category>();
-        loadsSinceLastReset = new Integer(0);
+        reset = new Boolean(false);
         duplicates = 0;
         resize = true;
     }
@@ -43,19 +42,17 @@ public class Deals {
     
     public void setDeals(final ArrayList<Deal> deals) {
         this.deals = deals;
-        this.loadsSinceLastReset = deals.size();
+        this.reset = true;
     }
     
     public void addDeal(final Deal deal) {
         this.deals.add(deal);
-        this.loadsSinceLastReset++;
     }
     
     public void addDeals(final ArrayList<Deal> deals) {
     	for(Deal deal : deals) {
     		this.deals.add(deal);
     	}
-    	this.loadsSinceLastReset += deals.size();
     }
 
     public Location getLocation() {
@@ -102,16 +99,12 @@ public class Deals {
         this.tags.add(tag);
     }
 
-    public Integer getLoadsSinceLastReset() {
-        return loadsSinceLastReset;
-    }
-
-    public void setLoadsSinceLastReset(final Integer loadsSinceLastReset) {
-        this.loadsSinceLastReset = loadsSinceLastReset;
+    public void acknowledgeReset() {
+    	this.reset = false;
     }
     
-    public void incrementLoadsSinceLastReset() {
-        this.loadsSinceLastReset++;
+    public Boolean isReset() {
+    	return this.reset;
     }
     
     public int getDuplicates()
@@ -133,5 +126,4 @@ public class Deals {
     {
         this.resize = bool;
     }
-    
 }

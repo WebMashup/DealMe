@@ -1,5 +1,6 @@
 package me.deal.server;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -8,11 +9,12 @@ import me.deal.shared.BusinessInfo;
 import me.deal.shared.Category;
 import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
+import me.deal.shared.Location;
+import me.deal.shared.json.JSONYelp.JSONYelpBusiness;
 import me.deal.shared.json.JSONYipitDeals;
 import me.deal.shared.json.JSONYelp;
-import me.deal.shared.json.JSONYipitDeals.JSONYipitDeal;
-import me.deal.shared.json.JSONYipitDeals.JSONYipitDeal.JSONTag;
-import me.deal.shared.Location;
+import me.deal.shared.json.JSONYipitDeals.JSONYipitDealsResponse.JSONYipitDeal;
+import me.deal.shared.json.JSONYipitDeals.JSONYipitDealsResponse.JSONYipitDeal.JSONTag;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,8 +44,14 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		
 		String endPoint = "http://api.yipit.com/v1/deals/";
 		String requestParameters = generateParamterStr(coor, radius, limit, offset, tags);
-		String response = HttpSender.sendGetRequest(endPoint, requestParameters);
-		response = formatResponse(response);
+		String response;
+		try {
+			response = HttpSender.sendGetRequest(endPoint, requestParameters);
+		} catch(SocketTimeoutException e) {
+			return null;
+		}
+		System.out.println("response = " + response);
+		//response = formatResponse(response);
 		
 		Gson gson = new GsonBuilder().create();
 		JSONYipitDeals yipitDeals = gson.fromJson(response, JSONYipitDeals.class);
@@ -56,7 +64,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		
 		ArrayList<Deal> deals = new ArrayList<Deal>();
 		
-		for(JSONYipitDeal jsonDeal : yipitDeals.deals) {
+		for(JSONYipitDeal jsonDeal : yipitDeals.response.deals) {
 			
 			ArrayList<Category> tags = new ArrayList<Category>();
 			for(JSONTag tag : jsonDeal.tags) {
@@ -110,12 +118,12 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		return deals;
 	}
 	
-	private String formatResponse(String response) {
-		String preBegin = "\"response\": {        ";
+	/* private String formatResponse(String response) {
 		String preEnd = "</pre>";
-		return "{ " + response.substring(response.indexOf(preBegin) + preBegin.length(),
-				response.indexOf(preEnd)-6) + " }";
-	}
+		if(response.indexOf(preEnd) != -1)
+			return "{ " + response.substring(0, response.indexOf(preEnd)-6) + " }";
+		return response;
+	} */
 	
 	private String generateParamterStr(LatLngCoor coor, Double radius, Integer limit, Integer offset, ArrayList<Category> tags) {
 		String parameterStr = "";
@@ -166,13 +174,18 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		String requestParameters = generateParamterStr(phoneNumber);
 		
 		Gson gson = new GsonBuilder().create();
-		String response = HttpSender.sendGetRequest(endPoint, requestParameters);
+		String response;
+		try {
+			response = HttpSender.sendGetRequest(endPoint, requestParameters);
+		} catch(SocketTimeoutException e) {
+				return null;
+		}
 		// System.out.println(response);
 		//JSONYelp yelp = gson.fromJson(response, JSONYelp.class);
 		
 		
-		SearchResponse searchResponse = new Gson().fromJson(response, SearchResponse.class);
-		ArrayList<JSONYelp> yelp= searchResponse.businesses;//response = formatResponse(response);
+		JSONYelp searchResponse = new Gson().fromJson(response, JSONYelp.class);
+		ArrayList<JSONYelpBusiness> yelp= searchResponse.businesses;//response = formatResponse(response);
 		// if there does not exists any record for the business on yelp 
 		if(yelp == null || yelp.size()==0)
 			return null;
@@ -180,17 +193,14 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		return convertYelp(yelp);
 	
 	}
-	private class SearchResponse {
-		public ArrayList<JSONYelp> businesses;
-	}
 	
-	private BusinessInfo convertYelp(ArrayList<JSONYelp> yelp) {
+	private BusinessInfo convertYelp(ArrayList<JSONYelpBusiness> yelp) {
 		
 		BusinessInfo instance =new BusinessInfo();
-		Iterator<JSONYelp> i = yelp.iterator();
+		Iterator<JSONYelpBusiness> i = yelp.iterator();
 		if(yelp==null)
 			return null;
-		JSONYelp oneRecord;
+		JSONYelpBusiness oneRecord;
 		while(i.hasNext())
 		{
 			oneRecord= i.next();

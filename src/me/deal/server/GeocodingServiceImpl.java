@@ -1,5 +1,7 @@
 package me.deal.server;
 
+import java.net.SocketTimeoutException;
+
 import me.deal.client.servlets.GeocodingService;
 import me.deal.shared.LatLngCoor;
 import me.deal.shared.Location;
@@ -20,8 +22,12 @@ public class GeocodingServiceImpl extends RemoteServiceServlet implements
 	public Location convertLatLngToAddress(LatLngCoor latLng) {
 		String endPoint = "http://maps.googleapis.com/maps/api/geocode/json";
 		String requestParameters = generateLatLngParamterStr(latLng);
-		String response = HttpSender.sendGetRequest(endPoint, requestParameters);
-		
+		String response;
+		try {
+			response = HttpSender.sendGetRequest(endPoint, requestParameters);
+		} catch(SocketTimeoutException e) {
+			return null;
+		}
 		Gson gson = new GsonBuilder().create();
 		JSONGoogleMapsLocations googleMapsLocations = gson.fromJson(response, JSONGoogleMapsLocations.class);
 		Location userLocation = parseUserLocation(googleMapsLocations);
@@ -34,8 +40,12 @@ public class GeocodingServiceImpl extends RemoteServiceServlet implements
 		String endPoint = "http://maps.googleapis.com/maps/api/geocode/json";
 		String requestParameters = generateAddressParamterStr(address);
 		System.out.println("requestParameters");
-		String response = HttpSender.sendGetRequest(endPoint, requestParameters);
-		
+		String response;
+		try {
+			response = HttpSender.sendGetRequest(endPoint, requestParameters);
+		} catch(SocketTimeoutException e) {
+			return null;
+		}
 		Gson gson = new GsonBuilder().create();
 		JSONGoogleMapsLocations googleMapsLocations = gson.fromJson(response, JSONGoogleMapsLocations.class);
 		LatLngCoor userLatLng = parseUserLatLng(googleMapsLocations);

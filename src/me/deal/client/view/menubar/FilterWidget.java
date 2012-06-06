@@ -139,7 +139,7 @@ public class FilterWidget extends Composite {
         
         dealService.getYipitDeals(deals.getLocation().getLatLng(),
                 deals.getRadius(),
-                mapView ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                deals.DEFAULT_NUM_DEALS,
                 deals.getOffset(),
                 deals.getTags(), 
                 new AsyncCallback<ArrayList<Deal>>() {

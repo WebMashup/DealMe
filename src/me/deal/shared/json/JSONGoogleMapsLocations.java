@@ -5,15 +5,24 @@ import java.util.ArrayList;
 public class JSONGoogleMapsLocations {
 
 	public ArrayList<JSONGoogleMapsLocation> results;
+	public JSONGoogleMapsLocations() {
+	}
 	
-	public class JSONGoogleMapsLocation {
+	public static class JSONGoogleMapsLocation {
+		
+		public JSONGoogleMapsLocation() {
+		}
 		public String formatted_address;
 		public JSONGeometry geometry;
 		
-		public class JSONGeometry {
+		public static class JSONGeometry {
+			public JSONGeometry() {
+			}
 			public JSONLocation location;
 			
-			public class JSONLocation {
+			public static class JSONLocation {
+				public JSONLocation() {
+				}
 				public Double lat;
 				public Double lng;
 			}

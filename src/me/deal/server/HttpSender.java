@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -29,7 +30,7 @@ public class HttpSender {
 	
 	public static String sendGetRequest(
 			String endpoint,
-			String requestParameters) {
+			String requestParameters) throws SocketTimeoutException{
 		String result = null;
 		if (endpoint.startsWith("http://")) {
 			// Send a GET request to the servlet

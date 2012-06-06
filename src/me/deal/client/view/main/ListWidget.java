@@ -1,6 +1,8 @@
 package me.deal.client.view.main;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 import me.deal.client.events.DealsEvent;
 import me.deal.client.events.DealsEventHandler;
@@ -11,14 +13,15 @@ import me.deal.shared.Deal;
 import me.deal.shared.LatLngCoor;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ScrollEvent;
+import com.google.gwt.user.client.Window.ScrollHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -44,29 +47,34 @@ public class ListWidget extends Composite {
     private final DirectionsServiceAsync directionsService;
     private final HandlerManager eventBus;
     
-    private final ScrollPanel mainScrollPanel;
-    private Boolean dealsLoaded = false;
-    private final Integer DEFAULT_NUM_DEALS = 10;
-    private Boolean initialLoad=true;
+    private Boolean scrollLock = false;
     private boolean mapView = false;
-    private ArrayList<ListItemWidget> listItems;
-    private Integer usedListItemIndex;
+    private Integer dealIndex;
+    private Integer listItemIndex;
+    private boolean loadingMoreDeals = false;
     
     public void setMapSize(boolean mapView)
     {
         this.mapView = mapView;
     }
     
-    public @UiConstructor ListWidget(final ScrollPanel mainScrollPanel,
-            final DealServiceAsync dealService,
+    public @UiConstructor ListWidget(final DealServiceAsync dealService,
             final DirectionsServiceAsync directionsService,
             final HandlerManager eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
-        this.mainScrollPanel = mainScrollPanel;
         this.dealService = dealService;
         this.directionsService = directionsService;
         this.eventBus = eventBus;
+    	
         initialize();
+    }
+    /*
+    public void setCurrDealIcon() {
+    	ArrayList<Deal> deals = Deals.getInstance().getDeals();
+    	Deal curr = deals.get(dealIndex).
+    	for(int i = 0; i < dealIndex; i++) {
+    		
+    	}
     }
     
     private String getDuplicateURL(ArrayList<Deal> deals, Deal current, Integer dealIndex)
@@ -86,7 +94,7 @@ public class ListWidget extends Composite {
         return "";
 
     }
-    
+    */
     private void initialize() {
         /*
          * TODO: Add code to observe the DealsData model and automatically
@@ -94,36 +102,134 @@ public class ListWidget extends Composite {
          * changes in the model.
          * 
          */
+    	dealIndex = 0;
+    	listItemIndex = 0;
+    	Window.enableScrolling(true);
+    	loadingSpinnerImage.setVisible(true);
+        listItemContainer.setVisible(false);
     	
-        mainScrollPanel.addScrollHandler(new ScrollHandler() {
-            @Override
-            public void onScroll(ScrollEvent event) {
-                if(dealsLoaded) {
-                    int maxPos = mainScrollPanel.getMaximumVerticalScrollPosition();
-                    int currPos = mainScrollPanel.getVerticalScrollPosition();
-                    
+    	Window.addWindowScrollHandler(new ScrollHandler() {
+			@Override
+			public void onWindowScroll(ScrollEvent event) {
+
+                int currPos = Window.getScrollTop();
+				System.out.println(currPos);
+                if(!scrollLock) {
+                    int maxPos = Window.getClientHeight();
+                   // int currPos = Window.getScrollTop();
+                    int numWidgets = listItemContainer.getWidgetCount();
+                	System.out.println("dealIndex = " + dealIndex);
+                	System.out.println("right = " + (dealIndex + numWidgets) + ", left = " + (Deals.getInstance().getDeals().size() - (Deals.getInstance().DEFAULT_NUM_DEALS/2)));
+                    if(!loadingMoreDeals && dealIndex + numWidgets >= Deals.getInstance().getDeals().size() - (Deals.getInstance().DEFAULT_NUM_DEALS/2)) {
+                    	loadingMoreDeals = true;
+                    	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    		public void execute() {
+                    			Deals deals = Deals.getInstance();
+                    			dealService.getYipitDeals(deals.getUserLocation().getLatLng(),
+                                		deals.getRadius(),
+                                		deals.DEFAULT_NUM_DEALS,
+                                		deals.getOffset(),
+                                		deals.getTags(), new AsyncCallback<ArrayList<Deal>> () {
+
+        								@Override
+        								public void onFailure(Throwable caught) {
+        	                                  Window.alert("Failed to load deals.");
+        	                                  scrollLock = false;
+        								}
+
+        								@Override
+        								public void onSuccess(ArrayList<Deal> result) {
+        									Deals deals = Deals.getInstance();
+        	                                deals.setOffset(deals.getOffset() + result.size());
+        	                                deals.addDeals(result);
+        	                                loadingMoreDeals = false;
+        								}
+                    			});
+                			}
+                		});
+                    }
                     if(currPos > maxPos - 1000) {
-                        dealsLoaded = false;
+                    	scrollLock = true;
+                    	Deal currDeal = null;
+	                    try {
+	                    	currDeal = Deals.getInstance().getDeals().get(dealIndex + numWidgets);
+	                    } catch(IndexOutOfBoundsException e) {
+	                    	System.out.println(Deals.getInstance().getDeals().size());
+	                    	return;
+	                    }
+                    	ListItemWidget currLi = (ListItemWidget)(listItemContainer.getWidget(0));
+                    	currLi.setDeal(currDeal);
+                    	listItemContainer.remove(0);
+                    	listItemContainer.add(currLi);
+                    	dealIndex++;
+                    	scrollLock = false;
+                    	/*
+                    	scrollLock = true;
                         Deals deals = Deals.getInstance();
                         dealService.getYipitDeals(deals.getUserLocation().getLatLng(),
                         		deals.getRadius(),
-                        		deals.DEFAULT_NUM_DEALS,
+                        		deals.DEFAULT_NUM_DEALS/2,
                         		deals.getOffset(),
                         		deals.getTags(), new AsyncCallback<ArrayList<Deal>> () {
 
-									@Override
-									public void onFailure(Throwable caught) {
-		                                  Window.alert("Failed to load deals.");
-									}
+								@Override
+								public void onFailure(Throwable caught) {
+	                                  Window.alert("Failed to load deals.");
+	                                  scrollLock = false;
+								}
 
-									@Override
-									public void onSuccess(ArrayList<Deal> result) {
-										Deals deals = Deals.getInstance();
-		                                deals.setOffset(deals.getOffset() + result.size());
-		                                deals.addDeals(result);
-		                                eventBus.fireEvent(new DealsEvent());
-									}
-                        });
+								@Override
+								public void onSuccess(ArrayList<Deal> result) {
+									Deals deals = Deals.getInstance();
+	                                deals.setOffset(deals.getOffset() + result.size());
+	                                deals.addDeals(result);
+	                                
+	                                ArrayList<ListItemWidget> tempRemovedWidgets = new ArrayList<ListItemWidget>();
+
+	                                for(int i = 0; i < result.size(); i++) {
+	                                	tempRemovedWidgets.add((ListItemWidget)listItemContainer.getWidget(0));
+	                                	tempRemovedWidgets.remove(i);
+	                                }
+	                                
+	                                int finalScrollPos = Window.getScrollTop();
+	                                for(int i = 0; i < result.size(); i++) {
+	                                	System.out.println("remove Widget 0 and adding it to listItemContainer");
+	                                	tempRemovedWidgets.get(i).setDeal(result.get(i));
+	                                	listItemContainer.add(tempRemovedWidgets.get(i));
+	                                }
+	                                Window.scrollTo(0, finalScrollPos);
+	                                dealIndex += result.size();
+	                                scrollLock = false;
+	                                eventBus.fireEvent(new DealsEvent());
+	                                System.out.println("end dealIndex2 = " + dealIndex);
+								}
+                        }); */
+                    } else if(currPos < 1000 && dealIndex != 0) {
+                    	scrollLock = true;
+                    	dealIndex--;
+                    	Deal currDeal = Deals.getInstance().getDeals().get(dealIndex);
+                    	ListItemWidget currLi = (ListItemWidget)(listItemContainer.getWidget(numWidgets-1));
+                    	currLi.setDeal(currDeal);
+                    	listItemContainer.remove(numWidgets-1);
+                    	listItemContainer.insert(currLi, 0);
+                    	scrollLock = false;
+                    	/*
+                    	ArrayList<Deal> deals = Deals.getInstance().getDeals().
+                    	Integer numToMove = Deals.getInstance().DEFAULT_NUM_DEALS/2;
+                    	ListItemWidget tempRemovedWidget;
+                        
+                        System.out.println("init = " + (dealIndex - 1)  + " end = " + (dealIndex - numToMove));
+                        for(int i = dealIndex - 1; i >= dealIndex - numToMove && i >= 0; i--) {
+                        	tempRemovedWidget = (ListItemWidget)(listItemContainer.getWidget(listItemContainer.getWidgetCount()-1));
+                        	listItemContainer.remove(listItemContainer.getWidgetCount()-1);
+                        	tempRemovedWidget.setDeal(deals.get(i));
+                        	listItemContainer.insert(tempRemovedWidget, 0);
+                        }
+
+                    	dealIndex = (dealIndex - numToMove < 0) ? 0 : (dealIndex - numToMove);
+                        scrollLock = false;
+                        System.out.println("end dealIndex = " + dealIndex);
+                        */
                     }
                 }
             }
@@ -133,75 +239,45 @@ public class ListWidget extends Composite {
                 new DealsEventHandler() {
                 @Override
                 public void onDeals(DealsEvent event) {
-                    loadingSpinnerImage.setVisible(true);
-                    listItemContainer.setVisible(false);
-                    
-                    final ArrayList<Deal> deals = Deals.getInstance().getDeals();
-                    Integer loadsSinceLastReset = Deals.getInstance().getLoadsSinceLastReset();
-
-                    Deals.getInstance().setDuplicates(0);
-                    
-                    //If there was a reset, remove all the current deals from the view first
-                    if(loadsSinceLastReset != 0 && loadsSinceLastReset == deals.size()) {
-                    	System.out.println("Widget count = " + listItemContainer.getWidgetCount());
-                    	System.out.println("After usedListItemIndex = " + usedListItemIndex);
-                    	Integer numWidgets = listItemContainer.getWidgetCount();
-                    	for(int i = numWidgets-1; i >= 0; i--) {
-                    		listItemContainer.remove(i);
-                    		usedListItemIndex--;
-                    	}
-                    	System.out.println("After usedListItemIndex = " + usedListItemIndex);
-                    }
-                    
-                    for(int i = 0; i < loadsSinceLastReset; i++) {
-                    	Integer dealIndex = deals.size() + i - loadsSinceLastReset;
-                    	System.out.println("DealIndex = " + dealIndex + ", usedListItemIndex = " + usedListItemIndex);
-                    	Deal currDeal = deals.get(dealIndex);
-                    	ListItemWidget currListItemWidget = listItems.get(usedListItemIndex);
-                    	currListItemWidget.setDeal(currDeal);
-                    	listItemContainer.add(currListItemWidget);
-                    	usedListItemIndex++;
+                	System.out.println("dealIndex " + dealIndex);
+                	System.out.println("reset = " + Deals.getInstance().isReset());
+                    if(Deals.getInstance().isReset()) {
                     	
-                    	String url = getDuplicateURL(deals, currDeal, dealIndex);
-                        if(url != "") {
-                        	System.out.println(url);
-                            Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
-                           currDeal.setIDUrl(url);
-                        } else if(usedListItemIndex < 26) {
-                            if(mapView) {
-                            	if(currDeal.getColor() != null) {
-                                    currDeal.setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + currDeal.getColor());
-                                    System.out.println("here1");
-                            	} else {
-                                    currDeal.setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF");
-                                    System.out.println("here2");
-                            	}
-                            }
+                        loadingSpinnerImage.setVisible(true);
+                        listItemContainer.setVisible(false);
+                        
+                        Deals.getInstance().setDuplicates(0);
+                        final ArrayList<Deal> deals = Deals.getInstance().getDeals();
+                    	dealIndex = 0;
+                    	
+                    	// TopPanel
+                    	Integer numWidgets = listItemContainer.getWidgetCount();
+                    	
+                    	for(Integer i = 0; i < numWidgets; i++) {
+                    		Deal currDeal = deals.get(i);
+                    		ListItemWidget currListItemWidget  = (ListItemWidget)listItemContainer.getWidget(i);
+                        	currListItemWidget.setDeal(currDeal);
+	                    	
+	                    	// setCurrDealIcon();
+                        	// String url = getDuplicateURL(deals, currDeal, dealIndex);
+                            /* if(url != "") {
+                                Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
+                               currDeal.setIDUrl(url);
+                            } 
                             else {
                                 currDeal.setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(
-                                		usedListItemIndex - Deals.getInstance().getDuplicates() - 1,
-                                		usedListItemIndex - Deals.getInstance().getDuplicates()) + ".png" );
-                            }
+                                		((dealIndex + i - Deals.getInstance().getDuplicates()) % 26),
+                                		((dealIndex + i - Deals.getInstance().getDuplicates() + 1) % 26)) + ".png");
+                            } */
+                            //currListItemWidget.setIcon(currDeal.getIDUrl());
                         }
-                        currListItemWidget.setIcon(currDeal.getIDUrl());
-                    }
-                    listItemContainer.setVisible(true);
-                    loadingSpinnerImage.setVisible(false);
-                    dealsLoaded = true;
-                    
-                    if(listItems.size() < listItemContainer.getWidgetCount() + Deals.MAP_VIEW_NUM_DEALS) {
-                    	for(int i = 0; i < Deals.MAP_VIEW_NUM_DEALS; i++) {
-                    		listItems.add(new ListItemWidget());
-                    	}
+                        
+                        listItemContainer.setVisible(true);
+                        loadingSpinnerImage.setVisible(false);
+                        scrollLock = false;
+                        Deals.getInstance().acknowledgeReset();
                     }
                 }
         });
-
-    	Integer listItemSize = 10;
-    	usedListItemIndex = 0;
-        listItems = new ArrayList<ListItemWidget>();
-    	for(int i = 0; i < listItemSize; i++) {
-    		listItems.add(new ListItemWidget());
-    	}
     }
 }
