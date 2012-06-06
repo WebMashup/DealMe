@@ -20,6 +20,8 @@ public class Deals {
     private Boolean reset;
     private int duplicates;
     private boolean resize;
+    private int visibleRangeStart;
+    private int visibleRangeEnd;
 
     private Deals() {
         deals = new ArrayList<Deal>();
@@ -30,6 +32,8 @@ public class Deals {
         reset = new Boolean(false);
         duplicates = 0;
         resize = true;
+        visibleRangeStart = 0;
+        visibleRangeEnd = 0;
     }
        
     public static Deals getInstance() {
@@ -125,5 +129,21 @@ public class Deals {
     public void setResize(boolean bool)
     {
         this.resize = bool;
+    }
+    
+    public void setRange(int start, int end)
+    {
+    	this.visibleRangeStart = start;
+    	this.visibleRangeEnd = end;
+    }
+    
+    public int getRangeStart()
+    {
+    	return this.visibleRangeStart;
+    }
+    
+    public int getRangeEnd()
+    {
+    	return this.visibleRangeEnd;
     }
 }

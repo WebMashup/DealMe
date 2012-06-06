@@ -77,7 +77,7 @@ public class Deal implements Serializable {
             this.tags = tags;
             this.dealBusinessInfo= dealBusinessInfo;
             this.dealSource = dealSource;
-            this.IDUrl = "http://www.google.com/mapfiles/marker.png";
+            this.IDUrl = "";
     }
     
     public Integer getYipitDealID() {

@@ -230,6 +230,8 @@ public class ListItemWidget extends Composite {
         
         //social media integration
         String yipitURL= deal.getYipitWebUrl();
+        if(yipitURL == null)
+        	yipitURL = "";
         String facebookLinkURL="https://www.facebook.com/sharer.php?u=" + yipitURL;
         String twitterLinkURL="http://twitter.com/share?count=horiztonal&url=" + yipitURL + "&text="
                 + (deal.getTitle() == null ? "" : deal.getTitle());

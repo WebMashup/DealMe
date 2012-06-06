@@ -152,6 +152,9 @@ public class MapLocationWidget extends Composite {
                                     public void onSuccess(ArrayList<Deal> result) {
                                         Deals deals = Deals.getInstance();
                                         deals.setDeals(result);
+                                        //deals.setLoadsSinceLastReset(new Integer(0));
+                                        deals.setOffset(result.size());
+                                        
                                         eventBus.fireEvent(new DealsEvent());
                                     }
                         });

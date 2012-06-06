@@ -136,7 +136,6 @@ public class FilterWidget extends Composite {
         Deals deals = Deals.getInstance();
         deals.setTags(filterList);
         deals.setOffset(0);
-        
         dealService.getYipitDeals(deals.getLocation().getLatLng(),
                 deals.getRadius(),
                 deals.DEFAULT_NUM_DEALS,

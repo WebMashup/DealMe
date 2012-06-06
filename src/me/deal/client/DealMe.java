@@ -187,7 +187,7 @@ public class DealMe implements EntryPoint {
         mainScrollPanel = new ScrollPanel();
         filterWidget = new FilterWidget(dealService, eventBus);
         locationWidget = new LocationWidget(geocodingService, dealService, eventBus);
-        listWidget = new ListWidget(dealService, directionsService, eventBus);
+        listWidget = new ListWidget(mainScrollPanel, dealService, directionsService, eventBus);
         googleMapWidget = new GoogleMapWidget(dealService, eventBus, false);
         
         getUserLocation();

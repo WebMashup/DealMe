@@ -43,8 +43,13 @@ public class HttpSender {
 				URL url = new URL(urlStr);
 				URLConnection conn = url.openConnection();
 				// Get the response
-				BufferedReader rd = new BufferedReader(new InputStreamReader(
-						conn.getInputStream()));
+				BufferedReader rd;
+				try {
+					rd = new BufferedReader(new InputStreamReader(
+							conn.getInputStream()));
+				} catch(SocketTimeoutException e) {
+					return sendGetRequest(endpoint, requestParameters);
+				}
 				StringBuffer sb = new StringBuffer();
 				String line;
 				while ((line = rd.readLine()) != null) {
