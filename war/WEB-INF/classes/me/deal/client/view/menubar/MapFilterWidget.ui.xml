@@ -1,0 +1,46 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" xmlns:m="urn:import:me.deal.client.view.menubar"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.sizing {
+			width: 300px;
+			margin-left: 8px;
+			margin-top: 5px;
+			padding-left: 3px;
+		}
+		
+		.smallCheckBox {
+			font-size: 11px;
+			font-weight: normal;
+			line-height: 14px;
+		}
+		
+		.centerButton {
+			margin-left: 106px;
+			width: 100px;
+		}
+	</ui:style>
+	<b:WellForm type="VERTICAL" styleName='{style.sizing}'>
+		<b:Row>
+			<b:Column size="1">
+				<b:CheckBox ui:field="allCheckBox">Select All</b:CheckBox>
+				<b:CheckBox ui:field="diningCheckBox">Dining</b:CheckBox>
+				<b:CheckBox ui:field="nightlifeCheckBox">Nightlife</b:CheckBox>
+			</b:Column>
+			<b:Column size="1">
+				<b:CheckBox ui:field="healthCheckBox">Health</b:CheckBox>
+				<b:CheckBox ui:field="fitnessCheckBox">Fitness</b:CheckBox>
+				<b:CheckBox ui:field="retailCheckBox">Retail</b:CheckBox>
+			</b:Column>
+			<b:Column size="1">
+				<b:CheckBox ui:field="servicesCheckBox">Services</b:CheckBox>
+				<b:CheckBox ui:field="activitiesCheckBox">Activities+Events</b:CheckBox>
+				<b:CheckBox ui:field="specialInterestCheckBox">Special Interests</b:CheckBox>
+			</b:Column>
+		</b:Row>
+		<g:FlowPanel styleName='{style.centerButton}'>
+			<b:Button type="PRIMARY" ui:field="submitButton">Submit</b:Button>
+		</g:FlowPanel>
+	</b:WellForm>
+</ui:UiBinder> 

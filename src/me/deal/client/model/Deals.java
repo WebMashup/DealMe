@@ -9,7 +9,7 @@ import me.deal.shared.Location;
 public class Deals {
 
     public static final Integer DEFAULT_NUM_DEALS = 30;
-    
+	
     private static final Deals INSTANCE = new Deals();
     private ArrayList<Deal> deals;
     private Location location;

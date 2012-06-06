@@ -48,15 +48,9 @@ public class ListWidget extends Composite {
     private final HandlerManager eventBus;
     
     private Boolean scrollLock = false;
-    private boolean mapView = false;
     private Integer dealIndex;
-    private Integer listItemIndex;
     private boolean loadingMoreDeals = false;
-    
-    public void setMapSize(boolean mapView)
-    {
-        this.mapView = mapView;
-    }
+    private Character nextLetter = 'A';
     
     public @UiConstructor ListWidget(final DealServiceAsync dealService,
             final DirectionsServiceAsync directionsService,
@@ -68,33 +62,28 @@ public class ListWidget extends Composite {
     	
         initialize();
     }
-    /*
-    public void setCurrDealIcon() {
-    	ArrayList<Deal> deals = Deals.getInstance().getDeals();
-    	Deal curr = deals.get(dealIndex).
-    	for(int i = 0; i < dealIndex; i++) {
-    		
-    	}
-    }
     
-    private String getDuplicateURL(ArrayList<Deal> deals, Deal current, Integer dealIndex)
+    private void setIDUrl(ArrayList<Deal> deals, Integer currentDealIndex)
     {
+    	Deal current = deals.get(currentDealIndex);
         LatLngCoor test = current.getBusinessAddress().getLatLng();
-        for(int i = 0; i < dealIndex; i++)
+        for(int i = 0; i < currentDealIndex; i++)
         {
             double lat1 = test.getLatitude();
             double lat2 = deals.get(i).getBusinessAddress().getLatLng().getLatitude();
             double lon1 = test.getLongitude();
             double lon2 = deals.get(i).getBusinessAddress().getLatLng().getLongitude();
             
-            if(lat1 == lat2 && lon1 == lon2) {    
-                return deals.get(i).getIDUrl();
+            if(lat1 == lat2 && lon1 == lon2) {
+            	current.setIDUrl(deals.get(i).getIDUrl());
+                return;
             }
         }
-        return "";
-
+        current.setIDUrl("http://www.google.com/mapfiles/marker" + nextLetter + ".png");
+        nextLetter = (char) ((nextLetter == 'Z') ? 'A' : (nextLetter + 1));
+        return;
     }
-    */
+    
     private void initialize() {
         /*
          * TODO: Add code to observe the DealsData model and automatically
@@ -103,7 +92,6 @@ public class ListWidget extends Composite {
          * 
          */
     	dealIndex = 0;
-    	listItemIndex = 0;
     	Window.enableScrolling(true);
     	loadingSpinnerImage.setVisible(true);
         listItemContainer.setVisible(false);
@@ -120,7 +108,8 @@ public class ListWidget extends Composite {
                     int numWidgets = listItemContainer.getWidgetCount();
                 	System.out.println("dealIndex = " + dealIndex);
                 	System.out.println("right = " + (dealIndex + numWidgets) + ", left = " + (Deals.getInstance().getDeals().size() - (Deals.getInstance().DEFAULT_NUM_DEALS/2)));
-                    if(!loadingMoreDeals && dealIndex + numWidgets >= Deals.getInstance().getDeals().size() - (Deals.getInstance().DEFAULT_NUM_DEALS/2)) {
+                   
+                	if(!loadingMoreDeals && dealIndex + numWidgets >= Deals.getInstance().getDeals().size() - (Deals.getInstance().DEFAULT_NUM_DEALS/2)) {
                     	loadingMoreDeals = true;
                     	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     		public void execute() {
@@ -148,6 +137,7 @@ public class ListWidget extends Composite {
                 			}
                 		});
                     }
+                	
                     if(currPos > maxPos - 1000) {
                     	scrollLock = true;
                     	Deal currDeal = null;
@@ -161,75 +151,24 @@ public class ListWidget extends Composite {
                     	currLi.setDeal(currDeal);
                     	listItemContainer.remove(0);
                     	listItemContainer.add(currLi);
+                    	setIDUrl(Deals.getInstance().getDeals(), dealIndex + numWidgets);
+                    	currLi.setIcon(currDeal.getIDUrl());
+                    	System.out.println("ID URL for Deal " + dealIndex + " = " + currDeal.getIDUrl());
                     	dealIndex++;
                     	scrollLock = false;
-                    	/*
-                    	scrollLock = true;
-                        Deals deals = Deals.getInstance();
-                        dealService.getYipitDeals(deals.getUserLocation().getLatLng(),
-                        		deals.getRadius(),
-                        		deals.DEFAULT_NUM_DEALS/2,
-                        		deals.getOffset(),
-                        		deals.getTags(), new AsyncCallback<ArrayList<Deal>> () {
-
-								@Override
-								public void onFailure(Throwable caught) {
-	                                  Window.alert("Failed to load deals.");
-	                                  scrollLock = false;
-								}
-
-								@Override
-								public void onSuccess(ArrayList<Deal> result) {
-									Deals deals = Deals.getInstance();
-	                                deals.setOffset(deals.getOffset() + result.size());
-	                                deals.addDeals(result);
-	                                
-	                                ArrayList<ListItemWidget> tempRemovedWidgets = new ArrayList<ListItemWidget>();
-
-	                                for(int i = 0; i < result.size(); i++) {
-	                                	tempRemovedWidgets.add((ListItemWidget)listItemContainer.getWidget(0));
-	                                	tempRemovedWidgets.remove(i);
-	                                }
-	                                
-	                                int finalScrollPos = Window.getScrollTop();
-	                                for(int i = 0; i < result.size(); i++) {
-	                                	System.out.println("remove Widget 0 and adding it to listItemContainer");
-	                                	tempRemovedWidgets.get(i).setDeal(result.get(i));
-	                                	listItemContainer.add(tempRemovedWidgets.get(i));
-	                                }
-	                                Window.scrollTo(0, finalScrollPos);
-	                                dealIndex += result.size();
-	                                scrollLock = false;
-	                                eventBus.fireEvent(new DealsEvent());
-	                                System.out.println("end dealIndex2 = " + dealIndex);
-								}
-                        }); */
-                    } else if(currPos < 1000 && dealIndex != 0) {
+                    }
+                    
+                    else if(currPos < 1000 && dealIndex != 0) {
                     	scrollLock = true;
                     	dealIndex--;
                     	Deal currDeal = Deals.getInstance().getDeals().get(dealIndex);
                     	ListItemWidget currLi = (ListItemWidget)(listItemContainer.getWidget(numWidgets-1));
                     	currLi.setDeal(currDeal);
+                    	setIDUrl(Deals.getInstance().getDeals(), dealIndex);
+                    	currLi.setIcon(currDeal.getIDUrl());
                     	listItemContainer.remove(numWidgets-1);
                     	listItemContainer.insert(currLi, 0);
                     	scrollLock = false;
-                    	/*
-                    	ArrayList<Deal> deals = Deals.getInstance().getDeals().
-                    	Integer numToMove = Deals.getInstance().DEFAULT_NUM_DEALS/2;
-                    	ListItemWidget tempRemovedWidget;
-                        
-                        System.out.println("init = " + (dealIndex - 1)  + " end = " + (dealIndex - numToMove));
-                        for(int i = dealIndex - 1; i >= dealIndex - numToMove && i >= 0; i--) {
-                        	tempRemovedWidget = (ListItemWidget)(listItemContainer.getWidget(listItemContainer.getWidgetCount()-1));
-                        	listItemContainer.remove(listItemContainer.getWidgetCount()-1);
-                        	tempRemovedWidget.setDeal(deals.get(i));
-                        	listItemContainer.insert(tempRemovedWidget, 0);
-                        }
-
-                    	dealIndex = (dealIndex - numToMove < 0) ? 0 : (dealIndex - numToMove);
-                        scrollLock = false;
-                        System.out.println("end dealIndex = " + dealIndex);
-                        */
                     }
                 }
             }
@@ -257,19 +196,8 @@ public class ListWidget extends Composite {
                     		Deal currDeal = deals.get(i);
                     		ListItemWidget currListItemWidget  = (ListItemWidget)listItemContainer.getWidget(i);
                         	currListItemWidget.setDeal(currDeal);
-	                    	
-	                    	// setCurrDealIcon();
-                        	// String url = getDuplicateURL(deals, currDeal, dealIndex);
-                            /* if(url != "") {
-                                Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
-                               currDeal.setIDUrl(url);
-                            } 
-                            else {
-                                currDeal.setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(
-                                		((dealIndex + i - Deals.getInstance().getDuplicates()) % 26),
-                                		((dealIndex + i - Deals.getInstance().getDuplicates() + 1) % 26)) + ".png");
-                            } */
-                            //currListItemWidget.setIcon(currDeal.getIDUrl());
+                        	setIDUrl(deals, i);
+                        	currListItemWidget.setIcon(currDeal.getIDUrl());
                         }
                         
                         listItemContainer.setVisible(true);

@@ -278,15 +278,18 @@ public class ListItemWidget extends Composite {
         numDaysLeft.setText(String.valueOf(deltaDays));
         //set days to plural if needed
         if (deltaDays > 1){
-            daysText.setText("\tdays left on");
+            daysText.setText("\tdays left on\t ");
         }
         else {
-            daysText.setText("\tday left on ");
+            daysText.setText("\t day left on \t");
         }
     }
     
     public void setDealSource(String dealSourceStr) {
         deal.setDealSource(dealSourceStr);
+        if(deal.getDealSource().contains("Deals"))
+        	dealSource.setText(deal.getDealSource().replaceAll("Deals", ""));
+        else
         dealSource.setText(deal.getDealSource());
     }
 }

@@ -54,7 +54,6 @@ public class GoogleMapWidget extends Composite {
     }
     
     
-    
     public @UiConstructor GoogleMapWidget(final DealServiceAsync dealService,
             final HandlerManager eventBus, boolean largeMap) {
         initWidget(uiBinder.createAndBindUi(this));

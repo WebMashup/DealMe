@@ -19,7 +19,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface DealService extends RemoteService {
 	// Get limit # of deals from yipit within radius distance of coor, using the filter tags.
 	// Returns null if no deals found
+	
 	ArrayList<Deal> getYipitDeals(LatLngCoor coor, Double radius, Integer limit, Integer offset, ArrayList<Category> tags);
+	
 	// Get yelp reviews for a business by phone number
 	// Returns null if the business is not found
 	BusinessInfo lookupYelpByPhone(String phoneNumber);

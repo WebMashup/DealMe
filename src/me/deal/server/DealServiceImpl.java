@@ -34,8 +34,8 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 	 *  Implemented using the Yipit API.  Returns deals relating to the tags within radius distance of
 	 *  the given coordinate.  Returns null if no deals found.
 	 */
-	public ArrayList<Deal> getYipitDeals(LatLngCoor coor, Double radius, Integer limit, Integer offset, ArrayList<Category> tags) {
-		/*
+	
+	public ArrayList<Deal> getYipitDeals(LatLngCoor coor, Double radius, Integer limit, Integer offset, ArrayList<Category> tags) {		/*
 		 * TODO: Implement this method.  Get the deals using the Yipit API and parse the result into
 		 * Deal java items, returning them to the user.  See http://yipit.com/about/api/documentation/
 		 * for reference.
@@ -44,6 +44,7 @@ public class DealServiceImpl extends RemoteServiceServlet implements
 		
 		String endPoint = "http://api.yipit.com/v1/deals/";
 		String requestParameters = generateParamterStr(coor, radius, limit, offset, tags);
+		
 		String response;
 		try {
 			response = HttpSender.sendGetRequest(endPoint, requestParameters);

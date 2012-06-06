@@ -9,16 +9,21 @@
 	height: 44px;
 }
 
-/* body, div, dl, dt, dd, ul, ol, li{ */
-/* 	margin: 0pt; */
-/* 	padding: 0 pt; */
-/* } */
-.buttonview
+.navBarButtonReplace
 {
-		font: 14px/20px helvetica,arial,sans-serif;
-		color: rgb(133, 150, 167);
-		line-height: 1;
-		padding-top: 5px;
+font: 14px/20px helvetica,arial,sans-serif;
+color: #8596A7;
+padding: 12px 20px 12px;
+display: block;
+float: left;
+padding: 12px 20px 12px;
+margin-left: -20px;
+font-weight: 200;
+line-height: 1;
+}
+.directionPadding
+{
+	margin-left: 6px;
 }
 .mapStyle
 {
@@ -29,6 +34,7 @@
 {
 	display: block;
 }
+
 .nopadding
 {
 	margin-bottom: 0px;
@@ -40,10 +46,11 @@
 }
 .popupPlacement
 {
-	bottom: 0px !important;
+	bottom: 10px !important;
 	position: absolute !important;
 	right: auto !important;
 	top: auto !important;
+	background-color: white;
 }
 li
 {
@@ -75,6 +82,7 @@ li
 	margin-right: 30 px;
 	width: 600px;
 	padding-left: 10px;
+	margin-bottom: 80px;
 }
 #cols .col_small
 {
@@ -88,7 +96,7 @@ li
 {
 	margin: 0pt auto;
 	position: relative;
-	font: 14px/20px helvetica, arial, sans-serif;
+	font: 13px/20px helvetica, arial, sans-serif;
 	color:rgb(123,128,132);
 }
 #main .marginal
@@ -171,15 +179,25 @@ h1 {
 }
 
 .boldText{
-	font-weight: 500;
-	padding-right: 20px;
+/* 	font-weight: 500; */
+	padding-right: 60px;
 }
 
 .boldText2{
 	font-weight: 600;
-	padding-right: 5px;
+	padding-right: 2px;
+	font-size: 12px;
+}
+.topPadding{
+	margin-top: 7px;
 }
 
+.bottomItemPosition
+{
+position: absolute;
+bottom: 5px;
+top: auto;
+}
 .miscStyle{
 	font-weight: 600;
 	
@@ -216,7 +234,7 @@ h1 {
 	z-index: 9999;
 	background-color: rgba(0,0,0,.6);
 	color: #FFFFFF;
-	font-size: 14px;
+	font-size: 16px;
 	font-weight: 600;
 	position: absolute;
 	top:130px;
@@ -239,6 +257,7 @@ h1 {
 	border-width:1px;
   	border-color: rgb(192,192,192);
   	border-style: solid;
+  	position: relative;
 }
 
 ul li {

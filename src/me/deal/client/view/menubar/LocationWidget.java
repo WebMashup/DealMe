@@ -26,6 +26,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class LocationWidget extends Composite {
@@ -52,6 +53,9 @@ public class LocationWidget extends Composite {
     {
         this.mapView = mapView;
     }
+    
+    @UiField
+    ListBox radius;
     
     @UiField
     Label addressLine1;
@@ -116,7 +120,6 @@ public class LocationWidget extends Composite {
             @Override
             public void onSuccess(LatLngCoor result) {
                 // TODO Auto-generated method stub
-                addressLine1.setText("");
                 Location userLoc = Deals.getInstance().getLocation();
                 userLoc.setLatLng((LatLngCoor) result);
                 
@@ -136,6 +139,11 @@ public class LocationWidget extends Composite {
                         Deals deals = Deals.getInstance();
                         deals.setLocation(result);
                         deals.setUserLocation(result);
+                        
+                        String radiusString = radius.getItemText(radius.getSelectedIndex());
+                        double radiusDouble = Double.parseDouble(radiusString);
+                        deals.setRadius(radiusDouble);
+                        
                         
                         dealService.getYipitDeals(deals.getLocation().getLatLng(),
                                 deals.getRadius(),
