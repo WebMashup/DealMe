@@ -21,7 +21,10 @@ public class Deals {
     private Integer loadsSinceLastReset;
     private int duplicates;
     private boolean resize;
+    private int visibleRangeStart;
+    private int visibleRangeEnd;
 
+    
    private Deals() {
         deals = new ArrayList<Deal>();
         location = new Location();
@@ -31,6 +34,8 @@ public class Deals {
         loadsSinceLastReset = new Integer(0);
         duplicates = 0;
         resize = true;
+        visibleRangeStart = 0;
+        visibleRangeEnd = 0;
     }
        
     public static Deals getInstance() {
@@ -133,4 +138,19 @@ public class Deals {
         this.resize = bool;
     }
     
+    public void setRange(int start, int end)
+    {
+    	this.visibleRangeStart = start;
+    	this.visibleRangeEnd = end;
+    }
+    
+    public int getRangeStart()
+    {
+    	return this.visibleRangeStart;
+    }
+    
+    public int getRangeEnd()
+    {
+    	return this.visibleRangeEnd;
+    }
 }

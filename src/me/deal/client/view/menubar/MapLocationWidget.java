@@ -139,7 +139,7 @@ public class MapLocationWidget extends Composite {
                         
                         dealService.getYipitDeals(deals.getLocation().getLatLng(),
                                 deals.getRadius(),
-                                mapView ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
+                                deals.MAP_VIEW_NUM_DEALS,
                                 deals.getOffset(),
                                 deals.getTags(),
                                 new AsyncCallback<ArrayList<Deal>>() {
@@ -152,7 +152,9 @@ public class MapLocationWidget extends Composite {
                                     public void onSuccess(ArrayList<Deal> result) {
                                         Deals deals = Deals.getInstance();
                                         deals.setDeals(result);
-                                        deals.setLoadsSinceLastReset(new Integer(0));
+                                        //deals.setLoadsSinceLastReset(new Integer(0));
+                                        deals.setOffset(result.size());
+
                                         eventBus.fireEvent(new DealsEvent());
                                     }
                         });

@@ -162,7 +162,7 @@ public class GoogleMapWidget extends Composite {
                     numDealsToLoad = 20;
                 dealService.getYipitDeals(deals.getLocation().getLatLng(),
                     deals.getRadius(),
-                    deals.DEFAULT_NUM_DEALS,
+                    largeMap ? deals.MAP_VIEW_NUM_DEALS : deals.DEFAULT_NUM_DEALS,
                     deals.getOffset(),
                     deals.getTags(),
                     new AsyncCallback<ArrayList<Deal>>() {
@@ -200,17 +200,24 @@ public class GoogleMapWidget extends Composite {
     {
         mapWidget.clearOverlays(); 
         int max = 0;
+        int start = 0;
         if(number >= currentMarks.size())
             max = currentMarks.size();
         else
             max = number;
         
-        
-        for(int i = 0; i < max; i++)
+        if(!(Deals.getInstance().getRangeStart() == 0 && Deals.getInstance().getRangeEnd() == 0))
+        {
+        	start = Deals.getInstance().getRangeStart();
+        	max = Deals.getInstance().getRangeEnd();
+        	Deals.getInstance().setRange(0,0);
+        }
+        	
+        for(int i = start; i < max; i++)
         {
             mapWidget.addOverlay(currentMarks.get(i));
-            if(i > 0 && currentMarks.get(i).getLatLng().getLatitude() == currentMarks.get(i - 1).getLatLng().getLatitude() && currentMarks.get(i).getLatLng().getLongitude() == currentMarks.get(i - 1).getLatLng().getLongitude())
-                currentMarks.get(i).setVisible(false);
+          //  if(i > 0 && currentMarks.get(i).getLatLng().getLatitude() == currentMarks.get(i - 1).getLatLng().getLatitude() && currentMarks.get(i).getLatLng().getLongitude() == currentMarks.get(i - 1).getLatLng().getLongitude())
+           //     currentMarks.get(i).setVisible(false);
         }
     }
     
@@ -277,6 +284,15 @@ public class GoogleMapWidget extends Composite {
         });
 
         return temp;
+    }
+    
+    public void manualUpdate()
+    {
+    	for(int i = 0; i< currentMarks.size();i++)
+    	{
+    		currentMarks.get(i).setVisible(false);
+    	}
+        markerUpdate(100); 	
     }
     
     public void centerMarker(Deal current)

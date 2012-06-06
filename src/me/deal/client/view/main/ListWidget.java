@@ -51,6 +51,7 @@ public class ListWidget extends Composite {
     private boolean mapView = false;
     private ArrayList<ListItemWidget> listItems;
     private Integer usedListItemIndex;
+    private Integer idIndex;
     
     public void setMapSize(boolean mapView)
     {
@@ -123,6 +124,7 @@ public class ListWidget extends Composite {
                         		Deals deals = Deals.getInstance();
                         		deals.setOffset(deals.getOffset() + result.size());
                         		deals.addDeals(result);
+                        		deals.setRange(deals.getInstance().getDeals().size() - 8, deals.getInstance().getDeals().size() - 1);
                         		eventBus.fireEvent(new DealsEvent());
                         		}
                         	});
@@ -131,6 +133,7 @@ public class ListWidget extends Composite {
                 }
             }
         });
+        
         
         eventBus.addHandler(DealsEvent.TYPE,
                 new DealsEventHandler() {
@@ -170,23 +173,23 @@ public class ListWidget extends Composite {
             
                             Deals.getInstance().setDuplicates(Deals.getInstance().getDuplicates() + 1);
                             currDeal.setIDUrl(url);
-                            } else if(usedListItemIndex < 26) {
-                            	if(mapView) {
-                            		if(currDeal.getColor() != null) {
-                            			currDeal.setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + currDeal.getColor());
-                            			System.out.println("here1");
-                            			} else {
-                            				currDeal.setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF");
-                            				System.out.println("here2");
-                            				}
+                            } 
+                    	else if(mapView) {
+                            	try{
+                            		currDeal.setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + currDeal.getColor());
+                            		System.out.println("here1");
+                            		} catch(NullPointerException n) {
+                            			currDeal.setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFFFF");
+                            			System.out.println("here2");
+                            			}
                             }
-                            else {
-                            	currDeal.setIDUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(                  
-                            	usedListItemIndex - Deals.getInstance().getDuplicates() - 1,
-                            	usedListItemIndex - Deals.getInstance().getDuplicates()) + ".png" );
-                            }
-                        
-                    }
+                       else if(!mapView) {
+                            	int temp = (dealIndex - Deals.getInstance().getDuplicates())%35;
+                    	   		currDeal.setIDUrl("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".substring(                  
+                            	temp,
+                            	temp+1) + "|FE7569" );
+                        }
+
                     currListItemWidget.setIcon(currDeal.getIDUrl());
                     }
                     listItemContainer.setVisible(true);
@@ -203,6 +206,7 @@ public class ListWidget extends Composite {
         
         Integer listItemSize = 10;
         usedListItemIndex = 0;
+        idIndex = 0;
         listItems = new ArrayList<ListItemWidget>();
         for(int i = 0; i < listItemSize; i++) {
         	listItems.add(new ListItemWidget());
