@@ -1,0 +1,35 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.sizing {
+			width: 300px;
+			margin-left: 5px;
+			margin-top: 5px;
+			padding-left: 2px;
+		}
+		
+		.labelFormat {
+			font-size: 11px;
+			weight: 1.2em;
+		}
+		
+		.centerButton {
+			margin-left: 110px;
+			width: 100px;
+		}
+	</ui:style>
+
+	<b:WellForm type="VERTICAL" styleName='{style.sizing}'>
+		<g:Label ui:field="addressLine1" styleName='{style.labelFormat}'></g:Label>
+		<b:TextBox ui:field="address" width="280px" placeholder="Address" />
+		<b:TextBox ui:field="city" width="140px" placeholder="City" />
+		<b:TextBox ui:field="state" width="50px" placeholder="State"
+			maxLength="2" />
+		<b:TextBox ui:field="zip" width="70px" placeholder="Zip Code"
+			maxLength="5" />
+		<g:FlowPanel styleName='{style.centerButton}'>
+			<b:Button type="PRIMARY" ui:field="changeLocationButton">Submit</b:Button>
+		</g:FlowPanel>
+	</b:WellForm>
+</ui:UiBinder>

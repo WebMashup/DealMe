@@ -158,6 +158,16 @@ public class ListWidget extends Composite {
                     		}
                     	System.out.println("After usedListItemIndex = " + usedListItemIndex);
                     }
+                    
+                    System.out.println("size before "+listItems.size());
+                    // handle the code for exepction throw after index 50. Its a temporary fix
+                    if(listItems.size()<usedListItemIndex+deals.size())
+                    {
+                    for(int i = listItems.size(); i <= usedListItemIndex+deals.size(); i++) {
+                		listItems.add(new ListItemWidget());
+                		}
+                    }
+                    System.out.println("size after "+listItems.size());
                     for(int i = 0; i < loadsSinceLastReset; i++) {
                     	Integer dealIndex = deals.size() + i - loadsSinceLastReset;
                     	System.out.println("DealIndex = " + dealIndex + ", usedListItemIndex = " + usedListItemIndex);
@@ -195,6 +205,7 @@ public class ListWidget extends Composite {
                     listItemContainer.setVisible(true);
                     loadingSpinnerImage.setVisible(false);
                     dealsLoaded = true;
+                    System.out.println("Current size of list items is "+listItems.size());
                     
                     if(listItems.size() < listItemContainer.getWidgetCount() + Deals.MAP_VIEW_NUM_DEALS) {
                     	for(int i = 0; i < Deals.MAP_VIEW_NUM_DEALS; i++) {
