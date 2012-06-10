@@ -104,7 +104,7 @@ public class ListItemWidget extends Composite {
          * the ListItem and add a close button so that the user can easily close
          * get rid of the directions.
          */
-        
+        //extract information from Yelp if we have not exceeded daily max number of requests
         if (deal.getDealBusinessInfo() != null)
         {
             setAvgRatingImageUrl(deal.getDealBusinessInfo().getAvgRatingImageUrl());
@@ -112,7 +112,7 @@ public class ListItemWidget extends Composite {
             setNumReviews(deal.getDealBusinessInfo().getNumReviews());
             setReviewsUrl(deal.getDealBusinessInfo().getWebUrl());
         }
-        
+        //parse info from Yipit and set to list item widgets
         setTitle(deal.getTitle());
         setSubtitle(deal.getSubtitle());
         setPrice(deal.getPrice());
@@ -134,7 +134,8 @@ public class ListItemWidget extends Composite {
         //formatMapButton.setTitle("Test title");
         //if(i < 26)
         //    formatMapButton.setUrl("http://www.google.com/mapfiles/marker" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i,i+1) + ".png" );
-        formatMapButton.setUrl(s);
+       //grab URL of Google Map marker image (accounts for duplicates)
+    	formatMapButton.setUrl(s);
         formatMapButton.addClickHandler(new ClickHandler() {
                   @Override
                   public void onClick(ClickEvent event) {
@@ -169,7 +170,7 @@ public class ListItemWidget extends Composite {
         deal.getDealBusinessInfo().setName(businessNameStr);
         businessName.setText(deal.getDealBusinessInfo().getName());        
     }
-    
+    //extracts number of Yelp reviews based on phone number and if more than 1 review(s)
     public void setNumReviews(Integer numReviewsInt) {
         if(deal.getDealBusinessInfo() == null)
             deal.setDealBusinessInfo(new BusinessInfo());
@@ -179,7 +180,7 @@ public class ListItemWidget extends Composite {
             numReviews.setText(deal.getDealBusinessInfo().getNumReviews() + " " + reviewText);
         }            
     }
-    
+    //opens deal venue Yelp page in a new browser tab
     public void setReviewsUrl(String reviewsUrl) {
         if(deal.getDealBusinessInfo() == null)
             deal.setDealBusinessInfo(new BusinessInfo());
@@ -204,6 +205,7 @@ public class ListItemWidget extends Composite {
         getDirectionsLink.setText("Directions");
     }
     
+    //extracts the center 300x200px of the Yipit image
     public void setBigImageUrl(String bigImageUrl) {
         deal.setBigImageUrl(bigImageUrl);
         dealImage.setUrl(deal.getBigImageUrl());
@@ -268,8 +270,8 @@ public class ListItemWidget extends Composite {
         discountPercentage.setText(deal.getDiscountPercentage() + "%");
     }
     
+    //end date parsed as a date so subtract from current date and round up to get # days left
     public void setEndDate(String endDate) {
-        //parse date strings to determine how many days are left compared to current date
         Date today = new Date();
         deal.setEndDate(endDate);
         Date endDay = new Date();

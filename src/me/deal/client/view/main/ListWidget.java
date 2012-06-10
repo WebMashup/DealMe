@@ -66,6 +66,8 @@ public class ListWidget extends Composite {
         initialize();
     }
     
+    //sets the image for the Google Map marker 
+    //maps deals with the same venue address to have the same marker
     private void setIDUrl(ArrayList<Deal> deals, Integer currentDealIndex, Integer direction)
     {
     	Deal current = deals.get(currentDealIndex);
